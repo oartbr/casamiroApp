@@ -10,6 +10,7 @@ import {
   RemoveMemberRequest,
   CancelInvitationRequest,
   ResendInvitationRequest,
+  MembershipsResponse,
 } from "../types/membership";
 import { RequestConfigType } from "./types/request-config";
 

@@ -7,6 +7,7 @@ import useAuth from "@/services/auth/use-auth";
 import HTTP_CODES_ENUM from "@/services/api/types/http-codes";
 import { useGetListingNotasByUserService } from "@/services/api/services/notas";
 import { useUserGroupsQuery } from "@/services/api/react-query/groups-queries";
+import { Membership } from "@/services/api/types/membership";
 // import { useTranslation } from "@/services/i18n/client";
 // import { useSnackbar } from "notistack";
 import { useRouter } from "next/navigation";
@@ -49,8 +50,10 @@ function List(props: Props) {
   );
 
   const activeGroups = groupsData?.groupsByStatus?.active || [];
-  const currentActiveGroup = activeGroups.find(
-    (membership: Membership) => membership.group_id.id === user?.activeGroupId
+  const currentActiveGroup = activeGroups.find((membership: Membership) =>
+    typeof membership.group_id === "object"
+      ? membership.group_id.id === user?.activeGroupId
+      : membership.group_id === user?.activeGroupId
   );
 
   const handleGroupFilterChange = async (groupId: string) => {
@@ -133,7 +136,11 @@ function List(props: Props) {
               {currentActiveGroup ? (
                 <Box display="flex" alignItems="center" mb={2}>
                   <Chip
-                    label={currentActiveGroup.group_id.name}
+                    label={
+                      typeof currentActiveGroup.group_id === "object"
+                        ? currentActiveGroup.group_id.name
+                        : "Unknown Group"
+                    }
                     color="primary"
                     variant="outlined"
                     sx={{ mr: 2 }}
@@ -172,10 +179,21 @@ function List(props: Props) {
                 >
                   {activeGroups.map((membership: Membership) => (
                     <MenuItem
-                      key={membership.group_id.id}
-                      value={membership.group_id.id}
+                      key={
+                        typeof membership.group_id === "object"
+                          ? membership.group_id.id
+                          : membership.group_id
+                      }
+                      value={
+                        typeof membership.group_id === "object"
+                          ? membership.group_id.id
+                          : membership.group_id
+                      }
                     >
-                      {membership.group_id.name} ({membership.role})
+                      {typeof membership.group_id === "object"
+                        ? membership.group_id.name
+                        : "Unknown Group"}{" "}
+                      ({membership.role})
                     </MenuItem>
                   ))}
                 </Select>

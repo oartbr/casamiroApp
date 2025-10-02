@@ -16,6 +16,7 @@ import Link from "@/components/link";
 import { useTranslation } from "@/services/i18n/client";
 import { useUserGroupsQuery } from "@/services/api/react-query/groups-queries";
 import { useSetActiveGroupMutation } from "@/services/api/react-query/users-queries";
+import { Membership } from "@/services/api/types/membership";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
@@ -160,10 +161,21 @@ function Profile() {
                     >
                       {activeGroups.map((membership: Membership) => (
                         <MenuItem
-                          key={membership.group_id.id}
-                          value={membership.group_id.id}
+                          key={
+                            typeof membership.group_id === "object"
+                              ? membership.group_id.id
+                              : membership.group_id
+                          }
+                          value={
+                            typeof membership.group_id === "object"
+                              ? membership.group_id.id
+                              : membership.group_id
+                          }
                         >
-                          {membership.group_id.name} ({membership.role})
+                          {typeof membership.group_id === "object"
+                            ? membership.group_id.name
+                            : "Unknown Group"}{" "}
+                          ({membership.role})
                         </MenuItem>
                       ))}
                     </Select>
@@ -197,7 +209,9 @@ function Profile() {
                   <Card>
                     <CardContent>
                       <Typography variant="h6" gutterBottom>
-                        {membership.group_id.name}
+                        {typeof membership.group_id === "object"
+                          ? membership.group_id.name
+                          : "Unknown Group"}
                       </Typography>
                       <Box display="flex" alignItems="center" mb={1}>
                         <Typography
@@ -219,19 +233,24 @@ function Profile() {
                           }
                         />
                       </Box>
-                      {membership.group_id.description && (
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          paragraph
-                        >
-                          {membership.group_id.description}
-                        </Typography>
-                      )}
+                      {typeof membership.group_id === "object" &&
+                        membership.group_id.description && (
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            paragraph
+                          >
+                            {membership.group_id.description}
+                          </Typography>
+                        )}
                       <Button
                         size="small"
                         component={Link}
-                        href={`/groups/${membership.group_id.id}`}
+                        href={`/groups/${
+                          typeof membership.group_id === "object"
+                            ? membership.group_id.id
+                            : membership.group_id
+                        }`}
                         sx={{ mt: 1 }}
                       >
                         View Group
@@ -258,7 +277,9 @@ function Profile() {
                   >
                     <CardContent>
                       <Typography variant="h6" gutterBottom>
-                        {invitation.group_id?.name}
+                        {typeof invitation.group_id === "object"
+                          ? invitation.group_id.name
+                          : "Unknown Group"}
                       </Typography>
                       <Box display="flex" alignItems="center" mb={1}>
                         <Typography

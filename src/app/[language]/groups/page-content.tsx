@@ -29,11 +29,6 @@ import {
 import { Group, CreateGroupRequest } from "@/services/api/types/group";
 import { Membership } from "@/services/api/types/membership";
 
-// Extended group type that includes the user's role in the group
-type GroupWithRole = Group & {
-  role: "admin" | "editor" | "contributor";
-};
-
 // Type for pending invitation
 type PendingInvitation = {
   _id: string;
@@ -160,17 +155,29 @@ function GroupsPageContent() {
         settings: group.settings,
       };
     })
-    .filter(Boolean); // Remove null entries
+    .filter((group): group is NonNullable<typeof group> => group !== null);
 
-  const transformedPendingInvitations = pendingInvitations.map(
-    (membership: Membership) => ({
-      _id: membership._id,
-      group: membership.group_id,
-      role: membership.role,
-      createdAt: membership.createdAt,
-      token: membership.token,
+  const transformedPendingInvitations = pendingInvitations
+    .map((membership: Membership) => {
+      // Type guard to ensure group_id is populated
+      const group =
+        typeof membership.group_id === "object" ? membership.group_id : null;
+      if (!group) {
+        console.warn("Group not populated in pending invitation:", membership);
+        return null;
+      }
+
+      return {
+        _id: membership._id,
+        group: group,
+        role: membership.role,
+        createdAt: membership.createdAt,
+        token: membership.token,
+      };
     })
-  );
+    .filter(
+      (invitation): invitation is PendingInvitation => invitation !== null
+    );
 
   return (
     <Container maxWidth="lg">
@@ -200,7 +207,7 @@ function GroupsPageContent() {
             {t("groups:sections.active")} ({transformedGroups.length})
           </Typography>
           <Grid container spacing={2}>
-            {transformedGroups.map((group: GroupWithRole) => (
+            {transformedGroups.map((group) => (
               <Grid item xs={12} sm={6} md={4} key={group.id}>
                 <Card>
                   <CardContent>

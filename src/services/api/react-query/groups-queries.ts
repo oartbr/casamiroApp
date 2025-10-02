@@ -77,7 +77,13 @@ export const useCreateGroupMutation = () => {
     onSuccess: (data) => {
       // Invalidate user groups queries
       queryClient.invalidateQueries({
-        queryKey: groupsQueryKeys.list().sub.byUser(data.createdBy).key,
+        queryKey: groupsQueryKeys
+          .list()
+          .sub.byUser(
+            typeof data.createdBy === "string"
+              ? data.createdBy
+              : data.createdBy._id
+          ).key,
       });
     },
   });
@@ -109,7 +115,13 @@ export const useUpdateGroupMutation = () => {
       });
       // Invalidate user groups queries
       queryClient.invalidateQueries({
-        queryKey: groupsQueryKeys.list().sub.byUser(data.createdBy).key,
+        queryKey: groupsQueryKeys
+          .list()
+          .sub.byUser(
+            typeof data.createdBy === "string"
+              ? data.createdBy
+              : data.createdBy._id
+          ).key,
       });
     },
   });

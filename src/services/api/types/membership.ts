@@ -49,3 +49,10 @@ export type CancelInvitationRequest = {
 export type ResendInvitationRequest = {
   resenderId: string;
 };
+
+export type MembershipsResponse = {
+  results: Membership[];
+  hasNextPage: boolean;
+  totalPages: number;
+  currentPage: number;
+};

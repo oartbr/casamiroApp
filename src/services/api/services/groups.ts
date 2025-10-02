@@ -2,7 +2,12 @@ import { useCallback } from "react";
 import useFetch from "../use-fetch";
 import { API_URL } from "../config";
 import wrapperFetchJsonResponse from "../wrapper-fetch-json-response";
-import { Group, CreateGroupRequest, UpdateGroupRequest } from "../types/group";
+import {
+  Group,
+  CreateGroupRequest,
+  UpdateGroupRequest,
+  GroupsResponse,
+} from "../types/group";
 import { RequestConfigType } from "./types/request-config";
 
 // Get all groups for a user
