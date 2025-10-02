@@ -161,6 +161,21 @@ function ResponsiveAppBar() {
                   </MenuItem>,
                 ]}
               {!!user?.role &&
+                [RoleEnum.ADMIN, RoleEnum.USER].includes(
+                  Number(user?.role?.id)
+                ) && [
+                  <MenuItem
+                    key="groups"
+                    onClick={handleCloseNavMenu}
+                    component={Link}
+                    href="/groups"
+                  >
+                    <Typography textAlign="center">
+                      {t("common:navigation.groups")}
+                    </Typography>
+                  </MenuItem>,
+                ]}
+              {!!user?.role &&
                 [RoleEnum.USER].includes(Number(user?.role?.id)) && [
                   <MenuItem
                     key="listing"
@@ -284,6 +299,19 @@ function ResponsiveAppBar() {
                   href="/admin-panel/skus"
                 >
                   {t("common:navigation.skus")}
+                </Button>
+              )}
+            {!!user?.role &&
+              [RoleEnum.ADMIN, RoleEnum.USER].includes(
+                Number(user?.role?.id)
+              ) && (
+                <Button
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                  component={Link}
+                  href="/groups"
+                >
+                  {t("common:navigation.groups")}
                 </Button>
               )}
             {!!user?.role &&

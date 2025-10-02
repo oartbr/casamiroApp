@@ -95,6 +95,21 @@ export function NotaCard({ item, onClick, action, type }: NotaCardProps) {
               .locale("pt-br")
               .format("DD/MM/YYYY HH:mm")}
           </Typography>
+
+          {/* Group Information */}
+          {item.group && (
+            <Typography
+              variant="body2"
+              sx={{
+                color: "primary.main",
+                marginLeft: (theme) => theme.spacing(5),
+                fontWeight: "medium",
+              }}
+            >
+              📁 {item.group.name}
+            </Typography>
+          )}
+
           <Grid
             container
             spacing={2}

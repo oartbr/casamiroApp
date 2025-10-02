@@ -90,6 +90,30 @@ export function useGetUserService() {
   );
 }
 
+// Get user with memberships
+export type UserWithMembershipsResponse = {
+  user: User;
+  memberships: Membership[];
+  primaryGroup: Group;
+  primaryRole: string;
+  totalGroups: number;
+  pendingInvitations: number;
+};
+
+export function useGetUserWithMembershipsService() {
+  const fetch = useFetch();
+
+  return useCallback(
+    (data: UserRequest, requestConfig?: RequestConfigType) => {
+      return fetch(`${API_URL}/v1/users/${data.id}`, {
+        method: "GET",
+        ...requestConfig,
+      }).then(wrapperFetchJsonResponse<UserWithMembershipsResponse>);
+    },
+    [fetch]
+  );
+}
+
 export type UserPostRequest = Pick<
   User,
   "email" | "firstName" | "lastName" | "photo" | "role" | "phoneNumber"
@@ -155,6 +179,29 @@ export function useDeleteUsersService() {
         method: "DELETE",
         ...requestConfig,
       }).then(wrapperFetchJsonResponse<UsersDeleteResponse>);
+    },
+    [fetch]
+  );
+}
+
+// Set active group
+export type SetActiveGroupRequest = {
+  userId: User["id"];
+  groupId: string;
+};
+
+export type SetActiveGroupResponse = User;
+
+export function useSetActiveGroupService() {
+  const fetch = useFetch();
+
+  return useCallback(
+    (data: SetActiveGroupRequest, requestConfig?: RequestConfigType) => {
+      return fetch(`${API_URL}/v1/users/${data.userId}/active-group`, {
+        method: "PATCH",
+        body: JSON.stringify({ groupId: data.groupId }),
+        ...requestConfig,
+      }).then(wrapperFetchJsonResponse<SetActiveGroupResponse>);
     },
     [fetch]
   );

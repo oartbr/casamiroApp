@@ -90,7 +90,7 @@ function AuthProvider(props: PropsWithChildren<{}>) {
           {
             method: "GET",
             headers: {
-              Authorization: `${tokens.refreshToken}`,
+              Authorization: `Bearer ${tokens.token}`,
             },
           },
           {

@@ -1,0 +1,103 @@
+{
+  "title": "Seus Grupos",
+  "actions": {
+    "submit": "Entrar",
+    "invite": "Convidar",
+    "view": "Ver",
+    "edit": "Editar",
+    "create": "Criar novo Grupo",
+    "respond": "Responder",
+    "cancel": "Cancelar",
+    "delete": "Deletar",
+    "accept": "Aceitar",
+    "reject": "Rejeitar",
+    "back": "Voltar",
+    "save": "Salvar",
+    "saving": "Salvando...",
+    "makeAdmin": "Tornar administrador",
+    "makeEditor": "Tornar editor",
+    "makeViewer": "Tornar visualizador",
+    "remove": "Remover"
+  },
+  "sections": {
+    "active": "Ativos",
+    "invite": "Convidar",
+    "create": "Criar novo Grupo",
+    "pending": "Pendentes"
+  },
+  "noActiveGroups" : "Não há grupos Ativos",
+  "noPendingInvitations" : "Não há convites pendentes",
+  "noGroups" : "Não há grupos",
+  "info": {
+    "title": "Informações do Grupo",
+    "created": "Criado em",
+    "members": "Membros",
+    "pending": "Pendentes",
+    "allowInvitations": "Permitir convites",
+    "requireApproval": "Requer aprovação",
+    "noInfo": "Não há informações do grupo",
+    "createdBy": "Criado por",
+    "yourRole": "Seu cargo"
+  },
+  "members": {
+    "name": "Nome",
+    "email": "Email",
+    "role": "Rol",
+    "joined": "Entrou em",
+    "actions": "Ações",
+    "title": "Membros"
+  },
+  "invitations": {
+    "title": "Convites",
+    "email": "Email",
+    "role": "Cargo",
+    "actions": "Ações",
+    "invited": "Convidado em",
+    "cancel": "Cancelar",
+    "phone": "Telefone"
+  },
+  "form": {
+    "name": "Nome",
+    "description": "Descrição",
+    "allowInvitations": "Permitir convites",
+    "requireApproval": "Requer aprovação",
+    "role": "Cargo",
+    "allowInvitationsHelp": "Permitir convites para o grupo",
+    "requireApprovalHelp": "Requer aprovação para entrar no grupo",
+    "phone": "Telefone"
+  },
+  "roles": {
+    "viewer": "Visualizador",
+    "editor": "Editor",
+    "admin": "Administrador"
+  },
+  "dialog": {
+    "createTitle": "Criar Grupo",
+    "editTitle": "Editar Grupo",
+    "description": "Editar o grupo",
+    "allowInvitations": "Permitir convites",
+    "requireApproval": "Requer aprovação",
+    "role": "Cargo",
+    "contributor": "Colaborador",
+    "roleInfo": "Selecione o cargo do membro",
+    "inviteTitle": "Convidar Membro"
+  },
+  "edit": {
+    "title": "Editar Grupo",
+    "description": "Editar o grupo",
+    "allowInvitations": "Permitir convites",
+    "requireApproval": "Requer aprovação",
+    "role": "Cargo",
+    "currentInfo": "Dados do grupo"
+  },
+  "yes": "Sim",
+  "no": "Não",
+  "pending": "Pendente",
+  "active": "Ativo",
+  "inactive": "Inativo",
+  "admin": "Administrador",
+  "editor": "Editor",
+  "viewer": "Visualizador",
+  "contributor": "Colaborador",
+  "or": "OR"
+}

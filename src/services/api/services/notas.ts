@@ -104,6 +104,7 @@ export type NotasRequest = {
   limit: number;
   filters?: {
     status?: Status[];
+    groupId?: string;
   };
   sort?: Array<{
     order: SortEnum;
@@ -125,9 +126,6 @@ export function useGetListingNotasByUserService() {
       requestUrl.searchParams.append("page", data.page.toString());
       requestUrl.searchParams.append("limit", data.limit.toString());
       requestUrl.searchParams.append("filters", JSON.stringify(oFilters));
-      if (data.filters) {
-        requestUrl.searchParams.append("filters", JSON.stringify(data.filters));
-      }
       if (data.sort) {
         requestUrl.searchParams.append("sort", JSON.stringify(data.sort));
       }

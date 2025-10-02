@@ -1,0 +1,69 @@
+{
+  "title": "Grupos",
+  "sections": {
+    "active": "Grupos Activos",
+    "pending": "Invitaciones Pendientes"
+  },
+  "actions": {
+    "create": "Crear Grupo",
+    "view": "Ver",
+    "edit": "Editar",
+    "invite": "Invitar Usuario",
+    "respond": "Responder",
+    "makeAdmin": "Hacer Administrador",
+    "makeEditor": "Hacer Editor",
+    "makeContributor": "Hacer Contribuyente",
+    "remove": "Remover Miembro"
+  },
+  "info": {
+    "title": "Información del Grupo",
+    "created": "Creado",
+    "members": "Miembros Activos",
+    "pending": "Invitaciones Pendientes",
+    "allowInvitations": "Permitir Invitaciones",
+    "requireApproval": "Requerir Aprobación",
+    "yourRole": "Tu Rol",
+    "createdBy": "Creado Por"
+  },
+  "members": {
+    "title": "Miembros",
+    "name": "Nombre",
+    "phone": "Teléfono",
+    "role": "Rol",
+    "joined": "Se Unió",
+    "actions": "Acciones"
+  },
+  "invitations": {
+    "title": "Invitaciones Pendientes",
+    "phone": "Teléfono",
+    "role": "Rol",
+    "invited": "Invitado",
+    "actions": "Acciones",
+    "cancel": "Cancelar"
+  },
+  "roles": {
+    "admin": "Administrador",
+    "editor": "Editor",
+    "contributor": "Contribuyente"
+  },
+  "form": {
+    "name": "Nombre del Grupo",
+    "nameRequired": "El nombre del grupo es requerido",
+    "description": "Descripción",
+    "descriptionPlaceholder": "Ingresa una descripción para tu grupo...",
+    "phone": "Número de Teléfono",
+    "roleInfo": "Todos los nuevos miembros serán invitados como contribuyentes. Solo los propietarios del grupo pueden ser administradores.",
+    "allowInvitations": "Permitir que los miembros inviten a otros",
+    "requireApproval": "Requerir aprobación del administrador para nuevos miembros",
+    "settings": "Configuración del Grupo"
+  },
+  "edit": {
+    "title": "Editar Grupo",
+    "currentInfo": "Información Actual del Grupo"
+  },
+  "dialog": {
+    "createTitle": "Crear Nuevo Grupo",
+    "inviteTitle": "Invitar Usuario al Grupo"
+  },
+  "noActiveGroups": "Aún no tienes grupos activos. ¡Crea tu primer grupo para comenzar!"
+}

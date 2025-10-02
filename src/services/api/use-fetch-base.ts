@@ -32,7 +32,7 @@ function useFetchBase() {
       if (tokens?.token) {
         headers = {
           ...headers,
-          Authorization: `${tokens.refreshToken}`, //`Bearer ${tokens.token}`,
+          Authorization: `Bearer ${tokens.token}`,
         };
       }
 

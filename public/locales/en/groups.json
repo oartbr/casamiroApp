@@ -1,0 +1,69 @@
+{
+  "title": "Groups",
+  "sections": {
+    "active": "Active Groups",
+    "pending": "Pending Invitations"
+  },
+  "actions": {
+    "create": "Create Group",
+    "view": "View",
+    "edit": "Edit",
+    "invite": "Invite User",
+    "respond": "Respond",
+    "makeAdmin": "Make Admin",
+    "makeEditor": "Make Editor",
+    "makeContributor": "Make Contributor",
+    "remove": "Remove Member"
+  },
+  "info": {
+    "title": "Group Information",
+    "created": "Created",
+    "members": "Active Members",
+    "pending": "Pending Invitations",
+    "allowInvitations": "Allow Invitations",
+    "requireApproval": "Require Approval",
+    "yourRole": "Your Role",
+    "createdBy": "Created By"
+  },
+  "members": {
+    "title": "Members",
+    "name": "Name",
+    "phone": "Phone",
+    "role": "Role",
+    "joined": "Joined",
+    "actions": "Actions"
+  },
+  "invitations": {
+    "title": "Pending Invitations",
+    "phone": "Phone",
+    "role": "Role",
+    "invited": "Invited",
+    "actions": "Actions",
+    "cancel": "Cancel"
+  },
+  "roles": {
+    "admin": "Administrator",
+    "editor": "Editor",
+    "contributor": "Contributor"
+  },
+  "form": {
+    "name": "Group Name",
+    "nameRequired": "Group name is required",
+    "description": "Description",
+    "descriptionPlaceholder": "Enter a description for your group...",
+    "phone": "Phone Number",
+    "roleInfo": "All new members will be invited as contributors. Only group owners can be administrators.",
+    "allowInvitations": "Allow members to invite others",
+    "requireApproval": "Require admin approval for new members",
+    "settings": "Group Settings"
+  },
+  "edit": {
+    "title": "Edit Group",
+    "currentInfo": "Current Group Information"
+  },
+  "dialog": {
+    "createTitle": "Create New Group",
+    "inviteTitle": "Invite User to Group"
+  },
+  "noActiveGroups": "You don't have any active groups yet. Create your first group to get started!"
+}

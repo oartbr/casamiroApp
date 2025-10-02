@@ -14,6 +14,7 @@ import {
   useState,
 } from "react";
 import { useUserListQuery, usersQueryKeys } from "./queries/users-queries";
+// import { useUserGroupsQuery } from "@/services/api/react-query/groups-queries";
 import { TableVirtuoso } from "react-virtuoso";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
@@ -30,7 +31,8 @@ import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
-import { User } from "@/services/api/types/user";
+import Chip from "@mui/material/Chip";
+import { User, UserWithMemberships } from "@/services/api/types/user";
 import Link from "@/components/link";
 import useAuth from "@/services/auth/use-auth";
 import useConfirmDialog from "@/components/confirm-dialog/use-confirm-dialog";
@@ -43,7 +45,7 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import { UserFilterType, UserSortType } from "./user-filter-types";
 import { SortEnum } from "@/services/api/types/sort-type";
 
-type UsersKeys = keyof User;
+type UsersKeys = keyof UserWithMemberships;
 
 const TableCellLoadingContainer = styled(TableCell)(() => ({
   padding: 0,
@@ -77,7 +79,7 @@ function TableSortCellWrapper(
   );
 }
 
-function Actions({ user }: { user: User }) {
+function Actions({ user }: { user: UserWithMemberships }) {
   const [open, setOpen] = useState(false);
   const { user: authUser } = useAuth();
   const { confirmDialog } = useConfirmDialog();
@@ -287,7 +289,8 @@ function Users() {
 
   const result = useMemo(() => {
     const result =
-      (data?.pages.flatMap((page) => page?.data) as User[]) ?? ([] as User[]);
+      (data?.pages.flatMap((page) => page?.data) as UserWithMemberships[]) ??
+      ([] as UserWithMemberships[]);
 
     return removeDuplicatesFromArrayObjects(result, "id");
   }, [data]);
@@ -354,10 +357,12 @@ function Users() {
                   <TableCell style={{ width: 80 }}>
                     {tUsers("admin-panel-users:table.column4")}
                   </TableCell>
+                  <TableCell style={{ width: 120 }}>Primary Group</TableCell>
+                  <TableCell style={{ width: 80 }}>Group Role</TableCell>
                 </TableRow>
                 {isFetchingNextPage && (
                   <TableRow>
-                    <TableCellLoadingContainer colSpan={6}>
+                    <TableCellLoadingContainer colSpan={8}>
                       <LinearProgress />
                     </TableCellLoadingContainer>
                   </TableRow>
@@ -384,6 +389,39 @@ function Users() {
                 <TableCell>{user?.email}</TableCell>
                 <TableCell style={{ width: 80 }}>
                   {tRoles(`role.${user?.role?.id}`)}
+                </TableCell>
+                <TableCell style={{ width: 120 }}>
+                  {user?.primaryGroup ? (
+                    <Chip
+                      label={user.primaryGroup.name}
+                      size="small"
+                      color="primary"
+                      variant="outlined"
+                    />
+                  ) : (
+                    <Typography variant="caption" color="text.secondary">
+                      No group
+                    </Typography>
+                  )}
+                </TableCell>
+                <TableCell style={{ width: 80 }}>
+                  {user?.primaryRole ? (
+                    <Chip
+                      label={user.primaryRole}
+                      size="small"
+                      color={
+                        user.primaryRole === "admin"
+                          ? "error"
+                          : user.primaryRole === "editor"
+                            ? "warning"
+                            : "default"
+                      }
+                    />
+                  ) : (
+                    <Typography variant="caption" color="text.secondary">
+                      -
+                    </Typography>
+                  )}
                 </TableCell>
               </>
             )}

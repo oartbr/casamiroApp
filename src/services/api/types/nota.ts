@@ -1,6 +1,11 @@
 export type Nota = {
   id: String;
   user: String;
+  groupId?: String;
+  group?: {
+    id: String;
+    name: String;
+  };
   url: String;
   purchaseDate: Date;
   registeredAt: Date;

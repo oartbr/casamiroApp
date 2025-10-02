@@ -48,7 +48,7 @@ const QRscanner = ({ callBack }: { callBack: (data: string) => void }) => {
     return () => {
       mounted = false;
     };
-  }, []); // Empty array since we only want this to run once
+  }, [currentDeviceId]); // Include currentDeviceId as dependency
 
   const handleScan = useCallback(
     (detectedCodes: IDetectedBarcode[]) => {

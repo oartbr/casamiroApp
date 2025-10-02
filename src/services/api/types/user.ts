@@ -1,5 +1,7 @@
 import { FileEntity } from "./file-entity";
 import { Role } from "./role";
+import { Membership } from "./membership";
+import { Group } from "./group";
 
 export enum UserProviderEnum {
   EMAIL = "email",
@@ -16,4 +18,13 @@ export type User = {
   socialId?: string;
   role?: Role;
   phoneNumber?: string;
+  activeGroupId?: string;
+};
+
+export type UserWithMemberships = User & {
+  memberships?: Membership[];
+  primaryGroup?: Group;
+  primaryRole?: string;
+  totalGroups?: number;
+  pendingInvitations?: number;
 };
