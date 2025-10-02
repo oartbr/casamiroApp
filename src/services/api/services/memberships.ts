@@ -10,7 +10,7 @@ import {
   RemoveMemberRequest,
   CancelInvitationRequest,
   ResendInvitationRequest,
-  MembershipsResponse,
+  MembershipsListResponse,
 } from "../types/membership";
 import { RequestConfigType } from "./types/request-config";
 
@@ -34,7 +34,7 @@ export function useGetUserMembershipsService() {
       return fetch(url.toString(), {
         method: "GET",
         ...requestConfig,
-      }).then(wrapperFetchJsonResponse<MembershipsResponse>);
+      }).then(wrapperFetchJsonResponse<MembershipsListResponse>);
     },
     [fetch]
   );
@@ -60,7 +60,7 @@ export function useGetGroupMembershipsService() {
       return fetch(url.toString(), {
         method: "GET",
         ...requestConfig,
-      }).then(wrapperFetchJsonResponse<MembershipsResponse>);
+      }).then(wrapperFetchJsonResponse<MembershipsListResponse>);
     },
     [fetch]
   );

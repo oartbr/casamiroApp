@@ -6,7 +6,7 @@ import {
   Group,
   CreateGroupRequest,
   UpdateGroupRequest,
-  GroupsResponse,
+  UserGroupsResponse,
 } from "../types/group";
 import { RequestConfigType } from "./types/request-config";
 
@@ -19,7 +19,7 @@ export function useGetUserGroupsService() {
       return fetch(`${API_URL}/v1/users/${userId}/groups`, {
         method: "GET",
         ...requestConfig,
-      }).then(wrapperFetchJsonResponse<GroupsResponse>);
+      }).then(wrapperFetchJsonResponse<UserGroupsResponse>);
     },
     [fetch]
   );

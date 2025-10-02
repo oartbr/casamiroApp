@@ -72,12 +72,10 @@ function GroupEditPageContent({ params }: GroupEditPageContentProps) {
   console.log({ group, user });
   const canEdit =
     group?.ownerId === user?.id ||
-    (typeof group?.createdBy === "object"
-      ? group?.createdBy?._id === user?.id
-      : group?.createdBy === user?.id) ||
+    group?.createdBy?._id === user?.id ||
+    group?.createdBy === user?.id ||
     group?.members?.some(
-      (member: { user_id: string; role: string }) =>
-        member.user_id === user?.id && member.role === "admin"
+      (member) => member.user_id === user?.id && member.role === "admin"
     );
 
   // Debug logging
@@ -346,9 +344,7 @@ function GroupEditPageContent({ params }: GroupEditPageContentProps) {
 
               <Typography variant="body2" color="text.secondary" paragraph>
                 <strong>{t("groups:info.createdBy")}:</strong>{" "}
-                {typeof group.createdBy === "object"
-                  ? `${group.createdBy.firstName} ${group.createdBy.lastName}`
-                  : "Unknown User"}
+                {group.createdBy?.firstName} {group.createdBy?.lastName}
               </Typography>
             </CardContent>
           </Card>

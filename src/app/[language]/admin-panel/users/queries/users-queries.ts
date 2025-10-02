@@ -3,7 +3,6 @@ import HTTP_CODES_ENUM from "@/services/api/types/http-codes";
 import { createQueryKeys } from "@/services/react-query/query-key-factory";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { UserFilterType, UserSortType } from "../user-filter-types";
-import { UserWithMemberships } from "@/services/api/types/user";
 
 export const usersQueryKeys = createQueryKeys(["users"], {
   list: () => ({
@@ -50,7 +49,7 @@ export const useUserListQuery = ({
       if (status === HTTP_CODES_ENUM.OK) {
         //console.log({ fetch: data.results });
         return {
-          data: data.results as UserWithMemberships[],
+          data: data.results,
           nextPage: data.hasNextPage ? pageParam + 1 : undefined,
         };
       }

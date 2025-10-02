@@ -45,7 +45,7 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import { UserFilterType, UserSortType } from "./user-filter-types";
 import { SortEnum } from "@/services/api/types/sort-type";
 
-type UsersKeys = keyof UserWithMemberships;
+type UsersKeys = keyof User;
 
 const TableCellLoadingContainer = styled(TableCell)(() => ({
   padding: 0,

@@ -207,7 +207,7 @@ function GroupsPageContent() {
             {t("groups:sections.active")} ({transformedGroups.length})
           </Typography>
           <Grid container spacing={2}>
-            {transformedGroups.map((group) => (
+            {transformedGroups.map((group: GroupWithRole) => (
               <Grid item xs={12} sm={6} md={4} key={group.id}>
                 <Card>
                   <CardContent>

@@ -50,9 +50,8 @@ export type ResendInvitationRequest = {
   resenderId: string;
 };
 
-export type MembershipsResponse = {
-  results: Membership[];
+export type MembershipsListResponse = {
+  results: MembershipWithDetails[];
   hasNextPage: boolean;
-  totalPages: number;
-  currentPage: number;
+  totalCount: number;
 };

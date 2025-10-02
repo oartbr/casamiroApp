@@ -2,9 +2,7 @@ import { useCallback } from "react";
 import useFetch from "../use-fetch";
 import { API_URL } from "../config";
 import wrapperFetchJsonResponse from "../wrapper-fetch-json-response";
-import { User, UserWithMemberships } from "../types/user";
-import { Membership } from "../types/membership";
-import { Group } from "../types/group";
+import { User } from "../types/user";
 import { InfinityPaginationType } from "../types/infinity-pagination";
 import { Role } from "../types/role";
 import { SortEnum } from "../types/sort-type";
@@ -17,12 +15,12 @@ export type UsersRequest = {
     roles?: Role[];
   };
   sort?: Array<{
-    orderBy: keyof UserWithMemberships;
+    orderBy: keyof User;
     order: SortEnum;
   }>;
 };
 
-export type UsersResponse = InfinityPaginationType<UserWithMemberships>;
+export type UsersResponse = InfinityPaginationType<User>;
 /*
 export function useGetUsersService() {
   const fetch = useFetch();
@@ -95,8 +93,21 @@ export function useGetUserService() {
 // Get user with memberships
 export type UserWithMembershipsResponse = {
   user: User;
-  memberships: Membership[];
-  primaryGroup: Group;
+  memberships: Array<{
+    _id: string;
+    group_id: {
+      id: string;
+      name: string;
+      description?: string;
+    };
+    role: string;
+    status: string;
+  }>;
+  primaryGroup: {
+    id: string;
+    name: string;
+    description?: string;
+  } | null;
   primaryRole: string;
   totalGroups: number;
   pendingInvitations: number;

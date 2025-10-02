@@ -1,5 +1,3 @@
-import { Membership } from "./membership";
-
 export type Group = {
   id: string;
   name: string;
@@ -7,7 +5,7 @@ export type Group = {
   createdAt: Date;
   updatedAt: Date;
   ownerId: string; // ID of the group owner/admin
-  createdBy: string | { _id: string; firstName: string; lastName: string }; // ID of the group creator or populated user object;
+  createdBy: string; // ID of the group creator;
   isPersonal: boolean;
   members?: Array<{
     _id: string;
@@ -54,24 +52,19 @@ export type UpdateGroupRequest = {
   };
 };
 
-export type GroupsResponse = {
+export type UserGroupsResponse = {
   groupsByStatus: {
-    active: Membership[];
-    pending: Membership[];
-    declined: Membership[];
-    removed: Membership[];
-  };
-  roleDistribution: Record<string, number>;
-  totalActiveGroups: number;
-  totalPendingInvitations: number;
-  summary: {
-    totalGroups: number;
-    activeGroups: number;
-    pendingInvitations: number;
-    primaryRole: string;
-    primaryGroup: {
+    active: Array<{
       _id: string;
-      name: string;
-    };
+      group_id: Group;
+      role: string;
+      status: string;
+    }>;
+    pending: Array<{
+      _id: string;
+      group_id: Group;
+      role: string;
+      status: string;
+    }>;
   };
 };

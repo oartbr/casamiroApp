@@ -16,7 +16,6 @@ import Link from "@/components/link";
 import { useTranslation } from "@/services/i18n/client";
 import { useUserGroupsQuery } from "@/services/api/react-query/groups-queries";
 import { useSetActiveGroupMutation } from "@/services/api/react-query/users-queries";
-import { Membership } from "@/services/api/types/membership";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
@@ -159,23 +158,12 @@ function Profile() {
                       label="Select Active Group"
                       disabled={setActiveGroupMutation.isPending}
                     >
-                      {activeGroups.map((membership: Membership) => (
+                      {activeGroups.map((membership) => (
                         <MenuItem
-                          key={
-                            typeof membership.group_id === "object"
-                              ? membership.group_id.id
-                              : membership.group_id
-                          }
-                          value={
-                            typeof membership.group_id === "object"
-                              ? membership.group_id.id
-                              : membership.group_id
-                          }
+                          key={membership.group_id.id}
+                          value={membership.group_id.id}
                         >
-                          {typeof membership.group_id === "object"
-                            ? membership.group_id.name
-                            : "Unknown Group"}{" "}
-                          ({membership.role})
+                          {membership.group_id.name} ({membership.role})
                         </MenuItem>
                       ))}
                     </Select>
@@ -204,14 +192,12 @@ function Profile() {
               Your Groups
             </Typography>
             <Grid container spacing={2}>
-              {activeGroups.map((membership: Membership) => (
+              {activeGroups.map((membership) => (
                 <Grid item xs={12} sm={6} md={4} key={membership._id}>
                   <Card>
                     <CardContent>
                       <Typography variant="h6" gutterBottom>
-                        {typeof membership.group_id === "object"
-                          ? membership.group_id.name
-                          : "Unknown Group"}
+                        {membership.group_id.name}
                       </Typography>
                       <Box display="flex" alignItems="center" mb={1}>
                         <Typography
@@ -233,24 +219,19 @@ function Profile() {
                           }
                         />
                       </Box>
-                      {typeof membership.group_id === "object" &&
-                        membership.group_id.description && (
-                          <Typography
-                            variant="body2"
-                            color="text.secondary"
-                            paragraph
-                          >
-                            {membership.group_id.description}
-                          </Typography>
-                        )}
+                      {membership.group_id.description && (
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          paragraph
+                        >
+                          {membership.group_id.description}
+                        </Typography>
+                      )}
                       <Button
                         size="small"
                         component={Link}
-                        href={`/groups/${
-                          typeof membership.group_id === "object"
-                            ? membership.group_id.id
-                            : membership.group_id
-                        }`}
+                        href={`/groups/${membership.group_id.id}`}
                         sx={{ mt: 1 }}
                       >
                         View Group
@@ -270,16 +251,14 @@ function Profile() {
               Pending Invitations
             </Typography>
             <Grid container spacing={2}>
-              {pendingInvitations.map((invitation: Membership) => (
+              {pendingInvitations.map((invitation) => (
                 <Grid item xs={12} sm={6} md={4} key={invitation._id}>
                   <Card
                     sx={{ border: "2px dashed", borderColor: "warning.main" }}
                   >
                     <CardContent>
                       <Typography variant="h6" gutterBottom>
-                        {typeof invitation.group_id === "object"
-                          ? invitation.group_id.name
-                          : "Unknown Group"}
+                        {invitation.group_id?.name}
                       </Typography>
                       <Box display="flex" alignItems="center" mb={1}>
                         <Typography
