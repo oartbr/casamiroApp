@@ -21,7 +21,8 @@
     "edit-sku": "Editar Equipo",
     "edit-garantia": "Editar Garantias",
     "scan": "Escanear",
-    "profile-menu": "Perfil"
+    "profile-menu": "Perfil",
+    "lists": "Listas"
   },
   "formInputs": {
     "avatarInput": {

@@ -213,15 +213,25 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
                 {new Date(group.createdAt).toLocaleDateString()}
               </Typography>
             </Box>
-            {canManage && (
+            <Box display="flex" gap={1}>
               <Button
-                variant="contained"
-                onClick={() => setInviteDialogOpen(true)}
+                component={Link}
+                href={`/groups/${groupId}/lists`}
+                variant="outlined"
                 color="primary"
               >
-                {t("groups:actions.invite")}
+                View Lists
               </Button>
-            )}
+              {canManage && (
+                <Button
+                  variant="contained"
+                  onClick={() => setInviteDialogOpen(true)}
+                  color="primary"
+                >
+                  {t("groups:actions.invite")}
+                </Button>
+              )}
+            </Box>
           </Box>
         </Grid>
 

@@ -189,6 +189,21 @@ function ResponsiveAppBar() {
                   </MenuItem>,
                 ]}
               {!!user?.role &&
+                [RoleEnum.ADMIN, RoleEnum.USER].includes(
+                  Number(user?.role?.id)
+                ) && [
+                  <MenuItem
+                    key="lists"
+                    onClick={handleCloseNavMenu}
+                    component={Link}
+                    href="/lists"
+                  >
+                    <Typography textAlign="center">
+                      {t("common:navigation.lists")}
+                    </Typography>
+                  </MenuItem>,
+                ]}
+              {!!user?.role &&
                 [RoleEnum.USER].includes(Number(user?.role?.id)) && [
                   <MenuItem
                     key="lscan"
@@ -323,6 +338,19 @@ function ResponsiveAppBar() {
                   href="/listing"
                 >
                   {t("common:navigation.listing")}
+                </Button>
+              )}
+            {!!user?.role &&
+              [RoleEnum.ADMIN, RoleEnum.USER].includes(
+                Number(user?.role?.id)
+              ) && (
+                <Button
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                  component={Link}
+                  href="/lists"
+                >
+                  {t("common:navigation.lists")}
                 </Button>
               )}
           </Box>

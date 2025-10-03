@@ -6,7 +6,7 @@ import useLanguage from "../i18n/use-language";
 import { RoleEnum } from "../api/types/role";
 
 type PropsTy = {
-  params: { slug: string; id: string; language: string };
+  params: { [key: string]: string | undefined };
   searchParams?: { [key: string]: string | string[] | undefined };
 };
 
