@@ -18,7 +18,9 @@ import {
   useGroupQuery,
   useUpdateGroupMutation,
 } from "@/services/api/react-query/groups-queries";
+import { useGroupMembershipsQuery } from "@/services/api/react-query/memberships-queries";
 import { Group } from "@/services/api/types/group";
+import { Membership } from "@/services/api/types/membership";
 import Link from "@/components/link";
 import withPageRequiredAuth from "@/services/auth/with-page-required-auth";
 import { RoleEnum } from "@/services/api/types/role";
@@ -49,6 +51,7 @@ function GroupEditPageContent({ params }: GroupEditPageContentProps) {
     isLoading: groupLoading,
     error: groupError,
   } = useGroupQuery(groupId);
+  const { data: membershipsData } = useGroupMembershipsQuery(groupId);
   const updateGroupMutation = useUpdateGroupMutation();
 
   // Initialize form data when group loads
@@ -70,19 +73,55 @@ function GroupEditPageContent({ params }: GroupEditPageContentProps) {
   // User can edit if they are the creator OR if they have admin role in memberships
 
   console.log({ group, user });
+
+  // Helper function to get createdBy ID (handles both string and object cases)
+  const getCreatedById = (
+    createdBy:
+      | string
+      | { _id: string; firstName: string; lastName: string; email: string }
+      | undefined
+  ) => {
+    if (typeof createdBy === "object" && createdBy) {
+      return createdBy._id;
+    }
+    return createdBy;
+  };
+
+  // Helper function to get createdBy display name
+  const getCreatedByDisplayName = (
+    createdBy:
+      | string
+      | { _id: string; firstName: string; lastName: string; email: string }
+      | undefined
+  ) => {
+    if (typeof createdBy === "object" && createdBy) {
+      return `${createdBy.firstName} ${createdBy.lastName}`;
+    }
+    return createdBy;
+  };
+
+  // Get active members count from memberships data
+  const memberships = membershipsData?.results || [];
+  const activeMembersCount = memberships.filter(
+    (m: Membership) => m.status === "active"
+  ).length;
+
   const canEdit =
     group?.ownerId === user?.id ||
-    group?.createdBy === user?.id ||
-    group?.members?.some(
-      (member) => member.user_id === user?.id && member.role === "admin"
+    getCreatedById(group?.createdBy) === user?.id ||
+    memberships.some(
+      (member: Membership) =>
+        member.user_id === user?.id && member.role === "admin"
     );
 
   // Debug logging
   console.log("Group data:", {
     groupId,
-    groupCreatedBy: group?.createdBy,
+    groupCreatedBy: getCreatedById(group?.createdBy),
     user: user?.id,
     members: group?.members,
+    memberships: memberships,
+    activeMembersCount: activeMembersCount,
     canEdit,
   });
 
@@ -338,11 +377,12 @@ function GroupEditPageContent({ params }: GroupEditPageContentProps) {
 
               <Typography variant="body2" color="text.secondary" paragraph>
                 <strong>{t("groups:info.members")}:</strong>{" "}
-                {group.members?.length || 0}
+                {activeMembersCount}
               </Typography>
 
               <Typography variant="body2" color="text.secondary" paragraph>
-                <strong>{t("groups:info.createdBy")}:</strong> {group.createdBy}
+                <strong>{t("groups:info.createdBy")}:</strong>{" "}
+                {getCreatedByDisplayName(group.createdBy)}
               </Typography>
             </CardContent>
           </Card>
