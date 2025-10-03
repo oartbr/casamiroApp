@@ -173,7 +173,7 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
     );
   }
 
-  const memberships = membershipsData?.memberships || [];
+  const memberships = membershipsData?.results || [];
   const activeMembers = memberships.filter(
     (m: Membership) => m.status === "active"
   );

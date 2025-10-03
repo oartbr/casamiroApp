@@ -27,15 +27,13 @@ import {
   useCreateGroupMutation,
 } from "@/services/api/react-query/groups-queries";
 import { Group, CreateGroupRequest } from "@/services/api/types/group";
-import { Membership } from "@/services/api/types/membership";
 
 // Type for pending invitation
 type PendingInvitation = {
   _id: string;
   group: Group;
-  role: "admin" | "editor" | "contributor";
-  createdAt: Date;
-  token: string;
+  role: string;
+  status: string;
 };
 import Link from "@/components/link";
 import withPageRequiredAuth from "@/services/auth/with-page-required-auth";
@@ -134,7 +132,7 @@ function GroupsPageContent() {
 
   // Transform the data to match frontend expectations
   const transformedGroups = groups
-    .map((membership: Membership) => {
+    .map((membership) => {
       // Type guard to ensure group_id is populated
       const group =
         typeof membership.group_id === "object" ? membership.group_id : null;
@@ -158,7 +156,7 @@ function GroupsPageContent() {
     .filter((group): group is NonNullable<typeof group> => group !== null);
 
   const transformedPendingInvitations = pendingInvitations
-    .map((membership: Membership) => {
+    .map((membership) => {
       // Type guard to ensure group_id is populated
       const group =
         typeof membership.group_id === "object" ? membership.group_id : null;
@@ -171,8 +169,7 @@ function GroupsPageContent() {
         _id: membership._id,
         group: group,
         role: membership.role,
-        createdAt: membership.createdAt,
-        token: membership.token,
+        status: membership.status,
       };
     })
     .filter(
@@ -207,7 +204,7 @@ function GroupsPageContent() {
             {t("groups:sections.active")} ({transformedGroups.length})
           </Typography>
           <Grid container spacing={2}>
-            {transformedGroups.map((group: GroupWithRole) => (
+            {transformedGroups.map((group) => (
               <Grid item xs={12} sm={6} md={4} key={group.id}>
                 <Card>
                   <CardContent>
@@ -319,8 +316,7 @@ function GroupsPageContent() {
                           Role: {invitation.role}
                         </Typography>
                         <Typography variant="caption" color="text.secondary">
-                          Invited:{" "}
-                          {new Date(invitation.createdAt).toLocaleDateString()}
+                          Status: {invitation.status}
                         </Typography>
                       </CardContent>
                       <CardActions>
@@ -328,7 +324,7 @@ function GroupsPageContent() {
                           size="small"
                           color="success"
                           component={Link}
-                          href={`/invitations/${invitation.token}`}
+                          href={`/invitations/${invitation._id}`}
                         >
                           {t("groups:actions.respond")}
                         </Button>

@@ -131,18 +131,7 @@ function Profile() {
                 </Typography>
                 <Chip label={pendingInvitations.length} color="warning" />
               </Box>
-              {groupsData?.summary?.primaryGroup && (
-                <Box display="flex" alignItems="center" mb={2}>
-                  <Typography variant="body1" sx={{ mr: 2 }}>
-                    Primary Group:
-                  </Typography>
-                  <Chip
-                    label={groupsData.summary.primaryGroup.name}
-                    color="success"
-                    variant="outlined"
-                  />
-                </Box>
-              )}
+              {/* Remove summary section since it's not available in UserGroupsResponse */}
 
               {/* Active Group Selector */}
               {activeGroups.length > 0 && (
@@ -285,14 +274,13 @@ function Profile() {
                         color="text.secondary"
                         paragraph
                       >
-                        Invited:{" "}
-                        {new Date(invitation.createdAt).toLocaleDateString()}
+                        Role: {invitation.role}
                       </Typography>
                       <Button
                         size="small"
                         color="success"
                         component={Link}
-                        href={`/invitations/${invitation.token}`}
+                        href={`/invitations/${invitation._id}`}
                         sx={{ mt: 1 }}
                       >
                         Respond to Invitation
