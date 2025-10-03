@@ -88,5 +88,3 @@ export type ListItemsResponse = {
   totalPages: number;
   totalResults: number;
 };
-
-

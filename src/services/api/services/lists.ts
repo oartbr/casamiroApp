@@ -4,7 +4,6 @@ import { API_URL } from "../config";
 import wrapperFetchJsonResponse from "../wrapper-fetch-json-response";
 import {
   List,
-  ListItem,
   CreateListRequest,
   UpdateListRequest,
   CreateListItemRequest,
@@ -190,5 +189,3 @@ export function useDeleteListItemService() {
     [fetch]
   );
 }
-
-

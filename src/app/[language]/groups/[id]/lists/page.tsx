@@ -13,5 +13,3 @@ interface ListsPageProps {
 export default function ListsPage({ params }: ListsPageProps) {
   return <ListsPageContent params={params} />;
 }
-
-

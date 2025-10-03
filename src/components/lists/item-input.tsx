@@ -1,12 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  Box,
-  TextField,
-  IconButton,
-  InputAdornment,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
 import AddIcon from "@mui/icons-material/Add";
 import { useCreateListItemMutation } from "../../services/api/react-query/lists-queries";
 import { useSnackbar } from "notistack";
@@ -69,7 +67,9 @@ export default function ItemInput({
             <InputAdornment position="end">
               <IconButton
                 onClick={handleAddItem}
-                disabled={disabled || createItemMutation.isPending || !itemText.trim()}
+                disabled={
+                  disabled || createItemMutation.isPending || !itemText.trim()
+                }
                 color="primary"
                 edge="end"
               >
@@ -83,5 +83,3 @@ export default function ItemInput({
     </Box>
   );
 }
-
-

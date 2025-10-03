@@ -80,5 +80,3 @@ function ListsPageContent({ params }: ListsPageContentProps) {
 export default withPageRequiredAuth(ListsPageContent, {
   roles: [RoleEnum.ADMIN, RoleEnum.USER],
 });
-
-

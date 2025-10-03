@@ -13,7 +13,12 @@ import {
   useDeleteListItemService,
 } from "../services/lists";
 import { createQueryKeys } from "../../react-query/query-key-factory";
-import { List, ListItem, CreateListRequest, UpdateListRequest, CreateListItemRequest, UpdateListItemRequest } from "../types/list";
+import {
+  CreateListRequest,
+  UpdateListRequest,
+  CreateListItemRequest,
+  UpdateListItemRequest,
+} from "../types/list";
 import HTTP_CODES_ENUM from "../types/http-codes";
 
 // Query Keys
@@ -76,7 +81,10 @@ export function useGetListQuery(listId: string, enabled: boolean = true) {
 }
 
 // Get lists by group
-export function useGetListsByGroupQuery(groupId: string, enabled: boolean = true) {
+export function useGetListsByGroupQuery(
+  groupId: string,
+  enabled: boolean = true
+) {
   const getListsByGroupService = useGetListsByGroupService();
 
   return useQuery({
@@ -93,7 +101,10 @@ export function useGetListsByGroupQuery(groupId: string, enabled: boolean = true
 }
 
 // Get default list by group
-export function useGetDefaultListByGroupQuery(groupId: string, enabled: boolean = true) {
+export function useGetDefaultListByGroupQuery(
+  groupId: string,
+  enabled: boolean = true
+) {
   const getDefaultListByGroupService = useGetDefaultListByGroupService();
 
   return useQuery({
@@ -142,10 +153,15 @@ export function useCreateListMutation() {
     onSuccess: (newList) => {
       // Invalidate and refetch lists queries
       queryClient.invalidateQueries({ queryKey: listQueryKeys.all().key });
-      queryClient.invalidateQueries({ queryKey: listQueryKeys.list().sub.byGroup(newList.groupId).key });
-      
+      queryClient.invalidateQueries({
+        queryKey: listQueryKeys.list().sub.byGroup(newList.groupId).key,
+      });
+
       // Add the new list to the cache
-      queryClient.setQueryData(listQueryKeys.list().sub.byId(newList.id).key, newList);
+      queryClient.setQueryData(
+        listQueryKeys.list().sub.byId(newList.id).key,
+        newList
+      );
     },
   });
 }
@@ -156,8 +172,17 @@ export function useUpdateListMutation() {
   const updateListService = useUpdateListService();
 
   return useMutation({
-    mutationFn: async ({ listId, data }: { listId: string; data: UpdateListRequest }) => {
-      const { status, data: responseData } = await updateListService(listId, data);
+    mutationFn: async ({
+      listId,
+      data,
+    }: {
+      listId: string;
+      data: UpdateListRequest;
+    }) => {
+      const { status, data: responseData } = await updateListService(
+        listId,
+        data
+      );
       if (status === HTTP_CODES_ENUM.OK) {
         return responseData;
       }
@@ -165,11 +190,16 @@ export function useUpdateListMutation() {
     },
     onSuccess: (updatedList) => {
       // Update the list in cache
-      queryClient.setQueryData(listQueryKeys.list().sub.byId(updatedList.id).key, updatedList);
-      
+      queryClient.setQueryData(
+        listQueryKeys.list().sub.byId(updatedList.id).key,
+        updatedList
+      );
+
       // Invalidate related queries
       queryClient.invalidateQueries({ queryKey: listQueryKeys.all().key });
-      queryClient.invalidateQueries({ queryKey: listQueryKeys.list().sub.byGroup(updatedList.groupId).key });
+      queryClient.invalidateQueries({
+        queryKey: listQueryKeys.list().sub.byGroup(updatedList.groupId).key,
+      });
     },
   });
 }
@@ -189,8 +219,10 @@ export function useDeleteListMutation() {
     },
     onSuccess: (listId) => {
       // Remove the list from cache
-      queryClient.removeQueries({ queryKey: listQueryKeys.list().sub.byId(listId).key });
-      
+      queryClient.removeQueries({
+        queryKey: listQueryKeys.list().sub.byId(listId).key,
+      });
+
       // Invalidate lists queries
       queryClient.invalidateQueries({ queryKey: listQueryKeys.all().key });
     },
@@ -212,8 +244,12 @@ export function useCreateListItemMutation() {
     },
     onSuccess: (updatedList) => {
       // Invalidate list queries since items are now embedded
-      queryClient.invalidateQueries({ queryKey: listQueryKeys.list().sub.byId(updatedList.id).key });
-      queryClient.invalidateQueries({ queryKey: listQueryKeys.list().sub.byGroup(updatedList.groupId).key });
+      queryClient.invalidateQueries({
+        queryKey: listQueryKeys.list().sub.byId(updatedList.id).key,
+      });
+      queryClient.invalidateQueries({
+        queryKey: listQueryKeys.list().sub.byGroup(updatedList.groupId).key,
+      });
     },
   });
 }
@@ -224,8 +260,17 @@ export function useUpdateListItemMutation() {
   const updateListItemService = useUpdateListItemService();
 
   return useMutation({
-    mutationFn: async ({ itemId, data }: { itemId: string; data: UpdateListItemRequest }) => {
-      const { status, data: responseData } = await updateListItemService(itemId, data);
+    mutationFn: async ({
+      itemId,
+      data,
+    }: {
+      itemId: string;
+      data: UpdateListItemRequest;
+    }) => {
+      const { status, data: responseData } = await updateListItemService(
+        itemId,
+        data
+      );
       if (status === HTTP_CODES_ENUM.OK) {
         return responseData;
       }
@@ -233,8 +278,12 @@ export function useUpdateListItemMutation() {
     },
     onSuccess: (updatedList) => {
       // Invalidate list queries since items are now embedded
-      queryClient.invalidateQueries({ queryKey: listQueryKeys.list().sub.byId(updatedList.id).key });
-      queryClient.invalidateQueries({ queryKey: listQueryKeys.list().sub.byGroup(updatedList.groupId).key });
+      queryClient.invalidateQueries({
+        queryKey: listQueryKeys.list().sub.byId(updatedList.id).key,
+      });
+      queryClient.invalidateQueries({
+        queryKey: listQueryKeys.list().sub.byGroup(updatedList.groupId).key,
+      });
     },
   });
 }
@@ -245,7 +294,13 @@ export function useDeleteListItemMutation() {
   const deleteListItemService = useDeleteListItemService();
 
   return useMutation({
-    mutationFn: async ({ itemId, listId }: { itemId: string; listId: string }) => {
+    mutationFn: async ({
+      itemId,
+      listId,
+    }: {
+      itemId: string;
+      listId: string;
+    }) => {
       const { status } = await deleteListItemService(itemId);
       if (status === HTTP_CODES_ENUM.NO_CONTENT) {
         return { itemId, listId };
@@ -254,7 +309,9 @@ export function useDeleteListItemMutation() {
     },
     onSuccess: (_, { listId }) => {
       // Invalidate list queries since items are now embedded
-      queryClient.invalidateQueries({ queryKey: listQueryKeys.list().sub.byId(listId).key });
+      queryClient.invalidateQueries({
+        queryKey: listQueryKeys.list().sub.byId(listId).key,
+      });
       // Note: We can't invalidate by group since we don't have groupId in the delete mutation
       // The frontend will need to refetch the list manually
     },

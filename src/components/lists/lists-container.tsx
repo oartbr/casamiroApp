@@ -1,21 +1,22 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Paper from "@mui/material/Paper";
+import List from "@mui/material/List";
+import CircularProgress from "@mui/material/CircularProgress";
+import Alert from "@mui/material/Alert";
+import Divider from "@mui/material/Divider";
 import {
-  Box,
-  Typography,
-  Paper,
-  List,
-  CircularProgress,
-  Alert,
-  Divider,
-} from "@mui/material";
-import { useGetListsByGroupQuery, useGetDefaultListByGroupQuery } from "../../services/api/react-query/lists-queries";
+  useGetListsByGroupQuery,
+  useGetDefaultListByGroupQuery,
+} from "../../services/api/react-query/lists-queries";
 import { useGetListItemsQuery } from "../../services/api/react-query/lists-queries";
 import ListSelector from "./list-selector";
 import ItemInput from "./item-input";
 import ItemDisplay from "./item-display";
-import { List as ListType, ListItem as ListItemType } from "../../services/api/types/list";
+import { ListItem as ListItemType } from "../../services/api/types/list";
 
 interface ListsContainerProps {
   groupId: string;
@@ -23,21 +24,16 @@ interface ListsContainerProps {
 
 export default function ListsContainer({ groupId }: ListsContainerProps) {
   const [selectedListId, setSelectedListId] = useState<string | null>(null);
-  
   // Get lists for the group
   const {
     data: listsData,
     isLoading: listsLoading,
     error: listsError,
-    refetch: refetchLists,
   } = useGetListsByGroupQuery(groupId);
 
   // Get default list
-  const {
-    data: defaultList,
-    isLoading: defaultListLoading,
-    refetch: refetchDefaultList,
-  } = useGetDefaultListByGroupQuery(groupId);
+  const { data: defaultList, isLoading: defaultListLoading } =
+    useGetDefaultListByGroupQuery(groupId);
 
   // Get items for selected list
   const {
@@ -81,14 +77,14 @@ export default function ListsContainer({ groupId }: ListsContainerProps) {
     refetchItems();
   };
 
-  const handleListCreated = () => {
-    refetchLists();
-    refetchDefaultList();
-  };
-
   if (listsLoading || defaultListLoading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight={200}>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight={200}
+      >
         <CircularProgress />
       </Box>
     );
@@ -116,7 +112,6 @@ export default function ListsContainer({ groupId }: ListsContainerProps) {
         <Typography variant="h5" gutterBottom>
           Lists
         </Typography>
-        
         <ListSelector
           lists={lists}
           selectedListId={selectedListId}
@@ -130,22 +125,23 @@ export default function ListsContainer({ groupId }: ListsContainerProps) {
             <Typography variant="h6" gutterBottom>
               {selectedList.name}
               {selectedList.isDefault && (
-                <Typography component="span" variant="caption" sx={{ ml: 1, color: "text.secondary" }}>
+                <Typography
+                  component="span"
+                  variant="caption"
+                  sx={{ ml: 1, color: "text.secondary" }}
+                >
                   (Default)
                 </Typography>
               )}
             </Typography>
-            
+
             {selectedList.description && (
               <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                 {selectedList.description}
               </Typography>
             )}
 
-            <ItemInput
-              listId={selectedList.id}
-              onItemAdded={handleItemAdded}
-            />
+            <ItemInput listId={selectedList.id} onItemAdded={handleItemAdded} />
 
             {itemsLoading ? (
               <Box display="flex" justifyContent="center" py={4}>
@@ -178,5 +174,3 @@ export default function ListsContainer({ groupId }: ListsContainerProps) {
     </Box>
   );
 }
-
-
