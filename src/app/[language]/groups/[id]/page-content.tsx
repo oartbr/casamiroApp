@@ -44,11 +44,11 @@ import { RoleEnum } from "@/services/api/types/role";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 interface GroupDetailPageContentProps {
-  params: { language: string; slug: string; id: string };
+  params: { [key: string]: string | undefined };
 }
 
 function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
-  const groupId = params.id;
+  const groupId = params.id!;
   const { t } = useTranslation("groups");
   const { user } = useAuth();
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false);

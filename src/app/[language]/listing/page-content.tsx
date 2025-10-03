@@ -25,7 +25,7 @@ import React, { useEffect, useState } from "react";
 import { Nota } from "@/services/api/types/nota";
 
 type Props = {
-  params: { language: string };
+  params: { [key: string]: string | undefined };
 };
 
 type ItemCardProps = Nota;

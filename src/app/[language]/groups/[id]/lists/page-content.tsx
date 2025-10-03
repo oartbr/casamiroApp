@@ -14,11 +14,11 @@ import { useGroupQuery } from "@/services/api/react-query/groups-queries";
 import ListsContainer from "@/components/lists/lists-container";
 
 interface ListsPageContentProps {
-  params: { language: string; id: string };
+  params: { [key: string]: string | undefined };
 }
 
 function ListsPageContent({ params }: ListsPageContentProps) {
-  const groupId = params.id;
+  const groupId = params.id!;
   const { t } = useTranslation("groups");
 
   const {

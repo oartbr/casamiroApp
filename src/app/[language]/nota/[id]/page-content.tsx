@@ -16,7 +16,7 @@ import React, { useEffect, useState } from "react";
 import { Nota } from "@/services/api/types/nota";
 
 type Props = {
-  params: { language: string; id: string };
+  params: { [key: string]: string | undefined };
 };
 
 type NotaCardProps = Nota;
@@ -38,7 +38,7 @@ function List(props: Props) {
   useEffect(() => {
     setIsLoading(true); // Indicate loading state
     if (user) {
-      fetchNotaDetails({ id: params.id })
+      fetchNotaDetails({ id: params.id! })
         .then((data) => {
           if (data.status === HTTP_CODES_ENUM.OK) {
             setNotaDetails(data.data.nota ?? null); // Step 3: Update state with sorted data, defaulting to null if undefined

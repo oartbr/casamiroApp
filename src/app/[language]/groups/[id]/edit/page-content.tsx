@@ -26,11 +26,11 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SaveIcon from "@mui/icons-material/Save";
 
 interface GroupEditPageContentProps {
-  params: { language: string; slug: string; id: string };
+  params: { [key: string]: string | undefined };
 }
 
 function GroupEditPageContent({ params }: GroupEditPageContentProps) {
-  const groupId = params.id;
+  const groupId = params.id!;
   const { t } = useTranslation("groups");
   const { user } = useAuth();
   const router = useRouter();
@@ -114,7 +114,7 @@ function GroupEditPageContent({ params }: GroupEditPageContentProps) {
 
     try {
       await updateGroupMutation.mutateAsync({
-        groupId,
+        groupId: groupId,
         data: {
           name: formData.name.trim(),
           description: formData.description?.trim() || "",
