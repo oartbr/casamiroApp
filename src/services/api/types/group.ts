@@ -65,6 +65,7 @@ export type UserGroupsResponse = {
       group_id: Group;
       role: string;
       status: string;
+      token?: string;
     }>;
   };
 };
