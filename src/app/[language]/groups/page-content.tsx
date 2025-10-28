@@ -26,6 +26,10 @@ import {
   useUserGroupsQuery,
   useCreateGroupMutation,
 } from "@/services/api/react-query/groups-queries";
+import {
+  useAcceptInvitationMutation,
+  useDeclineInvitationMutation,
+} from "@/services/api/react-query/memberships-queries";
 import { Group, CreateGroupRequest } from "@/services/api/types/group";
 
 // Type for pending invitation
@@ -34,6 +38,7 @@ type PendingInvitation = {
   group: Group;
   role: string;
   status: string;
+  token?: string;
 };
 import Link from "@/components/link";
 import withPageRequiredAuth from "@/services/auth/with-page-required-auth";
@@ -58,6 +63,8 @@ function GroupsPageContent() {
     error,
   } = useUserGroupsQuery(user?.id?.toString() || "");
   const createGroupMutation = useCreateGroupMutation();
+  const acceptInvitationMutation = useAcceptInvitationMutation();
+  const declineInvitationMutation = useDeclineInvitationMutation();
 
   // Don't render anything until user is loaded
   if (!user) {
@@ -105,6 +112,31 @@ function GroupsPageContent() {
     });
   };
 
+  const handleAcceptInvitation = async (invitation: PendingInvitation) => {
+    if (!user?.id || !invitation.token) return;
+
+    try {
+      await acceptInvitationMutation.mutateAsync({
+        token: invitation.token,
+        data: {
+          userId: user.id.toString(),
+        },
+      });
+    } catch (error) {
+      console.error("Failed to accept invitation:", error);
+    }
+  };
+
+  const handleDeclineInvitation = async (invitation: PendingInvitation) => {
+    if (!invitation.token) return;
+
+    try {
+      await declineInvitationMutation.mutateAsync(invitation.token);
+    } catch (error) {
+      console.error("Failed to decline invitation:", error);
+    }
+  };
+
   if (isLoading) {
     return (
       <Container maxWidth="lg">
@@ -128,7 +160,19 @@ function GroupsPageContent() {
   const groups = groupsData?.groupsByStatus?.active || [];
   const pendingInvitations = groupsData?.groupsByStatus?.pending || [];
 
-  console.log({ groups, pendingInvitations });
+  console.log("Frontend groups data debug:", {
+    fullGroupsData: groupsData,
+    activeGroups: groups,
+    pendingInvitations: pendingInvitations,
+    pendingInvitationsLength: pendingInvitations.length,
+    groupsByStatus: groupsData?.groupsByStatus,
+    pendingInvitationsWithTokens: pendingInvitations.map((inv) => ({
+      _id: inv._id,
+      token: inv.token,
+      role: inv.role,
+      status: inv.status,
+    })),
+  });
 
   // Transform the data to match frontend expectations
   const transformedGroups = groups
@@ -170,11 +214,10 @@ function GroupsPageContent() {
         group: group,
         role: membership.role,
         status: membership.status,
-      };
+        token: membership.token || undefined,
+      } as PendingInvitation;
     })
-    .filter(
-      (invitation): invitation is PendingInvitation => invitation !== null
-    );
+    .filter((invitation) => invitation !== null) as PendingInvitation[];
 
   return (
     <Container maxWidth="lg">
@@ -323,10 +366,30 @@ function GroupsPageContent() {
                         <Button
                           size="small"
                           color="success"
-                          component={Link}
-                          href={`/invitations/${invitation._id}`}
+                          onClick={() => handleAcceptInvitation(invitation)}
+                          disabled={
+                            !invitation.token ||
+                            acceptInvitationMutation.isPending ||
+                            declineInvitationMutation.isPending
+                          }
                         >
-                          {t("groups:actions.respond")}
+                          {acceptInvitationMutation.isPending
+                            ? t("groups:actions.accepting")
+                            : t("groups:actions.accept")}
+                        </Button>
+                        <Button
+                          size="small"
+                          color="error"
+                          onClick={() => handleDeclineInvitation(invitation)}
+                          disabled={
+                            !invitation.token ||
+                            acceptInvitationMutation.isPending ||
+                            declineInvitationMutation.isPending
+                          }
+                        >
+                          {declineInvitationMutation.isPending
+                            ? t("groups:actions.declining")
+                            : t("groups:actions.decline")}
                         </Button>
                       </CardActions>
                     </Card>
