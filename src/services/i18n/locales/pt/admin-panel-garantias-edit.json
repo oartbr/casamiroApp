@@ -1,0 +1,87 @@
+{
+  "title1": "Editar garantia",
+  "titleAssign": "Atribuir SKU à garantia",
+  "actions": {
+    "submit": "Salvar",
+    "cancel": "Cancelar",
+    "assign": "Atribuir",
+    "unassign": "Desatribuir",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "back": "Voltar"
+  },
+  "inputs": {
+    "email": {
+      "label": "Email",
+      "validation": {
+        "invalid": "O email é inválido",
+        "required": "O email é obrigatório",
+        "server": {
+          "emailAlreadyExists": "O email já existe"
+        }
+      }
+    },
+    "brand": {
+      "label": "Marca",
+      "validation": {
+        "required": "A marca é obrigatória"
+      }
+    },
+    "firstName": {
+      "label": "Nome",
+      "validation": {
+        "required": "O nome é obrigatório"
+      }
+    },
+    "lastName": {
+      "label": "Sobrenome",
+      "validation": {
+        "required": "O sobrenome é obrigatório"
+      }
+    },
+    "address": {
+      "label": "Endereço",
+      "validation": {
+        "required": "O endereço é obrigatório"
+      }
+    },
+    "zipcode": {
+      "label": "CEP",
+      "validation": {
+        "required": "O CEP é obrigatório"
+      }
+    },
+    "city": {
+      "label": "Cidade",
+      "validation": {
+        "required": "A cidade é obrigatória"
+      }
+    },
+    "number": {
+      "label": "Número",
+      "validation": {
+        "required": "O número é obrigatório"
+      }
+    },
+    "description": {
+      "label": "Descrição",
+      "validation": {
+        "required": "A descrição é obrigatória"
+      }
+    },
+    "sku": {
+      "label": "SKU",
+      "validation": {
+        "required": "O SKU é obrigatório"
+      }
+    }
+  },
+  "alerts": {
+    "password": {
+      "success": "A senha foi atualizada corretamente"
+    },
+    "user": {
+      "success": "O perfil do usuário foi atualizado corretamente"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "title": "Mamut, o clube de descontos mais inteligente do Brasil.",
+  "subTitle": "Transforme seus recibos em listas inteligentes com IA e o Mamut.", 
+  "description": "Escaneie recibos, acompanhe suas compras e receba as melhores ofertas especialmente para você. Junte-se ao clube e aproveite descontos exclusivos!",
+  "socialProof": "🔆 Economize tempo e dinheiro com ajuda de Inteligência Artificial!",
+  "register": "Cadastrar", 
+  "registerWarranty": "Registrar Garantia",
+  "notFound": "Código não identificado",
+  "notFoundMessage": "O código que você inseriu não existe em nossa base de dados, por favor verifique se está correto ou entre em contato com a empresa.",
+  "privacy-policy": "Política de Privacidade",
+  "callToAction": "Cadastre-se sem custo"
+}

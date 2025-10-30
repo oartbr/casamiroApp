@@ -1,0 +1,45 @@
+{
+  "app-name": "Registro de Garantias",
+  "install": {
+    "button": "Instalar como App"
+  },
+  "loading": "Carregando ...",
+  "navigation": {
+    "home": "Início",
+    "listing": "Listagens",
+    "signIn": "Entrar",
+    "signUp": "Cadastrar-se",
+    "profile": "Perfil",
+    "users": "Usuários",
+    "logout": "Sair",
+    "generate-codes": "Gerar Garantias",
+    "garantias": "Garantias",
+    "skus": "Equipamentos",
+    "groups": "Grupos",
+    "create-sku": "Criar Equipamento",
+    "create-garantia": "Criar Garantias",
+    "edit-sku": "Editar Equipamento",
+    "edit-garantia": "Editar Garantias",
+    "scan": "Escanear",
+    "profile-menu": "Perfil",
+    "lists": "Listas"
+  },
+  "formInputs": {
+    "avatarInput": {
+      "dropzoneText": "Solte a imagem aqui ...",
+      "dragAndDrop": "Ou arraste uma imagem e solte aqui",
+      "selectFile": "Selecione uma imagem"
+    }
+  },
+  "leavePage": {
+    "title": "Sair desta página?",
+    "message": "As alterações que você fez podem não ser salvas",
+    "stay": "Permanecer na Página",
+    "leave": "Sair da Página"
+  },
+  "auth": {
+    "facebook": {
+      "action": "Entrar com Facebook"
+    }
+  }
+}

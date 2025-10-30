@@ -1,0 +1,57 @@
+{
+  "title": "Garantias",
+  "table": {
+    "column1": "Código",
+    "column2": "SKU",
+    "column3": "Status",
+    "column4": "Usuário",
+    "column5": "Registro"
+  },
+  "status": {
+    "assigned": "Pendente",
+    "registered": "Registrado",
+    "canceled": "Status",
+    "created": "Novo"
+  },
+  "actions": {
+    "add": "Adicionar Garantia",
+    "edit": "Editar",
+    "delete": "Excluir",
+    "create": "Criar Garantias",
+    "submit": "Salvar",
+    "cancel": "Cancelar",
+    "assign": "Atribuir",
+    "unassign": "Desatribuir",
+    "back": "Voltar"
+  },
+  "confirm": {
+    "delete": {
+      "title": "Excluir Garantia",
+      "message": "Tem certeza de que deseja excluir esta Garantia?"
+    }
+  },
+  "filter": {
+    "actions": {
+      "filter": "Filtrar",
+      "apply": "Aplicar"
+    },
+    "inputs": {
+      "role": {
+        "label": "Função",
+        "options": {
+          "1": "Administrador",
+          "2": "Garantia"
+        }
+      },
+      "status": {
+        "label": "Status",
+        "options": {
+          "created": "Novas",
+          "assigned": "Atribuídas",
+          "registered": "Registradas",
+          "canceled": "Canceladas"
+        }
+      }
+    }
+  }
+}

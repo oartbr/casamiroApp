@@ -1,0 +1,61 @@
+{
+  "title": "Criar conta",
+  "actions": {
+    "submit": "Criar",
+    "accountAlreadyExists": "Já tem uma conta?"
+  },
+  "inputs": {
+    "firstName": {
+      "label": "Nome",
+      "validation": {
+        "required": "O nome é obrigatório"
+      }
+    },
+    "lastName": {
+      "label": "Sobrenome",
+      "validation": {
+        "required": "O sobrenome é obrigatório"
+      }
+    },
+    "email": {
+      "label": "Email",
+      "validation": {
+        "required": "O email é obrigatório",
+        "invalid": "Email ou senha incorretos",
+        "server": {
+          "emailAlreadyExists": "O email já está registrado"
+        }
+      }
+    },
+    "phoneNumber": {
+      "label": "Número de telefone",
+      "validation": {
+        "required": "O número de telefone é obrigatório"
+      }
+    },
+    "areaCode": {
+      "label": "País",
+      "validation": {
+        "required": "O país é obrigatório"
+      }
+    },
+    "password": {
+      "label": "Senha",
+      "validation": {
+        "required": "A senha é obrigatória",
+        "min": "A senha deve ter pelo menos 8 caracteres",
+        "server": {
+          "incorrectPassword": "Senha inválida"
+        }
+      }
+    },
+    "policy": {
+      "label": "Política de Privacidade",
+      "agreement": "Li e aceito as condições",
+      "validation": {
+        "required": "Concordar com a política de privacidade é obrigatório"
+      }
+    }
+  },
+  "or": "OU"
+}

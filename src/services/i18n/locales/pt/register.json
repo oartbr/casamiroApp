@@ -1,0 +1,148 @@
+{
+  "title": "Registrar Garantia",
+  "workflow": {
+    "confirm-phone": {
+      "title": "Precisamos validar seu número de telefone",
+      "subtitle": "Você receberá um código por WhatsApp.",
+      "submit": "Enviar código",
+      "checkPhoneNumber": "Verificar código"
+    },
+    "get-code": {
+      "title": "Por favor verifique seu WhatsApp",
+      "subtitle": "Insira o código que enviamos.",
+      "submit": "Confirmar",
+      "resend": "Reenviar",
+      "unexisting": "O código não existe.",
+      "incorrect": "Código incorreto",
+      "expired": "Seu código expirou. Por favor solicite um novo."
+    }
+  },
+  "actions": {
+    "submit": "Registrar Garantia"
+  },
+  "inputs": {
+    "phoneNumber": {
+      "label": "Número de Telefone",
+      "validation": {
+        "required": "Obrigatório",
+        "invalid": "Número inválido",
+        "server": {
+          "incorrectPassword": "Número inválido"
+        }
+      }
+    },
+    "countryCode": {
+      "label": "Código do país",
+      "validation": {
+        "required": "Obrigatório",
+        "invalid": "Código inválido",
+        "server": {
+          "incorrectPassword": "Código inválido"
+        }
+      }
+    },
+    "passwordConfirmation": {
+      "label": "Confirmação de senha",
+      "validation": {
+        "required": "Confirmação de senha é obrigatória",
+        "match": "A confirmação de senha deve corresponder à senha"
+      }
+    },
+    "code": {
+      "label": "Código",
+      "validation": {
+        "required": "Obrigatório",
+        "invalid": "Código inválido",
+        "server": {
+          "incorrectCode": "Código não identificado"
+        }
+      }
+    },
+    "confirmed": {
+      "label": "Válido",
+      "validation": {
+        "required": "Obrigatório",
+        "invalid": "Código incorreto"
+      }
+    },
+    "firstName": {
+      "label": "Nome",
+      "validation": {
+        "required": "Obrigatório",
+        "invalid": "Nome inválido"
+      }
+    },
+    "lastName": {
+      "label": "Sobrenome",
+      "validation": {
+        "required": "Obrigatório",
+        "invalid": "Sobrenome inválido"
+      }
+    },
+    "address": {
+      "label": "Endereço",
+      "validation": {
+        "required": "Obrigatório",
+        "invalid": "Endereço inválido"
+      }
+    },
+    "number": {
+      "label": "Número",
+      "validation": {
+        "required": "Obrigatório",
+        "invalid": "Número inválido"
+      }
+    },
+    "city": {
+      "label": "Cidade",
+      "validation": {
+        "required": "Obrigatório",
+        "invalid": "Cidade inválida"
+      }
+    },
+    "zipcode": {
+      "label": "CEP",
+      "validation": {
+        "required": "Obrigatório",
+        "invalid": "CEP inválido"
+      }
+    },
+    "email": {
+      "label": "Email",
+      "validation": {
+        "required": "Obrigatório",
+        "invalid": "Email inválido"
+      }
+    },
+    "confirmEmail": {
+      "label": "Confirmar email",
+      "validation": {
+        "required": "Obrigatório",
+        "invalid": "Email inválido"
+      }
+    },
+    "password": {
+      "label": "Senha",
+      "validation": {
+        "required": "Obrigatório",
+        "invalid": "Senha inválida"
+      }
+    },
+    "policy": {
+      "label": "Condições da garantia",
+      "agreement": "Confirmo que li e aceito as ",
+      "validation": {
+        "required": "Obrigatório",
+        "invalid": "Por favor confirmar as condições."
+      }
+    }
+  },
+  "alerts": {
+    "success": "Garantia registrada com sucesso",
+    "codeSent": "Verifique o código no seu WhatsApp!",
+    "codeConfirmed": "Código confirmado com sucesso",
+    "expired": "Seu código expirou. Por favor solicite um novo.",
+    "wrong": "Seu código não coincide. Por favor tente novamente",
+    "exceeded": "Seu código não coincide. Por favor solicite um novo."
+  }
+}

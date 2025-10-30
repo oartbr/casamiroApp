@@ -1,0 +1,78 @@
+{
+  "title": "Perfil",
+  "title1": "Editar Perfil",
+  "title2": "Alterar Email",
+  "title3": "Alterar Senha",
+  "actions": {
+    "edit": "Editar",
+    "submit": "Salvar",
+    "cancel": "Cancelar"
+  },
+  "inputs": {
+    "firstName": {
+      "label": "Nome",
+      "validation": {
+        "required": "O nome é obrigatório"
+      }
+    },
+    "lastName": {
+      "label": "Sobrenome",
+      "validation": {
+        "required": "O sobrenome é obrigatório"
+      }
+    },
+    "email": {
+      "label": "Novo Email",
+      "validation": {
+        "required": "O email é obrigatório",
+        "email": "O email não é válido",
+        "currentEmail": "O novo email deve ser diferente do antigo",
+        "server": {
+          "emailExists": "Este email já está registrado"
+        }
+      }
+    },
+    "emailConfirmation": {
+      "label": "Confirmação de Email",
+      "validation": {
+        "required": "A confirmação de email é obrigatória",
+        "match": "A confirmação de email deve coincidir com o email"
+      }
+    },
+    "oldPassword": {
+      "label": "Senha Antiga",
+      "validation": {
+        "required": "A senha antiga é obrigatória",
+        "min": "A senha deve ter pelo menos 6 caracteres",
+        "server": {
+          "incorrectOldPassword": "A senha antiga não é válida"
+        }
+      }
+    },
+    "password": {
+      "label": "Nova senha",
+      "validation": {
+        "required": "A nova senha é obrigatória",
+        "min": "A nova senha deve ter pelo menos 6 caracteres"
+      }
+    },
+    "passwordConfirmation": {
+      "label": "Confirmação de senha",
+      "validation": {
+        "required": "A confirmação de senha é obrigatória",
+        "match": "A confirmação de senha deve coincidir com a senha"
+      }
+    }
+  },
+  "alerts": {
+    "email": {
+      "success": "Enviamos um pedido de alteração de email para sua nova conta de email. Por favor, verifique seu email e clique no link de confirmação."
+    },
+    "password": {
+      "success": "A senha foi alterada com sucesso"
+    },
+    "profile": {
+      "success": "O perfil foi atualizado com sucesso"
+    }
+  }
+}

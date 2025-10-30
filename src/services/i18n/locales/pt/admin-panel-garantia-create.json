@@ -1,0 +1,60 @@
+{
+  "title": "Criar Garantias",
+  "actions": {
+    "create": "Criar",
+    "cancel": "Cancelar"
+  },
+  "inputs": {
+    "quantity": {
+      "label": "Número de garantias a criar",
+      "validation": {
+        "invalid": "O número de garantias não é válido",
+        "required": "O número de garantias é obrigatório",
+        "server": {
+          "error": "Não foi possível criar as garantias. Por favor tente mais tarde."
+        }
+      }
+    },
+    "firstName": {
+      "label": "Nome",
+      "validation": {
+        "required": "O nome é obrigatório"
+      }
+    },
+    "lastName": {
+      "label": "Sobrenome",
+      "validation": {
+        "required": "O sobrenome é obrigatório"
+      }
+    },
+    "role": {
+      "label": "Função",
+      "validation": {
+        "required": "A função é obrigatória"
+      },
+      "options": {
+        "1": "Administrador",
+        "2": "Usuário"
+      }
+    },
+    "password": {
+      "label": "Senha",
+      "validation": {
+        "required": "A senha é obrigatória",
+        "min": "A senha deve ter pelo menos 6 caracteres"
+      }
+    },
+    "passwordConfirmation": {
+      "label": "Confirmação de senha",
+      "validation": {
+        "required": "A confirmação de senha é obrigatória",
+        "match": "A confirmação de senha deve coincidir com a senha"
+      }
+    }
+  },
+  "alerts": {
+    "garantia": {
+      "success": "As garantias foram criadas com sucesso"
+    }
+  }
+}

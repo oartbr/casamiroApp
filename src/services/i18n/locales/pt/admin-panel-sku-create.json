@@ -1,0 +1,92 @@
+{
+  "title": "Criar Equipamento",
+  "actions": {
+    "create": "Criar",
+    "cancel": "Cancelar"
+  },
+  "inputs": {
+    "skuId": {
+      "label": "Código de SKU",
+      "validation": {
+        "required": "O SKU é obrigatório"
+      }
+    },
+    "description": {
+      "label": "Descrição",
+      "validation": {
+        "required": "A descrição é obrigatória"
+      }
+    },
+    "name": {
+      "label": "Nome",
+      "validation": {
+        "required": "O nome é obrigatório"
+      }
+    },
+    "category": {
+      "label": "Categoria",
+      "validation": {
+        "required": "A categoria é obrigatória"
+      }
+    },
+    "capacity": {
+      "label": "Capacidade (L)",
+      "validation": {
+        "required": "A capacidade é obrigatória"
+      }
+    },
+    "length": {
+      "label": "Comprimento",
+      "validation": {
+        "required": "O comprimento é obrigatório"
+      }
+    },
+    "width": {
+      "label": "Largura",
+      "validation": {
+        "required": "A largura é obrigatória"
+      }
+    },
+    "height": {
+      "label": "Altura",
+      "validation": {
+        "required": "A altura é obrigatória"
+      }
+    },
+    "weight": {
+      "label": "Peso",
+      "validation": {
+        "required": "O peso é obrigatório"
+      }
+    },
+    "material": {
+      "label": "Material",
+      "validation": {
+        "required": "O material é obrigatório"
+      }
+    },
+    "cost": {
+      "label": "Custo",
+      "validation": {
+        "required": "O custo é obrigatório"
+      }
+    },
+    "price": {
+      "label": "Preço",
+      "validation": {
+        "required": "O preço é obrigatório"
+      }
+    },
+    "brand": {
+      "label": "Marca",
+      "validation": {
+        "required": "A marca é obrigatória"
+      }
+    }
+  },
+  "alerts": {
+    "updateSuccess": {
+      "success": "Sucesso! O SKU foi criado."
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "title": "Criar usuário",
+  "actions": {
+    "submit": "Salvar",
+    "cancel": "Cancelar"
+  },
+  "inputs": {
+    "email": {
+      "label": "Email",
+      "validation": {
+        "invalid": "O email é inválido",
+        "required": "O email é obrigatório",
+        "server": {
+          "emailAlreadyExists": "O email já existe"
+        }
+      }
+    },
+    "firstName": {
+      "label": "Nome",
+      "validation": {
+        "required": "O nome é obrigatório"
+      }
+    },
+    "lastName": {
+      "label": "Sobrenome",
+      "validation": {
+        "required": "O sobrenome é obrigatório"
+      }
+    },
+    "phoneNumber": {
+      "label": "Número de telefone",
+      "validation": {
+        "required": "O número de telefone é obrigatório"
+      }
+    },
+    "areaCode": {
+      "label": "País",
+      "validation": {
+        "required": "O país é obrigatório"
+      }
+    },
+    "role": {
+      "label": "Função",
+      "validation": {
+        "required": "A função é obrigatória"
+      },
+      "options": {
+        "1": "Administrador",
+        "2": "Usuário"
+      }
+    },
+    "password": {
+      "label": "Senha",
+      "validation": {
+        "required": "A senha é obrigatória",
+        "min": "A senha deve ter pelo menos 6 caracteres"
+      }
+    },
+    "passwordConfirmation": {
+      "label": "Confirmação de senha",
+      "validation": {
+        "required": "A confirmação de senha é obrigatória",
+        "match": "A confirmação de senha deve coincidir com a senha"
+      }
+    }
+  },
+  "alerts": {
+    "user": {
+      "success": "O perfil do usuário foi criado com sucesso"
+    }
+  }
+}

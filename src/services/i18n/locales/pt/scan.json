@@ -1,0 +1,8 @@
+{
+  "title": "Escanear código QR",
+  "description": "",
+  "registerWarranty": "Registrar Garantia",
+  "notFound": "Código não identificado",
+  "notFoundMessage": "O código que você inseriu não existe em nossa base de dados, por favor verifique se está correto ou entre em contato com a empresa.",
+  "privacy-policy": "Política de Privacidade"
+}
