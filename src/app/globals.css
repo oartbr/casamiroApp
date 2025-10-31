@@ -260,3 +260,6 @@ body {
 .joinButton:active {
   transform: scale(0.98) !important; /* Slight scale-down on click */
 }
+.itemLista{
+  background: red!important
+}

@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 import FormControl from "@mui/material/FormControl";
@@ -19,6 +18,8 @@ import { RoleEnum } from "@/services/api/types/role";
 import ItemInput from "@/components/lists/item-input";
 import ItemDisplay from "@/components/lists/item-display";
 import { ListItem as ListItemType } from "@/services/api/types/list";
+import { useTranslation } from "@/services/i18n/client";
+import List from "@mui/material/List/List";
 
 interface ListsPageContentProps {
   params: { [key: string]: string | undefined };
@@ -27,6 +28,7 @@ interface ListsPageContentProps {
 function ListsPageContent({}: ListsPageContentProps) {
   const { user } = useAuth();
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
+  const { t } = useTranslation("lists");
 
   // Get user's groups
   const {
@@ -97,7 +99,7 @@ function ListsPageContent({}: ListsPageContentProps) {
     return (
       <Container maxWidth="lg">
         <Alert severity="error" sx={{ mt: 2 }}>
-          Failed to load groups. Please try again.
+          {t("failedToLoadGroups")}
         </Alert>
       </Container>
     );
@@ -107,8 +109,7 @@ function ListsPageContent({}: ListsPageContentProps) {
     return (
       <Container maxWidth="lg">
         <Alert severity="info" sx={{ mt: 2 }}>
-          You are not a member of any groups yet. Join a group to start using
-          lists.
+          {t("noGroupsMessage")}
         </Alert>
       </Container>
     );
@@ -117,105 +118,77 @@ function ListsPageContent({}: ListsPageContentProps) {
   return (
     <Container maxWidth="lg">
       <Box sx={{ mt: 2 }}>
-        <Typography variant="h3" gutterBottom>
-          Lists
-        </Typography>
-
-        <Paper elevation={1} sx={{ p: 3, mb: 3 }}>
-          <FormControl fullWidth sx={{ mb: 3 }}>
-            <InputLabel>Select Group</InputLabel>
-            <Select
-              value={selectedGroupId || ""}
-              label="Select Group"
-              onChange={(e) => setSelectedGroupId(e.target.value)}
-            >
-              {activeGroups.map((group) => (
-                <MenuItem key={group.group_id.id} value={group.group_id.id}>
-                  <Box display="flex" alignItems="center" gap={1}>
-                    <Typography variant="body2">
-                      {group.group_id.name}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      ({group.role})
-                    </Typography>
-                  </Box>
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {selectedGroupId && (
-            <>
-              {listLoading ? (
-                <Box display="flex" justifyContent="center" py={4}>
-                  <CircularProgress />
-                </Box>
-              ) : listError ? (
-                <Alert severity="error" sx={{ mb: 2 }}>
-                  Failed to load list. Please try again.
-                </Alert>
-              ) : defaultList ? (
-                <>
-                  <Typography variant="h5" gutterBottom>
-                    {defaultList.name}
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      sx={{ ml: 1, color: "text.secondary" }}
-                    >
-                      (Default List)
-                    </Typography>
+        <FormControl fullWidth sx={{ mb: 3 }}>
+          <InputLabel>{t("selectGroup")}</InputLabel>
+          <Select
+            value={selectedGroupId || ""}
+            label={t("selectGroup")}
+            onChange={(e) => setSelectedGroupId(e.target.value)}
+          >
+            {activeGroups.map((group) => (
+              <MenuItem key={group.group_id.id} value={group.group_id.id}>
+                <Box display="flex" alignItems="center" gap={1}>
+                  <Typography variant="body2">{group.group_id.name}</Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    ({group.role})
                   </Typography>
+                </Box>
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
-                  {defaultList.description && (
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{ mb: 2 }}
-                    >
-                      {defaultList.description}
-                    </Typography>
-                  )}
+        {selectedGroupId && (
+          <>
+            {listLoading ? (
+              <Box display="flex" justifyContent="center" py={4}>
+                <CircularProgress />
+              </Box>
+            ) : listError ? (
+              <Alert severity="error" sx={{ mb: 2 }}>
+                {t("failedToLoadList")}
+              </Alert>
+            ) : defaultList ? (
+              <>
+                <ItemInput
+                  listId={defaultList.id}
+                  onItemAdded={handleItemAdded}
+                  placeholder={t("addItemPlaceholder")}
+                  helperText={t("addItemHelperText")}
+                />
 
-                  <ItemInput
-                    listId={defaultList.id}
-                    onItemAdded={handleItemAdded}
-                  />
-
-                  {itemsLoading ? (
-                    <Box display="flex" justifyContent="center" py={4}>
-                      <CircularProgress />
-                    </Box>
-                  ) : itemsError ? (
-                    <Alert severity="error" sx={{ mb: 2 }}>
-                      Failed to load items. Please try again.
-                    </Alert>
-                  ) : items.length === 0 ? (
-                    <Alert severity="info">
-                      No items in this list yet. Add your first item above!
-                    </Alert>
-                  ) : (
-                    <Box>
-                      {items.map((item: ListItemType) => (
-                        <ItemDisplay
-                          key={item.id}
-                          item={item}
-                          listId={defaultList.id}
-                          onItemDeleted={handleItemDeleted}
-                          onItemUpdated={handleItemUpdated}
-                        />
-                      ))}
-                    </Box>
-                  )}
-                </>
-              ) : (
-                <Alert severity="error">
-                  No default list found for this group.
-                </Alert>
-              )}
-            </>
-          )}
-        </Paper>
+                {itemsLoading ? (
+                  <Box display="flex" justifyContent="center" py={4}>
+                    <CircularProgress />
+                  </Box>
+                ) : itemsError ? (
+                  <Alert severity="error" sx={{ mb: 2 }}>
+                    {t("failedToLoadItems")}
+                  </Alert>
+                ) : items.length === 0 ? (
+                  <Alert severity="info">{t("noItemsMessage")}</Alert>
+                ) : (
+                  <List>
+                    {items.map((item: ListItemType) => (
+                      <ItemDisplay
+                        key={item.id}
+                        item={item}
+                        listId={defaultList.id}
+                        onItemDeleted={handleItemDeleted}
+                        onItemUpdated={handleItemUpdated}
+                        deleteAction={t("actions.deleteItem")}
+                        markAsCompleteAction={t("actions.markAsComplete")}
+                        markAsIncompleteAction={t("actions.markAsIncomplete")}
+                      />
+                    ))}
+                  </List>
+                )}
+              </>
+            ) : (
+              <Alert severity="error">{t("noDefaultListFound")}</Alert>
+            )}
+          </>
+        )}
       </Box>
     </Container>
   );

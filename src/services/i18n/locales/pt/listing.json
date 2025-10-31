@@ -1,10 +1,14 @@
 {
-  "title": "Garantias",
+  "title": "Notas Fiscais",
   "actions": {
     "submit": "Entrar",
     "createAccount": "Criar uma conta",
     "forgotPassword": "Esqueceu a senha?",
-    "register": "Registrar Garantia"
+    "register": "Registrar Garantia",
+    "viewDetails": "Ver detalhes"
   },
-  "or": "OU"
+  "or": "OU",
+  "noActiveGroupSelected": "Nenhum grupo ativo selecionado",
+  "filterNotasByGroup": "Notas por Grupo",
+  "selectGroupToView": "Selecionar Grupo"
 }

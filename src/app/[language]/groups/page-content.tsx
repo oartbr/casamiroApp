@@ -229,7 +229,9 @@ function GroupsPageContent() {
             justifyContent="space-between"
             alignItems="center"
           >
-            <Typography variant="h3">{t("groups:title")}</Typography>
+            <Typography variant="h4" sx={{ mb: 2 }}>
+              {t("groups:sections.active")} ({transformedGroups.length})
+            </Typography>
             <Button
               variant="contained"
               startIcon={<AddIcon />}
@@ -243,9 +245,6 @@ function GroupsPageContent() {
 
         {/* Active Groups */}
         <Grid item xs={12}>
-          <Typography variant="h5" sx={{ mb: 2 }}>
-            {t("groups:sections.active")} ({transformedGroups.length})
-          </Typography>
           <Grid container spacing={2}>
             {transformedGroups.map((group) => (
               <Grid item xs={12} sm={6} md={4} key={group.id}>
@@ -287,13 +286,6 @@ function GroupsPageContent() {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button
-                      size="small"
-                      component={Link}
-                      href={`/groups/${group.id}`}
-                    >
-                      {t("groups:actions.view")}
-                    </Button>
                     {group.role === "admin" && (
                       <Button
                         size="small"

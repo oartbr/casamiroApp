@@ -5,7 +5,7 @@
     "invite": "Convidar",
     "view": "Ver",
     "edit": "Editar",
-    "create": "Criar novo Grupo",
+    "create": "Criar Grupo",
     "respond": "Responder",
     "cancel": "Cancelar",
     "delete": "Deletar",
@@ -17,12 +17,13 @@
     "makeAdmin": "Tornar administrador",
     "makeEditor": "Tornar editor",
     "makeViewer": "Tornar visualizador",
-    "remove": "Remover"
+    "remove": "Remover",
+    "loading": "Carregando..."
   },
   "sections": {
-    "active": "Ativos",
+    "active": "Grupos Ativos",
     "invite": "Convidar",
-    "create": "Criar novo Grupo",
+    "create": "Criar Grupo",
     "pending": "Pendentes"
   },
   "noActiveGroups" : "Não há grupos Ativos",
@@ -64,7 +65,8 @@
     "role": "Cargo",
     "allowInvitationsHelp": "Permitir convites para o grupo",
     "requireApprovalHelp": "Requer aprovação para entrar no grupo",
-    "phone": "Telefone"
+    "phone": "Telefone",
+    "settings": "Configurações"
   },
   "roles": {
     "viewer": "Visualizador",

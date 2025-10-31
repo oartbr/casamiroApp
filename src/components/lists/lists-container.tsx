@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
 import List from "@mui/material/List";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
@@ -108,69 +107,67 @@ export default function ListsContainer({ groupId }: ListsContainerProps) {
 
   return (
     <Box>
-      <Paper elevation={1} sx={{ p: 3, mb: 3 }}>
-        <Typography variant="h5" gutterBottom>
-          Lists
-        </Typography>
-        <ListSelector
-          lists={lists}
-          selectedListId={selectedListId}
-          onListChange={handleListChange}
-          groupId={groupId}
-        />
+      <Typography variant="h5" gutterBottom>
+        Lists
+      </Typography>
+      <ListSelector
+        lists={lists}
+        selectedListId={selectedListId}
+        onListChange={handleListChange}
+        groupId={groupId}
+      />
 
-        {selectedList && (
-          <>
-            <Divider sx={{ my: 2 }} />
-            <Typography variant="h6" gutterBottom>
-              {selectedList.name}
-              {selectedList.isDefault && (
-                <Typography
-                  component="span"
-                  variant="caption"
-                  sx={{ ml: 1, color: "text.secondary" }}
-                >
-                  (Default)
-                </Typography>
-              )}
-            </Typography>
-
-            {selectedList.description && (
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                {selectedList.description}
+      {selectedList && (
+        <>
+          <Divider sx={{ my: 2 }} />
+          <Typography variant="h6" gutterBottom>
+            {selectedList.name}
+            {selectedList.isDefault && (
+              <Typography
+                component="span"
+                variant="caption"
+                sx={{ ml: 1, color: "text.secondary" }}
+              >
+                (Default)
               </Typography>
             )}
+          </Typography>
 
-            <ItemInput listId={selectedList.id} onItemAdded={handleItemAdded} />
+          {selectedList.description && (
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              {selectedList.description}
+            </Typography>
+          )}
 
-            {itemsLoading ? (
-              <Box display="flex" justifyContent="center" py={4}>
-                <CircularProgress />
-              </Box>
-            ) : itemsError ? (
-              <Alert severity="error" sx={{ mb: 2 }}>
-                Failed to load items. Please try again.
-              </Alert>
-            ) : items.length === 0 ? (
-              <Alert severity="info">
-                No items in this list yet. Add your first item above!
-              </Alert>
-            ) : (
-              <List>
-                {items.map((item: ListItemType) => (
-                  <ItemDisplay
-                    key={item.id}
-                    item={item}
-                    listId={selectedList.id}
-                    onItemDeleted={handleItemDeleted}
-                    onItemUpdated={handleItemUpdated}
-                  />
-                ))}
-              </List>
-            )}
-          </>
-        )}
-      </Paper>
+          <ItemInput listId={selectedList.id} onItemAdded={handleItemAdded} />
+
+          {itemsLoading ? (
+            <Box display="flex" justifyContent="center" py={4}>
+              <CircularProgress />
+            </Box>
+          ) : itemsError ? (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              Failed to load items. Please try again.
+            </Alert>
+          ) : items.length === 0 ? (
+            <Alert severity="info">
+              No items in this list yet. Add your first item above!
+            </Alert>
+          ) : (
+            <List className="itemLista">
+              {items.map((item: ListItemType) => (
+                <ItemDisplay
+                  key={item.id}
+                  item={item}
+                  listId={selectedList.id}
+                  onItemDeleted={handleItemDeleted}
+                  onItemUpdated={handleItemUpdated}
+                />
+              ))}
+            </List>
+          )}
+        </>
+      )}
     </Box>
   );
 }

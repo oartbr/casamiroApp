@@ -25,6 +25,11 @@ interface ItemDisplayProps {
   onItemDeleted?: () => void;
   onItemUpdated?: () => void;
   disabled?: boolean;
+  deleteAction?: string;
+  editAction?: string;
+  viewAction?: string;
+  markAsCompleteAction?: string;
+  markAsIncompleteAction?: string;
 }
 
 export default function ItemDisplay({
@@ -33,6 +38,9 @@ export default function ItemDisplay({
   onItemDeleted,
   onItemUpdated,
   disabled = false,
+  deleteAction = "Delete item",
+  markAsCompleteAction = "Mark as complete",
+  markAsIncompleteAction = "Mark as incomplete",
 }: ItemDisplayProps) {
   const deleteItemMutation = useDeleteListItemMutation();
   const updateItemMutation = useUpdateListItemMutation();
@@ -61,9 +69,7 @@ export default function ItemDisplay({
       });
       onItemUpdated?.();
       enqueueSnackbar(
-        item.isCompleted
-          ? "Item marked as incomplete"
-          : "Item marked as complete",
+        item.isCompleted ? markAsIncompleteAction : markAsCompleteAction,
         { variant: "success" }
       );
     } catch (error) {
@@ -72,7 +78,22 @@ export default function ItemDisplay({
   };
 
   const formatDate = (date: Date) => {
-    return new Date(date).toLocaleString();
+    return new Date(date).toLocaleDateString("pt-br", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const formatDateShort = (date: Date) => {
+    return new Date(date).toLocaleDateString("pt-br", {
+      day: "2-digit",
+      month: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
   const getTooltipText = () => {
@@ -93,14 +114,13 @@ export default function ItemDisplay({
 
   return (
     <ListItem
+      disableGutters
       sx={{
-        border: "1px solid",
-        borderColor: "divider",
-        borderRadius: 1,
         mb: 1,
         bgcolor: item.isCompleted ? "action.hover" : "background.paper",
         opacity: item.isCompleted ? 0.7 : 1,
       }}
+      component="div"
     >
       <ListItemText
         primary={
@@ -115,9 +135,9 @@ export default function ItemDisplay({
               >
                 {item.text}
               </Typography>
-              {item.isCompleted && (
+              {item.isCompleted && item.completedAt && (
                 <Chip
-                  label="Completed"
+                  label={formatDateShort(item.completedAt)}
                   size="small"
                   color="success"
                   variant="outlined"
@@ -126,22 +146,13 @@ export default function ItemDisplay({
             </Box>
           </Tooltip>
         }
-        secondary={
-          <Box display="flex" alignItems="center" gap={1} mt={0.5}>
-            {item.isCompleted && item.completedAt && (
-              <>
-                <Typography variant="caption" color="text.secondary">
-                  • Completed {formatDate(item.completedAt)}
-                </Typography>
-              </>
-            )}
-          </Box>
-        }
       />
       <ListItemSecondaryAction>
         <Box display="flex" alignItems="center" gap={0.5}>
           <Tooltip
-            title={item.isCompleted ? "Mark as incomplete" : "Mark as complete"}
+            title={
+              item.isCompleted ? markAsIncompleteAction : markAsCompleteAction
+            }
           >
             <IconButton
               onClick={handleToggleComplete}
@@ -156,7 +167,7 @@ export default function ItemDisplay({
               )}
             </IconButton>
           </Tooltip>
-          <Tooltip title="Delete item">
+          <Tooltip title={deleteAction}>
             <IconButton
               onClick={handleDeleteItem}
               disabled={disabled || deleteItemMutation.isPending}

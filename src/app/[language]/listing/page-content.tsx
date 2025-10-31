@@ -7,14 +7,14 @@ import useAuth from "@/services/auth/use-auth";
 import HTTP_CODES_ENUM from "@/services/api/types/http-codes";
 import { useGetListingNotasByUserService } from "@/services/api/services/notas";
 import { useUserGroupsQuery } from "@/services/api/react-query/groups-queries";
-// import { useTranslation } from "@/services/i18n/client";
+import { useTranslation } from "@/services/i18n/client";
 // import { useSnackbar } from "notistack";
 import { useRouter } from "next/navigation";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import Chip from "@mui/material/Chip";
+// import Chip from "@mui/material/Chip";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
@@ -37,7 +37,7 @@ function List(props: Props) {
   // const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
   console.log(props);
-  // const { t } = useTranslation("register");
+  const { t } = useTranslation("listing");
   const { user } = useAuth();
 
   const fetchListNotas = useGetListingNotasByUserService();
@@ -96,8 +96,8 @@ function List(props: Props) {
           if (data.status === HTTP_CODES_ENUM.OK) {
             const sortedItems = (data.data.results as ItemCardProps[]).sort(
               (a: ItemCardProps, b: ItemCardProps) =>
-                new Date(b.registeredAt).getTime() -
-                new Date(a.registeredAt).getTime()
+                new Date(a.registeredAt).getTime() -
+                new Date(b.registeredAt).getTime()
             );
             setItems(sortedItems); // Step 3: Update state with sorted data
             setIsLoading(false); // Update loading state
@@ -114,7 +114,7 @@ function List(props: Props) {
     <Container maxWidth="sm" className="mainContainer">
       <Grid>
         <Grid>
-          <h1>Notas Fiscais</h1>
+          <h1>{t("title")}</h1>
 
           {/* Group Information and Filter */}
           {activeGroups.length > 0 && (
@@ -122,53 +122,25 @@ function List(props: Props) {
               sx={{
                 mb: 3,
                 p: 2,
-                border: "1px solid",
-                borderColor: "divider",
-                borderRadius: 1,
               }}
             >
-              <Typography variant="h6" gutterBottom>
-                Current Active Group
-              </Typography>
               {currentActiveGroup ? (
-                <Box display="flex" alignItems="center" mb={2}>
-                  <Chip
-                    label={currentActiveGroup.group_id.name}
-                    color="primary"
-                    variant="outlined"
-                    sx={{ mr: 2 }}
-                  />
-                  <Chip
-                    label={currentActiveGroup.role}
-                    size="small"
-                    color={
-                      currentActiveGroup.role === "admin"
-                        ? "error"
-                        : currentActiveGroup.role === "editor"
-                          ? "warning"
-                          : "default"
-                    }
-                  />
-                </Box>
+                <Typography variant="body2" sx={{ mb: 1 }}></Typography>
               ) : (
                 <Typography
                   variant="body2"
                   color="text.secondary"
                   sx={{ mb: 2 }}
                 >
-                  No active group selected
+                  {t("noActiveGroupSelected")}
                 </Typography>
               )}
-
-              <Typography variant="body2" sx={{ mb: 1 }}>
-                Filter Notas by Group:
-              </Typography>
               <FormControl fullWidth size="small">
-                <InputLabel>Select Group to View</InputLabel>
+                <InputLabel>{t("selectGroupToView")}</InputLabel>
                 <Select
                   value={selectedGroupId || ""}
                   onChange={(e) => handleGroupFilterChange(e.target.value)}
-                  label="Select Group to View"
+                  label={t("selectGroupToView")}
                 >
                   {activeGroups.map((membership) => (
                     <MenuItem
@@ -194,7 +166,7 @@ function List(props: Props) {
                   onClick={() => {
                     router.replace(`nota/${item.id}`);
                   }}
-                  action="Ver detalles"
+                  action={t("actions.viewDetails")}
                   type="listing"
                 />
               </Grid>

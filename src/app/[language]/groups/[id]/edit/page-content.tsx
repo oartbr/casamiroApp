@@ -168,14 +168,14 @@ function GroupEditPageContent({ params }: GroupEditPageContentProps) {
   };
 
   const handleCancel = () => {
-    router.push(`/groups/${groupId}`);
+    router.push(`/groups`);
   };
 
   if (groupLoading) {
     return (
       <Container maxWidth="lg">
         <Typography variant="h4" sx={{ mt: 4, mb: 2 }}>
-          Loading group...
+          {t("actions.loading")}
         </Typography>
       </Container>
     );
@@ -229,7 +229,7 @@ function GroupEditPageContent({ params }: GroupEditPageContentProps) {
           <Box display="flex" alignItems="center" mb={2}>
             <Button
               component={Link}
-              href={`/groups/${groupId}`}
+              href={`/groups`}
               startIcon={<ArrowBackIcon />}
               sx={{ mr: 2 }}
             >

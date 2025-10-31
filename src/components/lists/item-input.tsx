@@ -14,6 +14,7 @@ interface ItemInputProps {
   onItemAdded?: () => void;
   disabled?: boolean;
   placeholder?: string;
+  helperText?: string;
 }
 
 export default function ItemInput({
@@ -21,6 +22,7 @@ export default function ItemInput({
   onItemAdded,
   disabled = false,
   placeholder = "Add an item to the list...",
+  helperText = "Press Enter to add item",
 }: ItemInputProps) {
   const [itemText, setItemText] = useState("");
   const createItemMutation = useCreateListItemMutation();
@@ -78,7 +80,7 @@ export default function ItemInput({
             </InputAdornment>
           ),
         }}
-        helperText="Press Enter to add item"
+        helperText={helperText}
       />
     </Box>
   );
