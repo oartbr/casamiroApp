@@ -45,12 +45,13 @@ export default function ListSelector({
       enqueueSnackbar("List name is required", { variant: "error" });
       return;
     }
+    console.log({newListName});
 
     try {
       const newList = await createListMutation.mutateAsync({
         name: newListName.trim(),
         description: newListDescription.trim() || undefined,
-        groupId,
+        groupId: newListName as String,
         isDefault: false,
       });
 
