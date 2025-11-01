@@ -153,8 +153,12 @@ export function useCreateListMutation() {
     onSuccess: (newList) => {
       // Invalidate and refetch lists queries
       queryClient.invalidateQueries({ queryKey: listQueryKeys.all().key });
+      const groupId =
+        typeof newList.groupId === "string"
+          ? newList.groupId
+          : newList.groupId.id;
       queryClient.invalidateQueries({
-        queryKey: listQueryKeys.list().sub.byGroup(newList.groupId).key,
+        queryKey: listQueryKeys.list().sub.byGroup(groupId).key,
       });
 
       // Add the new list to the cache
@@ -197,8 +201,12 @@ export function useUpdateListMutation() {
 
       // Invalidate related queries
       queryClient.invalidateQueries({ queryKey: listQueryKeys.all().key });
+      const groupId =
+        typeof updatedList.groupId === "string"
+          ? updatedList.groupId
+          : updatedList.groupId.id;
       queryClient.invalidateQueries({
-        queryKey: listQueryKeys.list().sub.byGroup(updatedList.groupId).key,
+        queryKey: listQueryKeys.list().sub.byGroup(groupId).key,
       });
     },
   });
@@ -247,8 +255,12 @@ export function useCreateListItemMutation() {
       queryClient.invalidateQueries({
         queryKey: listQueryKeys.list().sub.byId(updatedList.id).key,
       });
+      const groupId =
+        typeof updatedList.groupId === "string"
+          ? updatedList.groupId
+          : updatedList.groupId.id;
       queryClient.invalidateQueries({
-        queryKey: listQueryKeys.list().sub.byGroup(updatedList.groupId).key,
+        queryKey: listQueryKeys.list().sub.byGroup(groupId).key,
       });
     },
   });
@@ -281,8 +293,12 @@ export function useUpdateListItemMutation() {
       queryClient.invalidateQueries({
         queryKey: listQueryKeys.list().sub.byId(updatedList.id).key,
       });
+      const groupId =
+        typeof updatedList.groupId === "string"
+          ? updatedList.groupId
+          : updatedList.groupId.id;
       queryClient.invalidateQueries({
-        queryKey: listQueryKeys.list().sub.byGroup(updatedList.groupId).key,
+        queryKey: listQueryKeys.list().sub.byGroup(groupId).key,
       });
     },
   });

@@ -464,9 +464,7 @@ function GroupsPageContent() {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCloseDialog}>
-              {t("common:actions.cancel")}
-            </Button>
+            <Button onClick={handleCloseDialog}>{t("actions.cancel")}</Button>
             <Button
               onClick={handleCreateGroup}
               variant="contained"

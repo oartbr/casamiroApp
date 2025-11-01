@@ -18,7 +18,7 @@ import ItemDisplay from "./item-display";
 import { ListItem as ListItemType } from "../../services/api/types/list";
 
 interface ListsContainerProps {
-  groupId: object;
+  groupId: string;
 }
 
 export default function ListsContainer({ groupId }: ListsContainerProps) {

@@ -27,7 +27,6 @@ import { Nota } from "@/services/api/types/nota";
 
 export default function PageContent() {
   const { t } = useTranslation("dashboard");
-  const { t: tHome } = useTranslation("home");
   const { user, isLoaded } = useAuth();
   const router = useRouter();
 
@@ -189,12 +188,12 @@ export default function PageContent() {
         <Grid item xs={12} md={6}>
           <div className="mensagem">
             <Typography variant="h4" gutterBottom>
-              {tHome("title")}
+              {t("dashboard:title")}
             </Typography>
             <Typography variant="body1" paragraph>
               <Trans
                 i18nKey="description"
-                t={tHome}
+                t={t}
                 components={[
                   <MuiLink
                     key="1"
@@ -215,10 +214,10 @@ export default function PageContent() {
               className="joinButton"
               sx={{ mb: 2 }}
             >
-              {tHome("callToAction")}
+              {t("dashboard:callToAction")}
             </Button>
             <Typography variant="body2" sx={{ color: "text.secondary" }}>
-              {tHome("socialProof")}
+              {t("dashboard:socialProof")}
             </Typography>
           </div>
         </Grid>

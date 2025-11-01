@@ -23,7 +23,7 @@ interface ListSelectorProps {
   lists: List[];
   selectedListId: string | null;
   onListChange: (listId: string | null) => void;
-  groupId: object;
+  groupId: string | object;
   disabled?: boolean;
 }
 
@@ -47,10 +47,14 @@ export default function ListSelector({
     }
 
     try {
+      // Convert string groupId to object format if needed
+      const groupIdObject =
+        typeof groupId === "string" ? { id: groupId } : groupId;
+
       const newList = await createListMutation.mutateAsync({
         name: newListName.trim(),
         description: newListDescription.trim() || undefined,
-        groupId: groupId,
+        groupId: groupIdObject,
         isDefault: false,
       });
 
