@@ -18,7 +18,7 @@ import ItemDisplay from "./item-display";
 import { ListItem as ListItemType } from "../../services/api/types/list";
 
 interface ListsContainerProps {
-  groupId: string;
+  groupId: object;
 }
 
 export default function ListsContainer({ groupId }: ListsContainerProps) {
@@ -28,11 +28,11 @@ export default function ListsContainer({ groupId }: ListsContainerProps) {
     data: listsData,
     isLoading: listsLoading,
     error: listsError,
-  } = useGetListsByGroupQuery(groupId);
+  } = useGetListsByGroupQuery(groupId as unknown as string);
 
   // Get default list
   const { data: defaultList, isLoading: defaultListLoading } =
-    useGetDefaultListByGroupQuery(groupId);
+    useGetDefaultListByGroupQuery(groupId as unknown as string);
 
   // Get items for selected list
   const {
