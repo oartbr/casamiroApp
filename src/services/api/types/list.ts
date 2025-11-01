@@ -1,8 +1,10 @@
+import { Group } from "../types/group";
+
 export type List = {
   id: string;
   name: string;
   description?: string;
-  groupId: string;
+  groupId: Group;
   isDefault: boolean;
   createdBy: string;
   createdAt: Date;
@@ -42,7 +44,7 @@ export type ListItem = {
 export type CreateListRequest = {
   name: string;
   description?: string;
-  groupId: string;
+  groupId: object;
   isDefault?: boolean;
   settings?: {
     allowItemDeletion?: boolean;
@@ -79,6 +81,7 @@ export type ListsResponse = {
   limit: number;
   totalPages: number;
   totalResults: number;
+  groupId: Group;
 };
 
 export type ListItemsResponse = {

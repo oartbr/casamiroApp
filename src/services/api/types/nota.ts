@@ -1,7 +1,7 @@
 export type Nota = {
   id: String;
   user: String;
-  groupId?: String;
+  groupId?: Object;
   group?: {
     id: String;
     name: String;

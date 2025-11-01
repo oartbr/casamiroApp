@@ -104,7 +104,7 @@ export type NotasRequest = {
   limit: number;
   filters?: {
     status?: Status[];
-    groupId?: string;
+    groupId?: Object;
   };
   sort?: Array<{
     order: SortEnum;

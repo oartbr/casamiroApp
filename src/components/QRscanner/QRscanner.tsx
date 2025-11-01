@@ -127,7 +127,7 @@ const QRscanner = ({ callBack }: { callBack: (data: string) => void }) => {
           styles={{ container: scannerStyle }}
         />
       ) : (
-        <p>Loading camera...</p>
+        <p>Abrindo Câmaras...</p>
       )}
       {devices.length > 1 && (
         <button
