@@ -23,7 +23,7 @@ interface ListSelectorProps {
   lists: List[];
   selectedListId: string | null;
   onListChange: (listId: string | null) => void;
-  groupId: string;
+  groupId: object;
   disabled?: boolean;
 }
 
@@ -45,13 +45,12 @@ export default function ListSelector({
       enqueueSnackbar("List name is required", { variant: "error" });
       return;
     }
-    console.log({newListName});
 
     try {
       const newList = await createListMutation.mutateAsync({
         name: newListName.trim(),
         description: newListDescription.trim() || undefined,
-        groupId: newListName as String,
+        groupId: groupId,
         isDefault: false,
       });
 
