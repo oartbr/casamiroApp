@@ -10,7 +10,6 @@ import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import { useTranslation } from "@/services/i18n/client";
 import { Trans } from "react-i18next/TransWithoutContext";
-import tanque from "../../../public/assets/images/nf.png";
 import scan from "../../../public/assets/images/home.png";
 import useAuth from "@/services/auth/use-auth";
 import { useEffect, useMemo, useState } from "react";
@@ -27,6 +26,7 @@ import { Nota } from "@/services/api/types/nota";
 
 export default function PageContent() {
   const { t } = useTranslation("dashboard");
+  const { t: home } = useTranslation("home");
   const { user, isLoaded } = useAuth();
   const router = useRouter();
 
@@ -125,9 +125,11 @@ export default function PageContent() {
           direction="column"
           sx={{ minHeight: "60vh", alignItems: "start" }}
         >
-          <h1>{t(greetingKey, { user: user.firstName })}</h1>
           <Grid item xs={12} md={6}>
-            <div className="mensagem">
+            <h1 style={{ marginTop: 0, textAlign: "left" }}>
+              {t(greetingKey, { user: user.firstName })}
+            </h1>
+            <div>
               {latestNota ? ( // show the latest receipt
                 <>
                   <NotaCard
@@ -146,7 +148,6 @@ export default function PageContent() {
               )}
             </div>
           </Grid>
-
           <Grid item xs={12} md={6}>
             <h1>{t("defaultList", { group: defaultListName })}</h1>
             <Box component="div" sx={{ position: "relative" }}>
@@ -160,7 +161,7 @@ export default function PageContent() {
                 </ul>
               ) : (
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  {t("dashboard.noListItems", {
+                  {t("noItemsMessage", {
                     defaultValue: "No items in your default list",
                   })}
                 </Typography>
@@ -178,22 +179,16 @@ export default function PageContent() {
   // Otherwise, show the original public home content
   return (
     <Container maxWidth="lg">
-      <Grid
-        container
-        spacing={3}
-        pt={3}
-        direction="row"
-        sx={{ minHeight: "90vh", alignItems: "center" }}
-      >
+      <Grid container spacing={3} pt={3} direction="row">
         <Grid item xs={12} md={6}>
           <div className="mensagem">
             <Typography variant="h4" gutterBottom>
-              {t("dashboard:title")}
+              {home("title")}
             </Typography>
             <Typography variant="body1" paragraph>
               <Trans
                 i18nKey="description"
-                t={t}
+                t={home}
                 components={[
                   <MuiLink
                     key="1"
@@ -214,10 +209,10 @@ export default function PageContent() {
               className="joinButton"
               sx={{ mb: 2 }}
             >
-              {t("dashboard:callToAction")}
+              {home("callToAction")}
             </Button>
             <Typography variant="body2" sx={{ color: "text.secondary" }}>
-              {t("dashboard:socialProof")}
+              {home("socialProof")}
             </Typography>
           </div>
         </Grid>
@@ -229,13 +224,6 @@ export default function PageContent() {
           >
             <div className="scanning">
               <Image
-                className="qrTanque"
-                src={tanque.src}
-                alt="tanque"
-                fill={true}
-                style={{ objectFit: "contain" }}
-              />
-              <Image
                 className="qrScan"
                 src={scan.src}
                 alt="scan"
@@ -244,9 +232,6 @@ export default function PageContent() {
               />
             </div>
           </Box>
-        </Grid>
-        <Grid item xs={12} sx={{ textAlign: "center", mt: "auto" }}>
-          <MuiLink href="/privacy-policy">{t("privacy-policy")}</MuiLink>
         </Grid>
       </Grid>
     </Container>

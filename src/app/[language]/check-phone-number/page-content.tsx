@@ -5,7 +5,6 @@ import { useForm, FormProvider, useFormState } from "react-hook-form";
 import { useCheckPhoneNumberLoginService } from "@/services/api/services/garantia";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
 import FormTextInput from "@/components/form/text-input/form-text-input";
 import FormSelectInput from "@/components/form/select/form-select";
 import * as yup from "yup";
@@ -24,10 +23,6 @@ import {
 type RegisterFormData = {
   phoneNumber: string;
   countryCode: { label: string; value: string };
-};
-
-type Props = {
-  params: { language: string; id: string };
 };
 
 const useValidationSchema = () => {
@@ -68,30 +63,36 @@ function FormActions() {
   );
 }
 
-function Form(props: Props) {
+function Form() {
   const { enqueueSnackbar } = useSnackbar();
   const fetchSendCode = useCheckPhoneNumberLoginService();
   const { t } = useTranslation("register");
   const validationSchema = useValidationSchema();
   const router = useRouter();
-  console.log(props.params);
 
-  const countryList = getCountryDataList()
+  const countryVals = getCountryDataList()
     .filter((country: ICountryData) => country.continent === "SA")
     .map((country: ICountryData) => {
       return {
-        label: country.name,
+        label: country.native,
         value: country.iso2,
       };
     });
 
+  const countryList = countryVals;
   const countryRenderOption = (option: { label: string }) => option.label;
+  const defaultCountry = countryList.find(
+    (option) => option.value === "BR"
+  ) || {
+    label: "",
+    value: "",
+  };
 
   const methods = useForm<RegisterFormData>({
     resolver: yupResolver<RegisterFormData>(validationSchema),
     defaultValues: {
       phoneNumber: "",
-      countryCode: { label: "", value: "" },
+      countryCode: defaultCountry,
     },
   });
 
@@ -134,51 +135,61 @@ function Form(props: Props) {
   });
 
   return (
-    <FormProvider {...methods}>
-      <Container maxWidth="xs">
-        <form onSubmit={onSubmit}>
-          <Grid container spacing={2} mb={3}>
-            <Grid item xs={12} mt={3} mb={3}>
-              <Typography variant="h6">
-                {t("register:workflow.confirm-phone.title")}
-              </Typography>
-              <Typography>
-                {t("register:workflow.confirm-phone.subtitle")}
-              </Typography>
-            </Grid>
-            <Grid container spacing={2}>
-              <Grid item xs={5}>
-                <FormSelectInput
-                  name="countryCode"
-                  label={t("register:inputs.countryCode.label")}
-                  options={countryList}
-                  renderOption={countryRenderOption}
-                  keyValue="value" // Assuming options is an array of objects with an 'id' key
-                  testId="example-select-input"
-                  onChange={changeCountry}
-                />
-              </Grid>
-              <Grid item xs={7}>
-                <FormTextInput<RegisterFormData>
-                  name="phoneNumber"
-                  label={t("register:inputs.phoneNumber.label")}
-                  type="phoneNumber"
-                  testId="phoneNumber"
-                />
-              </Grid>
-            </Grid>
-            <Grid item xs={7} mt={2}>
-              <FormActions />
-            </Grid>
+    <>
+      <Container maxWidth="xs" className="mainContainer">
+        <Grid
+          container
+          spacing={2}
+          pt={3}
+          direction="column"
+          sx={{ minHeight: "60vh", alignItems: "start" }}
+        >
+          <Grid item xs={12} md={12}>
+            <h1 style={{ marginTop: 0, textAlign: "left" }}>
+              {t("register:workflow.confirm-phone.title")}
+            </h1>
           </Grid>
-        </form>
+          <FormProvider {...methods}>
+            <Container maxWidth="xs">
+              <form onSubmit={onSubmit}>
+                <Grid container spacing={2} mb={3}>
+                  <Grid item xs={6}>
+                    <FormSelectInput
+                      name="countryCode"
+                      label={t("register:inputs.countryCode.label")}
+                      options={countryList}
+                      renderOption={countryRenderOption}
+                      keyValue="value"
+                      defaultValue={countryList.find(
+                        (option) => option.value === "BR"
+                      )}
+                      testId="example-select-input"
+                      onChange={changeCountry}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <FormTextInput<RegisterFormData>
+                      name="phoneNumber"
+                      label={t("register:inputs.phoneNumber.label")}
+                      type="phoneNumber"
+                      testId="phoneNumber"
+                    />
+                  </Grid>
+                </Grid>
+                <Grid item xs={12} mt={2}>
+                  <FormActions />
+                </Grid>
+              </form>
+            </Container>
+          </FormProvider>
+        </Grid>
       </Container>
-    </FormProvider>
+    </>
   );
 }
 
-function CheckPhoneNumber(props: Props) {
-  return <Form params={props.params} />;
+function CheckPhoneNumber() {
+  return <Form />;
 }
 
 export default CheckPhoneNumber;

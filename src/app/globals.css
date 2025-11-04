@@ -1,10 +1,23 @@
 /* Your global CSS here */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 body {
-  background: rgb(255, 255, 255) !important;
+  padding: 0px !important;
 }
 .logoHeader {
   margin-right: 5rem;
-  padding: 0.5rem;
+  padding: 0.1rem;
+  width: auto !important;
+  left: 50% !important;
+  margin-left: -7%;
+}
+.logoHeaderShort {
+  padding: 0.2rem;
+  top: 0px;
+  left: 50% !important;
+  margin-left: -7%;
+  display: none;
+  width: auto !important;
 }
 .welcomeMessage {
   display: none;
@@ -93,6 +106,12 @@ body {
   }
   .qrTanque {
     margin: 0;
+  }
+  .logoHeaderShort{
+    display: block;
+  }
+  .logoHeader{
+    display: none;
   }
 }
 
@@ -262,4 +281,29 @@ body {
 }
 .itemLista{
   background: red!important
+}
+
+@media only screen and (max-width: 480px) and (orientation: portrait) {
+  .logoHeader {
+    margin-right: 0.5rem;
+    padding: 0.3rem;
+    width: auto !important;
+    left: 50% !important;
+    margin-left: -25%;
+  }
+  .logoHeaderShort{
+    display: block;
+  }
+
+  #menu-appbar ul {
+    z-index: 5000;
+  }
+
+  #menu-appbar > div:first-of-type {
+    width: 80%;
+    z-index: 0;
+  }
+  #menu-appbar {
+    z-index: 999;
+  }
 }

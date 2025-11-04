@@ -2,13 +2,13 @@
   "title": "Registrar Garantia",
   "workflow": {
     "confirm-phone": {
-      "title": "Precisamos validar seu número de telefone",
-      "subtitle": "Você receberá um código por WhatsApp.",
+      "title": "Valide seu telefone",
+      "subtitle": "Revise o código no WhatsApp.",
       "submit": "Enviar código",
       "checkPhoneNumber": "Verificar código"
     },
     "get-code": {
-      "title": "Por favor verifique seu WhatsApp",
+      "title": "Por favor, verifique seu WhatsApp",
       "subtitle": "Insira o código que enviamos.",
       "submit": "Confirmar",
       "resend": "Reenviar",

@@ -7,7 +7,6 @@ import useAuthActions from "@/services/auth/use-auth-actions";
 import { useCheckCodeService } from "@/services/api/services/garantia";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
 import FormTextInput from "@/components/form/text-input/form-text-input";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -16,6 +15,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import HTTP_CODES_ENUM from "@/services/api/types/http-codes";
 import { useTranslation } from "@/services/i18n/client";
 import useAuthTokens from "@/services/auth/use-auth-tokens";
+import Link from "@mui/material/Link/Link";
 
 type RegisterFormData = {
   confirmationCode: string;
@@ -45,12 +45,11 @@ const useValidationSchema = () => {
 function FormActions() {
   const { t } = useTranslation("register");
   const { isSubmitting } = useFormState();
-  const router = useRouter();
   //const params = new URLSearchParams(window.location.search);
   return (
-    <div>
+    <>
       <Grid container spacing={0} mb={2}>
-        <Grid item xs={4} mt={3}>
+        <Grid item xs={6} mt={3}>
           <Button
             variant="contained"
             color="primary"
@@ -61,20 +60,17 @@ function FormActions() {
             {t("register:workflow.get-code.submit")}
           </Button>
         </Grid>
-        <Grid item xs={4} mt={3}>
-          <Button
-            variant="contained"
-            color="primary"
-            type="button"
-            disabled={isSubmitting}
+        <Grid item xs={6} mt={4}>
+          <Link
+            href="check-phone-number"
+            style={{ textDecoration: "none" }}
             data-testid="resend-code/"
-            onClick={() => router.replace("check-phone-number")}
           >
             {t("register:workflow.get-code.resend")}
-          </Button>
+          </Link>
         </Grid>
       </Grid>
-    </div>
+    </>
   );
 }
 
@@ -165,30 +161,42 @@ function Form({ params }: Props) {
   });
 
   return (
-    <FormProvider {...methods}>
-      <Container maxWidth="xs">
-        <form onSubmit={onSubmit}>
-          <Grid container spacing={2} mb={2}>
-            <Grid item xs={12} mt={3}>
-              <Typography variant="h6">
-                {t("register:workflow.get-code.title")}
-              </Typography>
-            </Grid>
-            <Grid item xs={5}>
-              <FormTextInput<RegisterFormData>
-                name="confirmationCode"
-                label={t("register:inputs.code.label")}
-                type="code"
-                testId="code"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormActions />
-            </Grid>
+    <>
+      <Container maxWidth="xs" className="mainContainer">
+        <Grid
+          container
+          spacing={2}
+          pt={3}
+          direction="column"
+          sx={{ minHeight: "60vh", alignItems: "start" }}
+        >
+          <Grid item xs={12} md={12}>
+            <h1 style={{ marginTop: 0, textAlign: "left" }}>
+              {t("register:workflow.get-code.title")}
+            </h1>
           </Grid>
-        </form>
+          <FormProvider {...methods}>
+            <Container maxWidth="xs">
+              <form onSubmit={onSubmit}>
+                <Grid container spacing={2} mb={2}>
+                  <Grid item xs={5}>
+                    <FormTextInput<RegisterFormData>
+                      name="confirmationCode"
+                      label={t("register:inputs.code.label")}
+                      type="code"
+                      testId="code"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FormActions />
+                  </Grid>
+                </Grid>
+              </form>
+            </Container>
+          </FormProvider>
+        </Grid>
       </Container>
-    </FormProvider>
+    </>
   );
 }
 

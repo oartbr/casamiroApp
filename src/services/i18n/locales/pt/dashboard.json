@@ -5,7 +5,7 @@
   "noGroupsMessage": "Você ainda não é membro de nenhum grupo. Junte-se a um grupo para começar a usar as listas.",
   "failedToLoadList": "Falha ao carregar a lista. Por favor, tente novamente.",
   "failedToLoadItems": "Falha ao carregar itens. Por favor, tente novamente.",
-  "noItemsMessage": "Ainda não há itens nesta lista. Adicione seu primeiro item acima!",
+  "noItemsMessage": "Adicione seu primeiro item acima!",
   "noDefaultListFound": "Nenhuma lista padrão encontrada para este grupo.",
   "addItemPlaceholder": "Adicionar item à lista",
   "addItemHelperText": "Pressione Enter para adicionar item",

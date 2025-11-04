@@ -23,7 +23,7 @@ interface ListSelectorProps {
   lists: List[];
   selectedListId: string | null;
   onListChange: (listId: string | null) => void;
-  groupId: string | object;
+  groupId: string;
   disabled?: boolean;
 }
 
