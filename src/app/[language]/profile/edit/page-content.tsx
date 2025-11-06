@@ -211,11 +211,13 @@ function FormBasicInfo() {
 
   return (
     <FormProvider {...methods}>
-      <Container maxWidth="xs">
+      <Container maxWidth="sm" className="mainContainer">
         <form onSubmit={onSubmit}>
-          <Grid container spacing={2} mb={3} mt={3}>
+          <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Typography variant="h6">{t("profile:title1")}</Typography>
+              <h1 style={{ textAlign: "left", marginBottom: 0 }}>
+                {t("profile:title1")}
+              </h1>
             </Grid>
             <Grid item xs={12}>
               <FormAvatarInput<EditProfileBasicInfoFormData>

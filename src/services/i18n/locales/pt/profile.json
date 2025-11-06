@@ -6,7 +6,8 @@
   "actions": {
     "edit": "Editar",
     "submit": "Salvar",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "manageGroups": "Administrar Grupos"
   },
   "inputs": {
     "firstName": {
@@ -74,5 +75,12 @@
     "profile": {
       "success": "O perfil foi atualizado com sucesso"
     }
+  },
+  "groups":{
+    "summary": "Seus Grupos",
+    "activeGroups": "Grupos Ativos",
+    "pendingInvitations": "Convites Pendentes",
+    "activeGroup": "Grupo Ativo",
+    "selectActiveGroup": "Grupo Ativo"
   }
 }

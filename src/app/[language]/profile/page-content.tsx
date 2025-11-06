@@ -114,124 +114,56 @@ function Profile() {
 
         {/* Groups Summary */}
         <Grid item xs={12} md={6}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Groups Summary
-              </Typography>
-              <Box display="flex" alignItems="center" mb={2}>
-                <Typography variant="body1" sx={{ mr: 2 }}>
-                  Active Groups:
-                </Typography>
-                <Chip label={activeGroups.length} color="primary" />
-              </Box>
-              <Box display="flex" alignItems="center" mb={2}>
-                <Typography variant="body1" sx={{ mr: 2 }}>
-                  Pending Invitations:
-                </Typography>
-                <Chip label={pendingInvitations.length} color="warning" />
-              </Box>
-              {/* Remove summary section since it's not available in UserGroupsResponse */}
-
-              {/* Active Group Selector */}
-              {activeGroups.length > 0 && (
-                <Box mb={2}>
-                  <Typography variant="body1" sx={{ mb: 1 }}>
-                    Active Group:
-                  </Typography>
-                  <FormControl fullWidth size="small">
-                    <InputLabel>Select Active Group</InputLabel>
-                    <Select
-                      value={user?.activeGroupId || ""}
-                      onChange={(e) => handleActiveGroupChange(e.target.value)}
-                      label="Select Active Group"
-                      disabled={setActiveGroupMutation.isPending}
-                    >
-                      {activeGroups.map((membership) => (
-                        <MenuItem
-                          key={membership.group_id.id}
-                          value={membership.group_id.id}
-                        >
-                          {membership.group_id.name} ({membership.role})
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Box>
-              )}
-
-              <Button
-                variant="outlined"
-                color="primary"
-                LinkComponent={Link}
-                href="/groups"
-                fullWidth
-                sx={{ mt: 2 }}
-              >
-                Manage Groups
-              </Button>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        {/* Active Groups */}
-        {activeGroups.length > 0 && (
-          <Grid item xs={12}>
-            <Typography variant="h5" gutterBottom>
-              Your Groups
-            </Typography>
-            <Grid container spacing={2}>
-              {activeGroups.map((membership) => (
-                <Grid item xs={12} sm={6} md={4} key={membership._id}>
-                  <Card>
-                    <CardContent>
-                      <Typography variant="h6" gutterBottom>
-                        {membership.group_id.name}
-                      </Typography>
-                      <Box display="flex" alignItems="center" mb={1}>
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          sx={{ mr: 1 }}
-                        >
-                          Role:
+          {/* Active Group Selector */}
+          {activeGroups.length > 0 && (
+            <Box sx={{ mt: 2 }}>
+              <FormControl fullWidth sx={{ mb: 3, mt: 1 }}>
+                <InputLabel>{t("groups.selectActiveGroup")}</InputLabel>
+                <Select
+                  value={user?.activeGroupId || ""}
+                  onChange={(e) => handleActiveGroupChange(e.target.value)}
+                  label={t("groups.selectActiveGroup")}
+                  disabled={setActiveGroupMutation.isPending}
+                >
+                  {activeGroups.map((group) => (
+                    <MenuItem key={group.group_id.id} value={group.group_id.id}>
+                      <Box display="flex" alignItems="center" gap={1}>
+                        <Typography variant="body2">
+                          {group.group_id.name}
                         </Typography>
-                        <Chip
-                          label={membership.role}
-                          size="small"
-                          color={
-                            membership.role === "admin"
-                              ? "error"
-                              : membership.role === "editor"
-                                ? "warning"
-                                : "default"
-                          }
-                        />
+                        <Typography variant="caption" color="text.secondary">
+                          ({group.role})
+                        </Typography>
                       </Box>
-                      {membership.group_id.description && (
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          paragraph
-                        >
-                          {membership.group_id.description}
-                        </Typography>
-                      )}
-                      <Button
-                        size="small"
-                        component={Link}
-                        href={`/groups/${membership.group_id.id}`}
-                        sx={{ mt: 1 }}
-                      >
-                        View Group
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
-          </Grid>
-        )}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+          )}
+          <Box display="flex" alignItems="center" mb={2}>
+            <Typography variant="body1" sx={{ mr: 2, ml: 2 }}>
+              {t("groups.activeGroups")}:
+            </Typography>
+            <Chip label={activeGroups.length} color="primary" />
+          </Box>
+          <Box display="flex" alignItems="center" mb={2}>
+            <Typography variant="body1" sx={{ mr: 2, ml: 2 }}>
+              {t("groups.pendingInvitations")}:
+            </Typography>
+            <Chip label={pendingInvitations.length} color="warning" />
+          </Box>
+          <Button
+            variant="outlined"
+            color="primary"
+            LinkComponent={Link}
+            href="/groups"
+            fullWidth
+            sx={{ mt: 2 }}
+          >
+            {t("actions.manageGroups")}
+          </Button>
+        </Grid>
 
         {/* Pending Invitations */}
         {pendingInvitations.length > 0 && (
