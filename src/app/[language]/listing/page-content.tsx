@@ -12,7 +12,6 @@ import { useTranslation } from "@/services/i18n/client";
 import { useRouter } from "next/navigation";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 // import Chip from "@mui/material/Chip";
 import FormControl from "@mui/material/FormControl";
@@ -49,9 +48,9 @@ function List(props: Props) {
   );
 
   const activeGroups = groupsData?.groupsByStatus?.active || [];
-  const currentActiveGroup = activeGroups.find(
+  /* const currentActiveGroup = activeGroups.find(
     (membership) => membership.group_id.id === user?.activeGroupId
-  );
+  ); */
 
   const handleGroupFilterChange = async (groupId: string) => {
     if (!user?.id) return;
@@ -96,8 +95,8 @@ function List(props: Props) {
           if (data.status === HTTP_CODES_ENUM.OK) {
             const sortedItems = (data.data.results as ItemCardProps[]).sort(
               (a: ItemCardProps, b: ItemCardProps) =>
-                new Date(a.registeredAt).getTime() -
-                new Date(b.registeredAt).getTime()
+                new Date(b.purchaseDate).getTime() -
+                new Date(a.purchaseDate).getTime()
             );
             setItems(sortedItems); // Step 3: Update state with sorted data
             setIsLoading(false); // Update loading state
@@ -111,68 +110,46 @@ function List(props: Props) {
   }, [user, fetchListNotas, selectedGroupId]); // Include selectedGroupId in dependencies
 
   return (
-    <Container maxWidth="sm" className="mainContainer">
-      <Grid>
-        <Grid>
-          <h1>{t("title")}</h1>
-
-          {/* Group Information and Filter */}
-          {activeGroups.length > 0 && (
-            <Box
-              sx={{
-                mb: 3,
-                p: 2,
-              }}
+    <Container maxWidth="lg" className="mainContainer">
+      {/* Group Information and Filter */}
+      {activeGroups.length > 0 && (
+        <Box sx={{ mt: 2 }}>
+          <FormControl fullWidth sx={{ mb: 3, mt: 1 }}>
+            <InputLabel>{t("selectGroupToView")}</InputLabel>
+            <Select
+              value={selectedGroupId || ""}
+              onChange={(e) => handleGroupFilterChange(e.target.value)}
+              label={t("selectGroupToView")}
             >
-              {currentActiveGroup ? (
-                <Typography variant="body2" sx={{ mb: 1 }}></Typography>
-              ) : (
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mb: 2 }}
+              {activeGroups.map((membership) => (
+                <MenuItem
+                  key={membership.group_id.id}
+                  value={membership.group_id.id}
                 >
-                  {t("noActiveGroupSelected")}
-                </Typography>
-              )}
-              <FormControl fullWidth size="small">
-                <InputLabel>{t("selectGroupToView")}</InputLabel>
-                <Select
-                  value={selectedGroupId || ""}
-                  onChange={(e) => handleGroupFilterChange(e.target.value)}
-                  label={t("selectGroupToView")}
-                >
-                  {activeGroups.map((membership) => (
-                    <MenuItem
-                      key={membership.group_id.id}
-                      value={membership.group_id.id}
-                    >
-                      {membership.group_id.name} ({membership.role})
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
-          )}
-        </Grid>
-        <Grid container spacing={3} rowSpacing={3}>
-          {isLoading ? (
-            <p>Loading...</p>
-          ) : (
-            items.map((item, index) => (
-              <Grid item xs={12} key={index}>
-                <NotaCard
-                  item={item}
-                  onClick={() => {
-                    router.replace(`nota/${item.id}`);
-                  }}
-                  action={t("actions.viewDetails")}
-                  type="listing"
-                />
-              </Grid>
-            ))
-          )}
-        </Grid>
+                  {membership.group_id.name} ({membership.role})
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+      )}
+      <Grid container spacing={3} rowSpacing={3}>
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : (
+          items.map((item, index) => (
+            <Grid item xs={12} key={index}>
+              <NotaCard
+                item={item}
+                onClick={() => {
+                  router.replace(`nota/${item.id}`);
+                }}
+                action={t("actions.viewDetails")}
+                type="listing"
+              />
+            </Grid>
+          ))
+        )}
       </Grid>
     </Container>
   );

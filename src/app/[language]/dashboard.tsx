@@ -68,8 +68,8 @@ export default function PageContent() {
         const results = (data.data.results as Nota[]) || [];
         results.sort(
           (a, b) =>
-            new Date(a.purchaseDate as unknown as string).getTime() -
-            new Date(b.purchaseDate as unknown as string).getTime()
+            new Date(b.purchaseDate as unknown as string).getTime() -
+            new Date(a.purchaseDate as unknown as string).getTime()
         );
         setLatestNota(results[0] || null);
       }

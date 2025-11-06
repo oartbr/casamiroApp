@@ -151,7 +151,7 @@ function Form({ params }: Props) {
           router.replace(`register`);
         } else {
           // console.log({ go: "listing" });
-          router.replace(`/listing`);
+          router.replace(`/`);
         }
       } else {
         // console.log({ go: "sign-up" });

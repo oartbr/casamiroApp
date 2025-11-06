@@ -118,7 +118,7 @@ function ListsPageContent({}: ListsPageContentProps) {
   return (
     <Container maxWidth="lg">
       <Box sx={{ mt: 2 }}>
-        <FormControl fullWidth sx={{ mb: 3 }}>
+        <FormControl fullWidth sx={{ mb: 3, mt: 1 }}>
           <InputLabel>{t("selectGroup")}</InputLabel>
           <Select
             value={selectedGroupId || ""}
