@@ -22,6 +22,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { NotaCard } from "@/components/cards/notaCard";
 import React, { useEffect, useState } from "react";
 import { Nota } from "@/services/api/types/nota";
+import Typography from "@mui/material/Typography";
 
 type Props = {
   params: { [key: string]: string | undefined };
@@ -121,12 +122,16 @@ function List(props: Props) {
               onChange={(e) => handleGroupFilterChange(e.target.value)}
               label={t("selectGroupToView")}
             >
-              {activeGroups.map((membership) => (
-                <MenuItem
-                  key={membership.group_id.id}
-                  value={membership.group_id.id}
-                >
-                  {membership.group_id.name} ({membership.role})
+              {activeGroups.map((group) => (
+                <MenuItem key={group.group_id.id} value={group.group_id.id}>
+                  <Box display="flex" alignItems="center" gap={1}>
+                    <Typography variant="body2">
+                      {group.group_id.name}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      ({group.role})
+                    </Typography>
+                  </Box>
                 </MenuItem>
               ))}
             </Select>
