@@ -41,6 +41,8 @@ function Profile() {
   const activeGroups = groupsData?.groupsByStatus?.active || [];
   const pendingInvitations = groupsData?.groupsByStatus?.pending || [];
 
+  console.log({ activeGroups });
+
   const handleActiveGroupChange = async (groupId: string) => {
     if (!user?.id) return;
 
