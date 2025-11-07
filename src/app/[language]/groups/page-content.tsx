@@ -195,6 +195,7 @@ function GroupsPageContent() {
         createdBy: group.createdBy,
         isPersonal: group.isPersonal,
         settings: group.settings,
+        iconUrl: group.iconUrl,
       };
     })
     .filter((group): group is NonNullable<typeof group> => group !== null);
@@ -219,6 +220,7 @@ function GroupsPageContent() {
     })
     .filter((invitation) => invitation !== null) as PendingInvitation[];
 
+  console.log({ transformedGroups });
   return (
     <Container maxWidth="lg">
       <Grid container spacing={3} sx={{ mt: 2 }}>
@@ -251,8 +253,20 @@ function GroupsPageContent() {
                 <Card>
                   <CardContent>
                     <Box display="flex" alignItems="center" mb={2}>
-                      <Avatar sx={{ mr: 2, bgcolor: "primary.main" }}>
-                        <GroupIcon />
+                      <Avatar
+                        src={group.iconUrl}
+                        variant="square"
+                        sx={{
+                          mr: 2,
+                          bgcolor: group.iconUrl
+                            ? "transparent"
+                            : "primary.main",
+                          width: 56,
+                          height: 56,
+                        }}
+                      >
+                        {!group.iconUrl &&
+                          (group.name?.[0]?.toUpperCase() || "")}
                       </Avatar>
                       <Box>
                         <Typography variant="h6" component="div">
@@ -333,8 +347,18 @@ function GroupsPageContent() {
                     >
                       <CardContent>
                         <Box display="flex" alignItems="center" mb={2}>
-                          <Avatar sx={{ mr: 2, bgcolor: "warning.main" }}>
-                            <GroupIcon />
+                          <Avatar
+                            src={invitation.group?.iconUrl}
+                            sx={{
+                              mr: 2,
+                              bgcolor: invitation.group?.iconUrl
+                                ? "transparent"
+                                : "warning.main",
+                              width: 56,
+                              height: 56,
+                            }}
+                          >
+                            {!invitation.group?.iconUrl && <GroupIcon />}
                           </Avatar>
                           <Box>
                             <Typography variant="h6" component="div">

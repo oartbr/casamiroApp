@@ -7,6 +7,7 @@ export type Group = {
   ownerId: string; // ID of the group owner/admin
   createdBy: string; // ID of the group creator;
   isPersonal: boolean;
+  iconUrl: string;
   members?: Array<{
     _id: string;
     user_id: string;
