@@ -19,6 +19,12 @@ body {
   display: none;
   width: auto !important;
 }
+.groupIconHeader {
+  width: 69px !important;
+  left: 50% !important;
+  margin-left: -13%;
+  padding: 0.5rem;
+}
 .welcomeMessage {
   display: none;
 }
@@ -293,6 +299,11 @@ body {
   }
   .logoHeaderShort{
     display: block;
+  }
+
+  .groupIconHeader {
+    width: 56px !important;
+    margin-left: -22%;
   }
 
   #menu-appbar ul {

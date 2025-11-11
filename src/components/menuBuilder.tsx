@@ -30,6 +30,8 @@ import InstallButton from "@/components/pwa/installButton";
 import { User } from "@/services/api/types/user";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
+import { useGroupQuery } from "@/services/api/react-query/groups-queries";
+// import Chip from "@mui/material/Chip";
 
 interface MenuBuilderProps {
   user: User | null; // Replace with your user type
@@ -75,7 +77,13 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({
   const getUserRole = () => {
     return user && user.role ? user.role.name : "GUEST";
   };
+  console.log({ user });
 
+  // Fetch active group data
+  const activeGroupId = user?.activeGroupId;
+  const { data: activeGroup, isLoading: isLoadingGroup } = useGroupQuery(
+    activeGroupId || ""
+  );
   // Helper function to get icon component based on icon name
   const getIcon = (iconName?: string, withMargin: boolean = false) => {
     if (!iconName) return null;
@@ -175,7 +183,23 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({
             fill={true}
             priority
           />
-
+          {/* Active Group Display */}
+          {user && activeGroupId && (
+            <>
+              {isLoadingGroup ? (
+                <CircularProgress size={20} color="inherit" />
+              ) : activeGroup?.iconUrl ? (
+                <Image
+                  className="groupIconHeader"
+                  src={activeGroup.iconUrl}
+                  alt={activeGroup.name}
+                  fill={true}
+                  priority
+                  title={activeGroup.name}
+                />
+              ) : null}
+            </>
+          )}
           {/* Mobile Menu */}
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton

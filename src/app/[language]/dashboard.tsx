@@ -23,6 +23,7 @@ import {
 import { ListItem } from "@/services/api/types/list";
 import { NotaCard } from "@/components/cards/notaCard";
 import { Nota } from "@/services/api/types/nota";
+import Alert from "@mui/material/Alert/Alert";
 
 export default function PageContent() {
   const { t } = useTranslation("dashboard");
@@ -142,14 +143,24 @@ export default function PageContent() {
                   />
                 </>
               ) : (
-                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  {t("dashboard.noNotas", { defaultValue: "No notas found" })}
-                </Typography>
+                <Box>
+                  <Alert severity="info">{t("noNotasFound")}</Alert>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{ mt: 1 }}
+                    onClick={() => router.replace("/scan")}
+                  >
+                    {t("actions.scanNota", { defaultValue: "Scan Nota" })}
+                  </Button>
+                </Box>
               )}
             </div>
           </Grid>
           <Grid item xs={12} md={6}>
-            <h1>{t("defaultList", { group: defaultListName })}</h1>
+            <h1 style={{ marginTop: 0, textAlign: "left" }}>
+              {t("defaultList", { group: defaultListName })}
+            </h1>
             <Box component="div" sx={{ position: "relative" }}>
               {defaultListItems?.length ? (
                 <ul>
@@ -160,15 +171,17 @@ export default function PageContent() {
                   ))}
                 </ul>
               ) : (
-                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  {t("noItemsMessage", {
-                    defaultValue: "No items in your default list",
-                  })}
-                </Typography>
+                <Alert severity="info">{t("noItemsMessage")}</Alert>
               )}
             </Box>
-            <Button onClick={() => router.replace("/lists")}>
-              {t("actions.editList", { defaultValue: "Edit List" })}
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ mt: 1 }}
+              onClick={() => router.replace("/lists")}
+            >
+              {t("actions.editList", { defaultValue: "Edit list" })}{" "}
+              {defaultListName}
             </Button>
           </Grid>
         </Grid>

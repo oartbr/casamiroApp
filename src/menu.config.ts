@@ -31,15 +31,6 @@ export const menuConfig: MenuItemConfig[] = [
     icon: "List",
   },
   {
-    label: "common:navigation.groups",
-    href: "/groups",
-    roles: ["USER"],
-    mobile: true,
-    desktop: true,
-    type: "page",
-    icon: "Groups",
-  },
-  {
     label: "common:navigation.lists",
     href: "/lists",
     roles: ["USER"],
@@ -84,6 +75,16 @@ export const menuConfig: MenuItemConfig[] = [
     userMenu: true,
     type: "profile",
     icon: "Profile",
+  },
+  {
+    label: "common:navigation.groups",
+    href: "/groups",
+    roles: ["USER"],
+    mobile: false,
+    desktop: true,
+    userMenu: true,
+    type: "page",
+    icon: "Groups",
   },
   {
     label: "common:navigation.logout",

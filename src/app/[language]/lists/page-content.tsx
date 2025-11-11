@@ -20,6 +20,7 @@ import ItemDisplay from "@/components/lists/item-display";
 import { ListItem as ListItemType } from "@/services/api/types/list";
 import { useTranslation } from "@/services/i18n/client";
 import List from "@mui/material/List/List";
+import Avatar from "@mui/material/Avatar/Avatar";
 
 interface ListsPageContentProps {
   params: { [key: string]: string | undefined };
@@ -128,6 +129,21 @@ function ListsPageContent({}: ListsPageContentProps) {
             {activeGroups.map((group) => (
               <MenuItem key={group.group_id.id} value={group.group_id.id}>
                 <Box display="flex" alignItems="center" gap={1}>
+                  <Avatar
+                    src={group.group_id.iconUrl}
+                    variant="square"
+                    sx={{
+                      mr: 2,
+                      bgcolor: group.group_id.iconUrl
+                        ? "transparent"
+                        : "primary.main",
+                      width: 56,
+                      height: 56,
+                    }}
+                  >
+                    {!group.group_id.iconUrl &&
+                      (group.group_id.name?.[0]?.toUpperCase() || "")}
+                  </Avatar>
                   <Typography variant="body2">{group.group_id.name}</Typography>
                   <Typography variant="caption" color="text.secondary">
                     ({group.role})

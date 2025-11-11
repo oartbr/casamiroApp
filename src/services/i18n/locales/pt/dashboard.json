@@ -7,6 +7,7 @@
   "failedToLoadItems": "Falha ao carregar itens. Por favor, tente novamente.",
   "noItemsMessage": "Adicione seu primeiro item acima!",
   "noDefaultListFound": "Nenhuma lista padrão encontrada para este grupo.",
+  "noNotasFound": "Escaneie suas notas fiscais.",
   "addItemPlaceholder": "Adicionar item à lista",
   "addItemHelperText": "Pressione Enter para adicionar item",
   "defaultList": "Lista de {{group}}",
@@ -16,7 +17,8 @@
     "viewItem": "Ver Nota",
     "markAsComplete": "Completar",
     "markAsIncomplete": "Desmarcar",
-    "editList": "Editar Lista"
+    "editList": "Editar Lista",
+    "scanNota": "Escanear Nota Fiscal"
   },
   "greetings": {
     "morning": "Bom dia {{user}}!",

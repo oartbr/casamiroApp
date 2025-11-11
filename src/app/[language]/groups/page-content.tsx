@@ -220,34 +220,32 @@ function GroupsPageContent() {
     })
     .filter((invitation) => invitation !== null) as PendingInvitation[];
 
-  console.log({ transformedGroups });
   return (
-    <Container maxWidth="lg">
-      <Grid container spacing={3} sx={{ mt: 2 }}>
-        {/* Header */}
-        <Grid item xs={12}>
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
+    <Container maxWidth="md" className="mainContainer">
+      <Grid
+        container
+        spacing={3}
+        pt={3}
+        direction="column"
+        sx={{ minHeight: "60vh", alignItems: "start" }}
+      >
+        <Grid item xs={12} md={6}>
+          <h1 style={{ marginTop: 0, textAlign: "left" }}>
+            {t("groups:sections.active")} ({transformedGroups.length})
+          </h1>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={() => setCreateDialogOpen(true)}
+            color="primary"
           >
-            <Typography variant="h4" sx={{ mb: 2 }}>
-              {t("groups:sections.active")} ({transformedGroups.length})
-            </Typography>
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={() => setCreateDialogOpen(true)}
-              color="primary"
-            >
-              {t("groups:actions.create")}
-            </Button>
-          </Box>
+            {t("groups:actions.create")}
+          </Button>
         </Grid>
 
         {/* Active Groups */}
-        <Grid item xs={12}>
-          <Grid container spacing={2}>
+        <Grid item lg={12}>
+          <Grid container spacing={3}>
             {transformedGroups.map((group) => (
               <Grid item xs={12} sm={6} md={4} key={group.id}>
                 <Card>
@@ -261,29 +259,28 @@ function GroupsPageContent() {
                           bgcolor: group.iconUrl
                             ? "transparent"
                             : "primary.main",
-                          width: 56,
-                          height: 56,
+                          width: 80,
+                          height: 80,
                         }}
                       >
                         {!group.iconUrl &&
                           (group.name?.[0]?.toUpperCase() || "")}
                       </Avatar>
-                      <Box>
-                        <Typography variant="h6" component="div">
-                          {group.name}
-                        </Typography>
-                        <Chip
-                          label={group.role}
-                          size="small"
-                          color={
-                            group.role === "admin"
-                              ? "error"
-                              : group.role === "editor"
-                                ? "warning"
-                                : "default"
-                          }
-                        />
-                      </Box>
+                      <Typography variant="h6" component="div">
+                        {group.name}
+                      </Typography>
+                      <Chip
+                        label={group.role}
+                        size="small"
+                        sx={{ marginLeft: (theme) => theme.spacing(2) }}
+                        color={
+                          group.role === "admin"
+                            ? "error"
+                            : group.role === "editor"
+                              ? "warning"
+                              : "default"
+                        }
+                      />
                     </Box>
                     {group.description && (
                       <Typography

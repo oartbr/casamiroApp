@@ -130,6 +130,21 @@ function Profile() {
                   {activeGroups.map((group) => (
                     <MenuItem key={group.group_id.id} value={group.group_id.id}>
                       <Box display="flex" alignItems="center" gap={1}>
+                        <Avatar
+                          src={group.group_id.iconUrl}
+                          variant="square"
+                          sx={{
+                            mr: 2,
+                            bgcolor: group.group_id.iconUrl
+                              ? "transparent"
+                              : "primary.main",
+                            width: 56,
+                            height: 56,
+                          }}
+                        >
+                          {!group.group_id.iconUrl &&
+                            (group.group_id.name?.[0]?.toUpperCase() || "")}
+                        </Avatar>
                         <Typography variant="body2">
                           {group.group_id.name}
                         </Typography>
