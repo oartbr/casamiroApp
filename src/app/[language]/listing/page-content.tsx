@@ -169,6 +169,7 @@ function List(props: Props) {
                 }}
                 action={t("actions.viewDetails")}
                 type="listing"
+                t={t}
               />
             </Grid>
           ))

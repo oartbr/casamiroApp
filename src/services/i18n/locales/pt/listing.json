@@ -7,6 +7,12 @@
     "register": "Registrar Garantia",
     "viewDetails": "Ver detalhes"
   },
+  "status":{
+    "registeredAt": "⌛ Nota registrada ",
+    "purchasedAt": "📃 Compra feita ",
+    "cancelled": "😱 Cancelada ",
+    "markedAt": "📣 A nota foi marcada em "
+  },
   "or": "OU",
   "noActiveGroupSelected": "Nenhum grupo ativo selecionado",
   "filterNotasByGroup": "Notas por Grupo",

@@ -28,6 +28,7 @@ import Alert from "@mui/material/Alert/Alert";
 export default function PageContent() {
   const { t } = useTranslation("dashboard");
   const { t: home } = useTranslation("home");
+  const { t: notaCardT } = useTranslation("listing");
   const { user, isLoaded } = useAuth();
   const router = useRouter();
 
@@ -140,6 +141,7 @@ export default function PageContent() {
                     }}
                     action={t("actions.viewItem")}
                     type="listing"
+                    t={notaCardT}
                   />
                 </>
               ) : (
@@ -207,7 +209,7 @@ export default function PageContent() {
                     key="1"
                     target="_blank"
                     rel="noopener noreferrer"
-                    href="https://github.com/brocoders/extensive-react-boilerplate/blob/main/docs/README.md"
+                    href="https://xpand.international"
                   >
                     {}
                   </MuiLink>,

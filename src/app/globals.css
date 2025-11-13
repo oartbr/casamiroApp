@@ -25,6 +25,10 @@ body {
   margin-left: -13%;
   padding: 0.5rem;
 }
+.groupIconHeader::after{
+  content: "@";
+  color: #ff0000;
+}
 .welcomeMessage {
   display: none;
 }
@@ -84,6 +88,10 @@ body {
   opacity: 0;
   position: absolute;
   animation: qrScanAnimation 4s 1s forwards;
+}
+
+.MuiAvatar-circular{
+  border: 1px solid #ccc;
 }
 
 .scanScreenButton {

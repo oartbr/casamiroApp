@@ -29,6 +29,7 @@ export type Item = {
   totalPrice: number;
   unitPrice: number;
   vendor: string;
+  t: object;
 };
 
 export type NotaCardProps = {
@@ -36,13 +37,14 @@ export type NotaCardProps = {
   onClick: () => void;
   action: string;
   type: string;
+  t: object;
 };
 
-export function NotaCard({ item, onClick, action, type }: NotaCardProps) {
+export function NotaCard({ item, onClick, action, type, t }: NotaCardProps) {
   // console.log({ item });
 
   return (
-    <div>
+    <>
       <Card elevation={3} className={`${item.status}Card`}>
         <CardContent>
           <Typography variant="h1" component="div" sx={{ fontSize: 26 }}>
@@ -63,13 +65,13 @@ export function NotaCard({ item, onClick, action, type }: NotaCardProps) {
 
               switch (item.status) {
                 case "pending":
-                  return `⌛ Registrada em ${registerDate}, ${dayjs(item.registeredAt).locale("pt-br").fromNow()}.`;
+                  return `${typeof t === "function" ? t("status.registeredAt") : ""}, ${registerDate}, ${dayjs(item.registeredAt).locale("pt-br").fromNow()}.`;
                 case "read":
-                  return `📃 Compra feita ${dayjs(item.purchaseDate).locale("pt-br").fromNow()}.`;
+                  return `${typeof t === "function" ? t("status.purchasedAt") : ""} ${dayjs(item.purchaseDate).locale("pt-br").fromNow()}`;
                 case "canceled":
-                  return `😱 Cancelada em ${purchaseDate}`;
+                  return `${typeof t === "function" ? t("status.canceledAt") : ""}  ${purchaseDate}`;
                 case "flagged":
-                  return `📣 A nota foi marcada em ${purchaseDate}`;
+                  return `${typeof t === "function" ? t("status.flaggedAt") : ""}  ${purchaseDate}`;
                 default:
                   return "";
               }
@@ -162,6 +164,6 @@ export function NotaCard({ item, onClick, action, type }: NotaCardProps) {
           <Button onClick={onClick}>{action}</Button>
         </CardActions>
       </Card>
-    </div>
+    </>
   );
 }

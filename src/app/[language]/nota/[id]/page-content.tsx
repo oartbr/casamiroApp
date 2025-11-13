@@ -6,7 +6,7 @@ import useAuth from "@/services/auth/use-auth";
 // import useAuthTokens from "@/services/auth/use-auth-tokens";
 import HTTP_CODES_ENUM from "@/services/api/types/http-codes";
 import { useGetNotaService } from "@/services/api/services/notas";
-// import { useTranslation } from "@/services/i18n/client";
+import { useTranslation } from "@/services/i18n/client";
 // import { useSnackbar } from "notistack";
 import { useRouter } from "next/navigation";
 import Container from "@mui/material/Container";
@@ -28,7 +28,7 @@ function List(props: Props) {
   // const { enqueueSnackbar } = useSnackbar();
   const { params } = props;
   const router = useRouter();
-  // const { t } = useTranslation("register");
+  const { t } = useTranslation("listing");
   const { user } = useAuth();
 
   const fetchNotaDetails = useGetNotaService();
@@ -70,6 +70,7 @@ function List(props: Props) {
                 }}
                 action="Voltar"
                 type="details"
+                t={t}
               />
             </Grid>
           )}
