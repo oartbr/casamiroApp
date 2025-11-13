@@ -13,7 +13,6 @@ import type { Metadata } from "next";
 import SnackbarProvider from "@/components/snackbar-provider";
 import { getServerTranslation } from "@/services/i18n";
 import StoreLanguageProvider from "@/services/i18n/store-language-provider";
-import { ThemeProvider } from "@mui/material/styles";
 import LeavePageProvider from "@/services/leave-page/leave-page-provider";
 import QueryClientProvider from "@/services/react-query/query-client-provider";
 import queryClient from "@/services/react-query/query-client";
@@ -23,7 +22,7 @@ import FacebookAuthProvider from "@/services/social-auth/facebook/facebook-auth-
 import ConfirmDialogProvider from "@/components/confirm-dialog/confirm-dialog-provider";
 import InitColorSchemeScript from "@/components/theme/init-color-scheme-script";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
-import mamutTheme from "@/components/theme/mamut-theme";
+import ThemeProvider from "@/components/theme/theme-provider";
 
 type Props = {
   params: { language: string };
@@ -56,7 +55,7 @@ export default function RootLayout({
           <InitColorSchemeScript />
           <QueryClientProvider client={queryClient}>
             <ReactQueryDevtools initialIsOpen={false} />
-            <ThemeProvider theme={mamutTheme}>
+            <ThemeProvider>
               <CssBaseline />
               <SnackbarProvider maxSnack={3}>
                 <StoreLanguageProvider>

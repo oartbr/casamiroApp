@@ -11,19 +11,44 @@ function ThemeProvider(props: PropsWithChildren<{}>) {
         colorSchemes: {
           light: {
             palette: {
-              // This will override the default background color in light mode.
               background: {
-                default: "#d9e4ef", // your desired light mode background color
+                default: "#ffffff", // light mode background color
+              },
+              primary: {
+                main: "#b7d7f6", // custom primary color
+                contrastText: "#006680",
+              },
+              secondary: {
+                main: "#ff0000", // custom secondary color
+                contrastText: "#006680",
               },
             },
           },
           dark: {
             palette: {
-              // This will override the default background color in light mode.
               background: {
-                default: "#29343f", // your desired dark mode background color
+                default: "#29343f", // dark mode background color
+              },
+              primary: {
+                main: "#b7d7f6", // custom primary color
+                contrastText: "#006680",
+              },
+              secondary: {
+                main: "#ff0000", // custom secondary color
+                contrastText: "#006680",
               },
             },
+          },
+        },
+        typography: {
+          subtitle1: {
+            fontSize: 12,
+          },
+          body1: {
+            fontWeight: 500,
+          },
+          button: {
+            color: "colorPrimary",
           },
         },
         components: {
@@ -31,7 +56,7 @@ function ThemeProvider(props: PropsWithChildren<{}>) {
             styleOverrides: {
               colorPrimary: ({ theme }) => ({
                 backgroundColor:
-                  theme.palette.mode === "dark" ? "#09141f" : "#1976d2",
+                  theme.palette.mode === "dark" ? "#09141f" : "#b7d7f6",
               }),
             },
           },
