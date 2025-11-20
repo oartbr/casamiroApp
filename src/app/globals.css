@@ -22,12 +22,8 @@ body {
 .groupIconHeader {
   width: 69px !important;
   left: 50% !important;
-  margin-left: -13%;
-  padding: 0.5rem;
-}
-.groupIconHeader::after{
-  content: "@";
-  color: #ff0000;
+  margin-left: -7%;
+  padding: 0.1rem;
 }
 .welcomeMessage {
   display: none;
@@ -311,7 +307,7 @@ body {
 
   .groupIconHeader {
     width: 56px !important;
-    margin-left: -22%;
+    margin-left: -7%;
   }
 
   #menu-appbar ul {
