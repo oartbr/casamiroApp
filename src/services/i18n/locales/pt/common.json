@@ -42,5 +42,11 @@
     "facebook": {
       "action": "Entrar com Facebook"
     }
+  },
+  "pwa":{
+    "prompt": "Instale como App",
+    "message": "Ao instalar como App, você não ocupa espaço adicional.",
+    "install": "Instalar como App",
+    "cancelar": "Cancelar"
   }
 }

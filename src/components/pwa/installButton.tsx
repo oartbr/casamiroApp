@@ -97,10 +97,10 @@ export default function InstallButton() {
           gutterBottom
           sx={{ fontWeight: "bold" }}
         >
-          {t("common:install.prompt")}
+          {t("pwa.prompt")}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          {t("common:install.message")}
+          {t("pwa.message")}
         </Typography>
       </CardContent>
 
@@ -120,7 +120,7 @@ export default function InstallButton() {
             },
           }}
         >
-          {t("common:install.cancel")}
+          {t("pwa.cancel")}
         </Button>
         <Button
           variant="contained"
@@ -136,7 +136,7 @@ export default function InstallButton() {
             },
           }}
         >
-          {t("common:install.button")}
+          {t("pwa.install")}
         </Button>
       </Box>
     </Card>

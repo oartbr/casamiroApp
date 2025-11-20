@@ -292,12 +292,18 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({
               </Menu>
             </Box>
           ) : (
-            <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
-              <ThemeSwitchButton />
-              {menuConfig
-                .filter((item) => item.desktop && item.roles.includes("GUEST"))
-                .map((item, index) => renderButton(item, index))}
-            </Box>
+            <>
+              <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
+                {menuConfig
+                  .filter(
+                    (item) => item.desktop && item.roles.includes("GUEST")
+                  )
+                  .map((item, index) => renderButton(item, index))}
+              </Box>
+              <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "flex" } }}>
+                <ThemeSwitchButton />
+              </Box>
+            </>
           )}
         </Toolbar>
       </Container>
