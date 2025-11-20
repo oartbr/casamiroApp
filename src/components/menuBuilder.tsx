@@ -169,22 +169,8 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({
       <Container maxWidth="xl">
         <div className="PWA_installButton">{pwa && <InstallButton />}</div>
         <Toolbar disableGutters>
-          <Image
-            className="logoHeader"
-            src={logos.long}
-            alt="logo"
-            fill={true}
-            priority
-          />
-          <Image
-            className="logoHeaderShort"
-            src={logos.short}
-            alt="logo"
-            fill={true}
-            priority
-          />
           {/* Active Group Display */}
-          {user && activeGroupId && (
+          {user && activeGroupId ? (
             <>
               {isLoadingGroup ? (
                 <CircularProgress size={20} color="inherit" />
@@ -193,11 +179,28 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({
                   className="groupIconHeader"
                   src={activeGroup.iconUrl}
                   alt={activeGroup.name}
-                  fill={true}
+                  fill
                   priority
                   title={activeGroup.name}
                 />
               ) : null}
+            </>
+          ) : (
+            <>
+              <Image
+                className="logoHeader"
+                src={logos.long}
+                alt="logo"
+                fill
+                priority
+              />
+              <Image
+                className="logoHeaderShort"
+                src={logos.short}
+                alt="logo"
+                fill
+                priority
+              />
             </>
           )}
           {/* Mobile Menu */}
