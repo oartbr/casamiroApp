@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import AppBar from "@mui/material/AppBar";
@@ -165,7 +167,7 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" suppressHydrationWarning>
       <Container maxWidth="xl">
         <div className="PWA_installButton">{pwa && <InstallButton />}</div>
         <Toolbar disableGutters>

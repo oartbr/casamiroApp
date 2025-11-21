@@ -237,7 +237,7 @@ body {
 @media (max-width: 767px) {
   .PWA_installButton {
     position: fixed;
-    bottom: 0px;
+    bottom: 25%;
     top: auto;
     left: 50%;
     transform: translateX(-50%);
