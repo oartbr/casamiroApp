@@ -35,7 +35,8 @@ const clientTheme = {
     MuiAppBar: {
       styleOverrides: {
         colorPrimary: ({ theme }) => ({
-          backgroundColor: theme.palette.mode === "dark" ? "#09141f" : "#ccc",
+          backgroundColor:
+            theme.palette.mode === "dark" ? "#09141f" : "#A5B5C2",
         }),
       },
     },
@@ -58,7 +59,7 @@ const clientTheme = {
     long: "/logo.casamiro.svg", // svg 503x138px
     short: "/logo.casamiro.short.svg", // svg 177x135px
     hero: "/assets/images/home.png", // check why this one is not really there
-    pwa: "/mamut.png", // png 150x150px
+    pwa: "/logo.casamiro.pwa.png", // png 150x150px
   },
 };
 

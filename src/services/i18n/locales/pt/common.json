@@ -45,8 +45,9 @@
   },
   "pwa":{
     "prompt": "Instale como App",
-    "message": "Ao instalar como App, você não ocupa espaço adicional.",
-    "install": "Instalar como App",
-    "cancelar": "Cancelar"
+    "message": "Ao instalar o Casamiro como App, você não ocupa memória adicional, e mesmo assim, vai ter o ícone para acessar diretamente.",
+    "alt": "Instalar o Casamiro como um applicativo.",
+    "install": "Instalar",
+    "cancel": "Agora Não"
   }
 }
