@@ -1,19 +1,19 @@
 {
-  "name": "Mamut.app",
-  "short_name": "Mamut",
-  "id": "Mamut",
-  "description": "O app que cuida da sua grana",
+  "name": "Casamiro.ai",
+  "short_name": "Casamiro",
+  "id": "casamiro",
+  "description": "O app que cuida da sua casa",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#b7d7f6ff",
+  "background_color": "#c2b2a5",
   "icons": [
     {
-      "src": "/assets/images/mamut192x192.png",
+      "src": "./logo.casamiro.192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/assets/images/mamut512x512.png",
+      "src": "./logo.casamiro.512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
@@ -79,5 +79,15 @@
       "sizes": "640x1136",
       "type": "image/png"
     }
-  ]
+  ],
+    "protocol_handlers": [
+      {
+        "protocol": "notas",
+        "url": "/nota?type=%s"
+      },
+      {
+        "protocol": "listas",
+        "url": "/lista?type=%s"
+      }
+    ]
 }
