@@ -9,6 +9,7 @@ const clientTheme = {
         background: {
           default: "#f6f6f6", // Light mode default background
           paper: "#fff", // Background for paper surfaces
+          bar: "#A5B5C2", // for the appBar
         },
       },
     },
@@ -17,8 +18,9 @@ const clientTheme = {
         primary: { main: "#ff6600" },
         secondary: { main: "#004310" },
         background: {
-          default: "#112627", // Dark mode default background
+          default: "#222229", // Dark mode default background
           paper: "#003c4a", // toolbar bg color
+          bar: "#09141f", // for the appBar
         },
       },
     },
@@ -34,16 +36,13 @@ const clientTheme = {
   components: {
     MuiAppBar: {
       styleOverrides: {
-        colorPrimary: ({ theme }) => ({
-          backgroundColor:
-            theme.palette.mode === "dark" ? "#09141f" : "#A5B5C2",
-        }),
+        colorPrimary: { backgroundColor: "var(--mui-palette-background-bar)" },
       },
     },
     ThemeSwitchButton: {
       styleOverrides: {
         colorPrimary: ({ theme }) => ({
-          color: theme.palette.mode === "dark" ? "#f00" : "#09141f",
+          backgroundColor: theme.palette.mode === "dark" ? "#f00" : "#09141f",
         }),
       },
     },

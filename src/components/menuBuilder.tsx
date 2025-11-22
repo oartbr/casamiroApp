@@ -79,7 +79,6 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({
   const getUserRole = () => {
     return user && user.role ? user.role.name : "GUEST";
   };
-  console.log({ user });
 
   // Fetch active group data
   const activeGroupId = user?.activeGroupId;
@@ -167,7 +166,7 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({
   };
 
   return (
-    <AppBar position="static" suppressHydrationWarning>
+    <AppBar position="static" color="primary" suppressHydrationWarning>
       <Container maxWidth="xl">
         <div className="PWA_installButton">{pwa && <InstallButton />}</div>
         <Toolbar disableGutters>
