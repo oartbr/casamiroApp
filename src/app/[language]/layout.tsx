@@ -23,6 +23,7 @@ import ConfirmDialogProvider from "@/components/confirm-dialog/confirm-dialog-pr
 import InitColorSchemeScript from "@/components/theme/init-color-scheme-script";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import ThemeProvider from "@/components/theme/theme-provider";
+import Version from "@/components/version/version";
 
 type Props = {
   params: { language: string };
@@ -76,6 +77,7 @@ export default function RootLayout({
             </ThemeProvider>
           </QueryClientProvider>
         </AppRouterCacheProvider>
+        <Version />
       </body>
     </html>
   );

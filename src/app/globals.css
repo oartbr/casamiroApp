@@ -279,7 +279,7 @@ body {
 }
 
 .joinButton {
-  background-color: #ff0015 !important; /* Vibrant red */
+  /*background-color: #ff0015 !important;  Vibrant red */
   color: #ffffff !important; /* White text */
   padding: 8px 20px !important; /* Smaller padding for a compact look */
   font-size: 14px !important; /* Smaller font size */

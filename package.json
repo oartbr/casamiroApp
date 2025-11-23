@@ -5,10 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
+    "dev:memory": "node --max-old-space-size=4096 node_modules/next/dist/bin/next dev",
     "build": "next build",
     "build:e2e": "cp -n example.env.local .env.local && next build",
     "start": "next start",
     "lint": "next lint",
+    "clean": "rm -rf .next node_modules/.cache",
+    "clean:win": "if exist .next rmdir /s /q .next && if exist node_modules\\.cache rmdir /s /q node_modules\\.cache",
     "prepare": "is-ci || husky",
     "release": "release-it"
   },

@@ -4,6 +4,7 @@ import { useAuthGoogleLoginService } from "@/services/api/services/auth";
 import HTTP_CODES_ENUM from "@/services/api/types/http-codes";
 import useAuthActions from "@/services/auth/use-auth-actions";
 import useAuthTokens from "@/services/auth/use-auth-tokens";
+import { setReturningUserCookie } from "@/services/auth/returning-user-cookie";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
 import { FullPageLoader } from "@/components/full-page-loader";
@@ -32,6 +33,7 @@ export default function GoogleAuth() {
         tokenExpires: data.tokenExpires,
       });
       setUser(data.user);
+      setReturningUserCookie();
     }
     setIsLoading(false);
   };

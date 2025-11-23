@@ -6,6 +6,7 @@ import { useForm, FormProvider, useFormState } from "react-hook-form";
 import { useAuthLoginService } from "@/services/api/services/auth";
 import useAuthActions from "@/services/auth/use-auth-actions";
 import useAuthTokens from "@/services/auth/use-auth-tokens";
+import { setReturningUserCookie } from "@/services/auth/returning-user-cookie";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -102,6 +103,7 @@ function Form() {
         tokenExpires: data.tokenExpires,
       });
       setUser(data.user);
+      setReturningUserCookie();
     }
   });
 
