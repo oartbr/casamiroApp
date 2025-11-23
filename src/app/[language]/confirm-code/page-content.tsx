@@ -16,6 +16,7 @@ import HTTP_CODES_ENUM from "@/services/api/types/http-codes";
 import { useTranslation } from "@/services/i18n/client";
 import useAuthTokens from "@/services/auth/use-auth-tokens";
 import Link from "@mui/material/Link/Link";
+import { setReturningUserCookie } from "@/services/auth/returning-user-cookie";
 
 type RegisterFormData = {
   confirmationCode: string;
@@ -146,6 +147,7 @@ function Form({ params }: Props) {
           tokenExpires: data.tokenExpires,
         });
         setUser(data.user);
+        setReturningUserCookie();
         if (params.id) {
           // console.log({ go: "register" });
           router.replace(`register`);
