@@ -17,7 +17,10 @@
     "makeAdmin": "Tornar administrador",
     "makeEditor": "Tornar editor",
     "makeViewer": "Tornar visualizador",
-    "remove": "Remover"
+    "remove": "Remover",
+    "loading": "Carregando...",
+    "canceling": "Cancelando...",
+    "retry": "Tentar novamente"
   },
   "sections": {
     "active": "Ativos",
@@ -54,7 +57,16 @@
     "actions": "Ações",
     "invited": "Convidado em",
     "cancel": "Cancelar",
-    "phone": "Telefone"
+    "phone": "Telefone",
+    "joinPrompt": "Você foi convidado para participar deste grupo.",
+    "invitedBy": "Convidado por",
+    "roleLabel": "Cargo",
+    "unknownGroup": "Grupo desconhecido",
+    "expires": "Expira em",
+    "resendLink": "Reenviar link",
+    "noExpiration": "Sem expiração",
+    "cancelSuccess": "Convite cancelado com sucesso.",
+    "cancelError": "Não foi possível cancelar o convite."
   },
   "form": {
     "name": "Nome",

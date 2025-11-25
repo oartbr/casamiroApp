@@ -2,6 +2,7 @@ import {
   useGetUserMembershipsService,
   useGetGroupMembershipsService,
   useCreateInvitationService,
+  useGetInvitationByTokenService,
   useAcceptInvitationService,
   useDeclineInvitationService,
   useUpdateRoleService,
@@ -36,6 +37,14 @@ export const membershipsQueryKeys = createQueryKeys(["memberships"], {
         options?: { page?: number; limit?: number; status?: string }
       ) => ({
         key: [groupId, options],
+      }),
+    },
+  }),
+  invitation: () => ({
+    key: [],
+    sub: {
+      byToken: (token: string) => ({
+        key: [token],
       }),
     },
   }),
@@ -104,6 +113,30 @@ export const useCreateInvitationMutation = () => {
           ).key,
       });
     },
+  });
+};
+
+// Get invitation by token
+export const useInvitationByTokenQuery = (token?: string) => {
+  const fetch = useGetInvitationByTokenService();
+  const invitationKey = membershipsQueryKeys.invitation();
+
+  return useQuery({
+    queryKey: token
+      ? invitationKey.sub.byToken(token).key
+      : [...invitationKey.key, "byToken", "missing"],
+    queryFn: async () => {
+      if (!token) {
+        throw new Error("Invitation token is required");
+      }
+      const { status, data } = await fetch(token);
+      if (status === HTTP_CODES_ENUM.OK) {
+        return data;
+      }
+      throw new Error("Failed to fetch invitation");
+    },
+    enabled: !!token,
+    retry: false,
   });
 };
 

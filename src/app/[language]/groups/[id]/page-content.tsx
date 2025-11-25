@@ -21,12 +21,6 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import TextField from "@mui/material/TextField";
-
 import Box from "@mui/material/Box";
 import useAuth from "@/services/auth/use-auth";
 import { useGroupQuery } from "@/services/api/react-query/groups-queries";
@@ -35,13 +29,20 @@ import {
   useCreateInvitationMutation,
   useUpdateRoleMutation,
   useRemoveMemberMutation,
+  useCancelInvitationMutation,
 } from "@/services/api/react-query/memberships-queries";
+import { useQueryClient } from "@tanstack/react-query";
 import { Membership } from "@/services/api/types/membership";
-import { CreateInvitationRequest } from "@/services/api/types/membership";
 import Link from "@/components/link";
 import withPageRequiredAuth from "@/services/auth/with-page-required-auth";
 import { RoleEnum } from "@/services/api/types/role";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useSnackbar } from "notistack";
+
+type MembershipWithOptionalId = Membership & { id?: string };
+
+const getMembershipId = (membership: MembershipWithOptionalId) =>
+  membership._id || membership.id || "";
 
 interface GroupDetailPageContentProps {
   params: { [key: string]: string | undefined };
@@ -51,58 +52,160 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
   const groupId = params.id!;
   const { t } = useTranslation("groups");
   const { user } = useAuth();
-  const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
-  const [newInvitation, setNewInvitation] = useState<CreateInvitationRequest>({
-    group_id: groupId,
-    invitee_phone: "",
-    invited_by: user?.id?.toString() || "",
-    role: "contributor", // All users are invited as contributors by default
-  });
+  const { enqueueSnackbar } = useSnackbar();
+  const queryClient = useQueryClient();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedMembership, setSelectedMembership] =
     useState<Membership | null>(null);
+  const [shareError, setShareError] = useState<string | null>(null);
+  const [cancelTargetId, setCancelTargetId] = useState<string | null>(null);
 
   const {
     data: group,
     isLoading: groupLoading,
     error: groupError,
   } = useGroupQuery(groupId);
-  const { data: membershipsData } = useGroupMembershipsQuery(groupId);
-
+  const {
+    data: membershipsData,
+    isLoading: membershipsLoading,
+    error: membershipsError,
+  } = useGroupMembershipsQuery(groupId, { limit: 100 });
   const createInvitationMutation = useCreateInvitationMutation();
   const updateRoleMutation = useUpdateRoleMutation();
   const removeMemberMutation = useRemoveMemberMutation();
+  const cancelInvitationMutation = useCancelInvitationMutation();
 
-  const handleInviteUser = async () => {
-    console.log({ newInvitation });
-    if (!newInvitation.invitee_phone.trim()) return;
+  const shareInvitationLink = (url: string, message: string) => {
+    if (typeof navigator !== "undefined" && navigator.share) {
+      // Include URL in text for better WhatsApp compatibility
+      const shareText = `${message}\n\n${url}`;
+      return navigator.share({
+        title: "Invite",
+        text: shareText,
+        url, // Keep url property for other apps
+      });
+    }
+
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(
+      `${message}\n\n${url}`
+    )}`;
+    const opened = window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+
+    if (!opened && navigator.clipboard) {
+      return navigator.clipboard.writeText(`${message}\n\n${url}`);
+    }
+
+    return Promise.resolve();
+  };
+
+  const handleShareInvite = async () => {
+    if (!group || !user?.id) return;
 
     try {
-      await createInvitationMutation.mutateAsync({
-        ...newInvitation,
-        invitee_phone: newInvitation.invitee_phone.trim(),
+      setShareError(null);
+      const invitation = await createInvitationMutation.mutateAsync({
+        group_id: groupId,
+        invited_by: user.id.toString(),
+        role: "contributor",
       });
 
-      setInviteDialogOpen(false);
-      setNewInvitation({
-        group_id: groupId,
-        invitee_phone: "",
-        invited_by: user?.id?.toString() || "",
-        role: "contributor", // All users are invited as contributors by default
+      // Manually invalidate all group memberships queries to refresh the list
+      queryClient.invalidateQueries({
+        queryKey: ["memberships", "list", "byGroup", groupId],
       });
+
+      const identifier = invitation.token || invitation._id;
+      if (!identifier) {
+        throw new Error("Missing invitation token");
+      }
+
+      const origin =
+        typeof window !== "undefined" ? window.location.origin : "";
+      const invitationUrl = `${
+        origin || process.env.NEXT_PUBLIC_APP_URL || "https://casamiro.ai"
+      }/invite/${identifier}`;
+      const message = `Join my group "${group.name}" on Casamiro.`;
+
+      await shareInvitationLink(invitationUrl, message);
     } catch (error) {
-      console.error("Failed to invite user:", error);
+      console.error("Failed to trigger share:", error);
+      setShareError("Unable to share invitation link. Please try again.");
     }
   };
 
-  const handleCloseInviteDialog = () => {
-    setInviteDialogOpen(false);
-    setNewInvitation({
-      group_id: groupId,
-      invitee_phone: "",
-      invited_by: user?.id?.toString() || "",
-      role: "contributor", // All users are invited as contributors by default
-    });
+  const handleShareExistingInvitation = async (invitation: Membership) => {
+    if (!group) return;
+    const invitationId = getMembershipId(
+      invitation as MembershipWithOptionalId
+    );
+
+    try {
+      setShareError(null);
+      const identifier = invitation.token || invitationId;
+      if (!identifier) {
+        throw new Error("Missing invitation token");
+      }
+      const origin =
+        typeof window !== "undefined" ? window.location.origin : "";
+      const invitationUrl = `${
+        origin || process.env.NEXT_PUBLIC_APP_URL || "https://casamiro.ai"
+      }/invite/${identifier}`;
+      const message = `Join my group "${group.name}" on Casamiro.`;
+
+      await shareInvitationLink(invitationUrl, message);
+    } catch (error) {
+      console.error("Failed to share invitation link:", error);
+      setShareError("Unable to share invitation link. Please try again.");
+    }
+  };
+
+  const handleCancelInvitation = async (invitation: Membership) => {
+    if (!user?.id) return;
+    const invitationId = getMembershipId(
+      invitation as MembershipWithOptionalId
+    );
+    if (!invitationId) {
+      console.error("Missing invitation id");
+      return;
+    }
+
+    try {
+      setShareError(null);
+      setCancelTargetId(invitationId);
+      await cancelInvitationMutation.mutateAsync({
+        membershipId: invitationId,
+        data: {
+          cancellerId: user.id.toString(),
+        },
+      });
+
+      // Manually invalidate all group memberships queries to refresh the list
+      queryClient.invalidateQueries({
+        queryKey: ["memberships", "list", "byGroup", groupId],
+      });
+
+      enqueueSnackbar(t("groups:invitations.cancelSuccess"), {
+        variant: "success",
+      });
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Unable to cancel invitation. Please try again.";
+      console.error("Failed to cancel invitation:", {
+        error,
+        invitationId,
+        groupId,
+        userId: user?.id,
+        errorMessage,
+      });
+      setShareError(errorMessage);
+      enqueueSnackbar(t("groups:invitations.cancelError"), {
+        variant: "error",
+      });
+    } finally {
+      setCancelTargetId(null);
+    }
   };
 
   const handleMenuOpen = (
@@ -157,7 +260,7 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
     return (
       <Container maxWidth="lg">
         <Typography variant="h4" sx={{ mt: 4, mb: 2 }}>
-          Loading group...
+          {t("actions.loading")}
         </Typography>
       </Container>
     );
@@ -174,6 +277,18 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
   }
 
   const memberships = membershipsData?.results || [];
+
+  // Debug logging
+  console.log("Memberships data:", {
+    membershipsData,
+    memberships,
+    membershipsCount: memberships.length,
+    membershipsLoading,
+    membershipsError,
+    groupId,
+    user: user?.id,
+  });
+
   const activeMembers = memberships.filter(
     (m: Membership) => m.status === "active"
   );
@@ -181,26 +296,47 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
   const pendingInvitations = memberships.filter(
     (m: Membership) => m.status === "pending"
   );
-  const userMembership = activeMembers.find(
-    (m: Membership) =>
-      (typeof m.user_id === "object" ? m.user_id.id : m.user_id) === user?.id
-  );
+
+  console.log("Filtered members:", {
+    activeMembers,
+    activeMembersCount: activeMembers.length,
+    pendingInvitations,
+    pendingInvitationsCount: pendingInvitations.length,
+  });
+
+  // Helper to get user ID from membership, handling both object and string/number types
+  const getMembershipUserId = (m: Membership): string | null => {
+    if (!m.user_id) return null;
+    if (typeof m.user_id === "object") {
+      return m.user_id.id?.toString() || null;
+    }
+    return m.user_id.toString();
+  };
+
+  const userMembership = activeMembers.find((m: Membership) => {
+    const membershipUserId = getMembershipUserId(m);
+    const currentUserId = user?.id?.toString();
+    return membershipUserId === currentUserId;
+  });
   const canManage = userMembership?.role === "admin";
-  console.log({ activeMembers, user });
   return (
     <Container maxWidth="lg">
       <Grid container spacing={3} sx={{ mt: 2 }}>
         {/* Header */}
         <Grid item xs={12}>
           <Box display="flex" alignItems="center" mb={2}>
-            <Button
-              component={Link}
-              href="/groups"
-              startIcon={<ArrowBackIcon />}
-              sx={{ mr: 2 }}
-            >
-              {t("actions.back")}
-            </Button>
+            <Box>
+              <Avatar
+                src={group.iconUrl}
+                variant="square"
+                sx={{
+                  mr: 2,
+                  bgcolor: group.iconUrl ? "transparent" : "primary.main",
+                  width: 80,
+                  height: 80,
+                }}
+              ></Avatar>
+            </Box>
             <Box flex={1}>
               <Typography variant="h3">{group.name}</Typography>
               {group.description && (
@@ -213,25 +349,15 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
                 {new Date(group.createdAt).toLocaleDateString()}
               </Typography>
             </Box>
-            <Box display="flex" gap={1}>
-              <Button
-                component={Link}
-                href={`/groups/${groupId}/lists`}
-                variant="outlined"
-                color="primary"
+            {shareError && (
+              <Typography
+                variant="body2"
+                color="error"
+                sx={{ mt: 1, width: "100%" }}
               >
-                View Lists
-              </Button>
-              {canManage && (
-                <Button
-                  variant="contained"
-                  onClick={() => setInviteDialogOpen(true)}
-                  color="primary"
-                >
-                  {t("groups:actions.invite")}
-                </Button>
-              )}
-            </Box>
+                {shareError}
+              </Typography>
+            )}
           </Box>
         </Grid>
 
@@ -240,6 +366,17 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
           <Typography variant="h5" sx={{ mb: 2 }}>
             {t("groups:members.title")} ({activeMembers.length})
           </Typography>
+          {membershipsError && (
+            <Typography variant="body2" color="error" sx={{ mb: 2 }}>
+              {"Error loading members: "}
+              {membershipsError.message || "Unknown error"}
+            </Typography>
+          )}
+          {membershipsLoading && (
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              {t("actions.loading")}...
+            </Typography>
+          )}
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
@@ -253,166 +390,214 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {activeMembers.map((membership: Membership) => (
-                  <TableRow key={membership._id}>
-                    <TableCell>
-                      <Box display="flex" alignItems="center">
-                        <Avatar sx={{ mr: 2, width: 32, height: 32 }}>
-                          {(typeof membership.user_id === "object"
-                            ? membership.user_id?.firstName?.[0]
-                            : null) ||
-                            membership.invitee_phone?.[0] ||
-                            "?"}
-                        </Avatar>
-                        <Typography>
-                          {typeof membership.user_id === "object" &&
-                          membership.user_id
-                            ? `${membership.user_id.firstName} ${membership.user_id.lastName}`
-                            : membership.invitee_phone}
-                        </Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell>
-                      <Chip
-                        label={membership.role}
-                        size="small"
-                        color={
-                          membership.role === "admin"
-                            ? "error"
-                            : membership.role === "editor"
-                              ? "warning"
-                              : "default"
-                        }
-                      />
-                    </TableCell>
-                    <TableCell>
-                      {new Date(
-                        membership.accepted_at || membership.createdAt
-                      ).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell align="right">
-                      {canManage &&
-                        (typeof membership.user_id === "object"
-                          ? membership.user_id.id
-                          : membership.user_id) !== user?.id && (
-                          <IconButton
-                            onClick={(e) => handleMenuOpen(e, membership)}
-                            size="small"
-                          >
-                            <MoreVertIcon />
-                          </IconButton>
-                        )}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Grid>
+                {activeMembers.map((membership: Membership) => {
+                  // Get photo URL - photo can be a string (URL) or FileEntity
+                  const getPhotoUrl = () => {
+                    if (
+                      typeof membership.user_id === "object" &&
+                      membership.user_id?.photo
+                    ) {
+                      // If photo is a string, use it directly
+                      if (typeof membership.user_id.photo === "string") {
+                        return membership.user_id.photo;
+                      }
+                      // If photo is a FileEntity object, use the path
+                      if (
+                        typeof membership.user_id.photo === "object" &&
+                        "path" in membership.user_id.photo
+                      ) {
+                        return membership.user_id.photo.path;
+                      }
+                    }
+                    return undefined;
+                  };
 
-        {/* Pending Invitations */}
-        {pendingInvitations.length > 0 && (
-          <Grid item xs={12}>
-            <Typography variant="h5" sx={{ mb: 2 }}>
-              {t("groups:invitations.title")} ({pendingInvitations.length})
-            </Typography>
-            <TableContainer component={Paper}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>{t("groups:invitations.phone")}</TableCell>
-                    <TableCell>{t("groups:invitations.role")}</TableCell>
-                    <TableCell>{t("groups:invitations.invited")}</TableCell>
-                    <TableCell align="right">
-                      {t("groups:invitations.actions")}
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {pendingInvitations.map((invitation: Membership) => (
-                    <TableRow key={invitation._id}>
-                      <TableCell>{invitation.invitee_phone}</TableCell>
+                  const photoUrl = getPhotoUrl();
+
+                  return (
+                    <TableRow key={membership._id}>
+                      <TableCell>
+                        <Box display="flex" alignItems="center">
+                          <Avatar
+                            src={photoUrl}
+                            sx={{ mr: 2, width: 32, height: 32 }}
+                            onError={() => {
+                              console.error("Avatar image failed to load:", {
+                                photo: photoUrl,
+                                user_id: membership.user_id,
+                              });
+                            }}
+                          >
+                            {(typeof membership.user_id === "object"
+                              ? membership.user_id?.firstName?.[0]
+                              : null) ||
+                              membership.invitee_phone?.[0] ||
+                              "?"}
+                          </Avatar>
+                          <Typography>
+                            {typeof membership.user_id === "object" &&
+                            membership.user_id
+                              ? `${membership.user_id.firstName} ${membership.user_id.lastName}`
+                              : membership.invitee_phone}
+                          </Typography>
+                        </Box>
+                      </TableCell>
                       <TableCell>
                         <Chip
-                          label={invitation.role}
+                          label={membership.role}
                           size="small"
                           color={
-                            invitation.role === "admin"
+                            membership.role === "admin"
                               ? "error"
-                              : invitation.role === "editor"
+                              : membership.role === "editor"
                                 ? "warning"
                                 : "default"
                           }
                         />
                       </TableCell>
                       <TableCell>
-                        {new Date(invitation.createdAt).toLocaleDateString()}
+                        {new Date(
+                          membership.accepted_at || membership.createdAt
+                        ).toLocaleDateString()}
                       </TableCell>
                       <TableCell align="right">
-                        {canManage && (
-                          <Button
-                            size="small"
-                            color="error"
-                            onClick={() => {
-                              // Handle cancel invitation
-                            }}
-                          >
-                            {t("groups:invitations.cancel")}
-                          </Button>
-                        )}
+                        {canManage &&
+                          getMembershipUserId(membership) !==
+                            user?.id?.toString() && (
+                            <IconButton
+                              onClick={(e) => handleMenuOpen(e, membership)}
+                              size="small"
+                            >
+                              <MoreVertIcon />
+                            </IconButton>
+                          )}
                       </TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+        {/* Pending Invitations */}
+        {(pendingInvitations.length > 0 || canManage) && (
+          <Grid item xs={12}>
+            <Typography variant="h5" sx={{ mb: 2 }}>
+              {t("groups:invitations.title")} ({pendingInvitations.length})
+            </Typography>
+            {pendingInvitations.length > 0 ? (
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>{t("groups:invitations.expires")}</TableCell>
+                      <TableCell align="right">
+                        {t("groups:invitations.actions")}
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {pendingInvitations.map((invitation: Membership) => {
+                      const invitationId = getMembershipId(
+                        invitation as MembershipWithOptionalId
+                      );
+                      const isCancelling =
+                        !!invitationId && cancelTargetId === invitationId;
+
+                      // Check if user is admin or created this invitation
+                      const invitedByUserId =
+                        typeof invitation.invited_by === "object"
+                          ? invitation.invited_by.id
+                          : invitation.invited_by;
+                      const canManageInvitation =
+                        canManage || invitedByUserId === user?.id?.toString();
+
+                      return (
+                        <TableRow key={invitationId || invitation.token}>
+                          <TableCell>
+                            {invitation.expiration_date
+                              ? new Date(
+                                  invitation.expiration_date
+                                ).toLocaleDateString()
+                              : t("groups:invitations.noExpiration")}
+                          </TableCell>
+                          <TableCell align="right">
+                            {canManageInvitation && (
+                              <Box
+                                display="flex"
+                                gap={1}
+                                justifyContent="flex-end"
+                              >
+                                <Button
+                                  size="small"
+                                  onClick={() =>
+                                    handleShareExistingInvitation(invitation)
+                                  }
+                                >
+                                  {t("groups:invitations.resendLink")}
+                                </Button>
+                                <Button
+                                  size="small"
+                                  color="error"
+                                  onClick={() =>
+                                    handleCancelInvitation(invitation)
+                                  }
+                                  disabled={isCancelling}
+                                >
+                                  {isCancelling
+                                    ? t("groups:actions.canceling")
+                                    : t("groups:invitations.cancel")}
+                                </Button>
+                              </Box>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            ) : (
+              canManage && (
+                <Typography variant="body2" color="text.secondary">
+                  {t("groups:noPendingInvitations")}
+                </Typography>
+              )
+            )}
           </Grid>
         )}
-
-        {/* Invite User Dialog */}
-        <Dialog
-          open={inviteDialogOpen}
-          onClose={handleCloseInviteDialog}
-          maxWidth="sm"
-          fullWidth
-        >
-          <DialogTitle>{t("groups:dialog.inviteTitle")}</DialogTitle>
-          <DialogContent>
-            <TextField
-              autoFocus
-              margin="dense"
-              label={t("groups:form.phone")}
-              type="tel"
-              fullWidth
-              variant="outlined"
-              value={newInvitation.invitee_phone}
-              onChange={(e) =>
-                setNewInvitation({
-                  ...newInvitation,
-                  invitee_phone: e.target.value,
-                })
-              }
-              sx={{ mb: 2 }}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseInviteDialog}>
-              {t("actions.cancel")}
+        <Grid item xs={12}>
+          <Box display="flex" gap={1}>
+            <Button
+              component={Link}
+              href="/groups"
+              startIcon={<ArrowBackIcon />}
+              sx={{ mr: 2 }}
+            >
+              {t("actions.back")}
             </Button>
             <Button
-              onClick={handleInviteUser}
-              variant="contained"
-              disabled={
-                !newInvitation.invitee_phone.trim() ||
-                createInvitationMutation.isPending
-              }
+              component={Link}
+              href={`/groups/${groupId}/lists`}
+              variant="outlined"
+              color="primary"
             >
-              {createInvitationMutation.isPending
-                ? t("actions.inviting")
-                : t("actions.invite")}
+              {t("groups:actions.viewLists")}
             </Button>
-          </DialogActions>
-        </Dialog>
+            {canManage && (
+              <Button
+                variant="contained"
+                onClick={handleShareInvite}
+                color="primary"
+                disabled={createInvitationMutation.isPending}
+              >
+                {createInvitationMutation.isPending
+                  ? t("actions.inviting")
+                  : t("groups:actions.invite")}
+              </Button>
+            )}
+          </Box>
+        </Grid>
 
         {/* Member Actions Menu */}
         <Menu

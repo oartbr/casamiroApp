@@ -100,7 +100,7 @@ body {
 }
 
 .version {
-  font-size: 1rem;
+  font-size: 0.7rem;
   font-weight: 100;
   color: #999;
   opacity: 70%;
@@ -298,9 +298,6 @@ body {
 
 .joinButton:active {
   transform: scale(0.98) !important; /* Slight scale-down on click */
-}
-.itemLista{
-  background: red!important
 }
 
 @media only screen and (max-width: 480px) and (orientation: portrait) {
