@@ -82,6 +82,21 @@ export function useCreateInvitationService() {
   );
 }
 
+// Get invitation by token
+export function useGetInvitationByTokenService() {
+  const fetch = useFetch();
+
+  return useCallback(
+    (token: string, requestConfig?: RequestConfigType) => {
+      return fetch(`${API_URL}/v1/memberships/invite/${token}`, {
+        method: "GET",
+        ...requestConfig,
+      }).then(wrapperFetchJsonResponse<Membership>);
+    },
+    [fetch]
+  );
+}
+
 // Accept invitation
 export function useAcceptInvitationService() {
   const fetch = useFetch();

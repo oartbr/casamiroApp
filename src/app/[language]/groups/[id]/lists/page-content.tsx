@@ -12,6 +12,7 @@ import withPageRequiredAuth from "@/services/auth/with-page-required-auth";
 import { RoleEnum } from "@/services/api/types/role";
 import { useGroupQuery } from "@/services/api/react-query/groups-queries";
 import ListsContainer from "@/components/lists/lists-container";
+import Avatar from "@mui/material/Avatar/Avatar";
 
 interface ListsPageContentProps {
   params: { [key: string]: string | undefined };
@@ -60,6 +61,18 @@ function ListsPageContent({ params }: ListsPageContentProps) {
           >
             {t("actions.back")}
           </Button>
+          <Box>
+            <Avatar
+              src={group.iconUrl}
+              variant="square"
+              sx={{
+                mr: 2,
+                bgcolor: group.iconUrl ? "transparent" : "primary.main",
+                width: 80,
+                height: 80,
+              }}
+            ></Avatar>
+          </Box>
           <Box flex={1}>
             <Typography variant="h3">{group.name} - Lists</Typography>
             {group.description && (
