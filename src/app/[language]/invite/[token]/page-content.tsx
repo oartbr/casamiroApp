@@ -70,7 +70,7 @@ function InvitePageContent({ params }: InvitePageContentProps) {
       const groupId =
         typeof membership.group_id === "string"
           ? membership.group_id
-          : membership.group_id?.id || membership.group_id?._id;
+          : membership.group_id?.id;
 
       router.push(groupId ? `/groups/${groupId}` : "/groups");
     } catch (err) {
