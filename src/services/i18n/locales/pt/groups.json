@@ -55,6 +55,8 @@
   },
   "invitations": {
     "title": "Convites",
+    "title_one": "Convite",
+    "title_other": "Convites",
     "email": "Email",
     "role": "Cargo",
     "actions": "Ações",

@@ -166,7 +166,7 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({
   };
 
   return (
-    <AppBar position="static" color="primary" suppressHydrationWarning>
+    <AppBar position="fixed" color="primary" suppressHydrationWarning>
       <Container maxWidth="xl">
         <div className="PWA_installButton">{pwa && <InstallButton />}</div>
         <Toolbar disableGutters>
@@ -176,14 +176,23 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({
               {isLoadingGroup ? (
                 <CircularProgress size={20} color="inherit" />
               ) : activeGroup?.iconUrl ? (
-                <Image
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  gap={1}
                   className="groupIconHeader"
-                  src={activeGroup.iconUrl}
-                  alt={activeGroup.name}
-                  fill
-                  priority
-                  title={activeGroup.name}
-                />
+                >
+                  <Image
+                    src={activeGroup.iconUrl}
+                    alt={activeGroup.name}
+                    fill
+                    priority
+                    title={activeGroup.name}
+                  />
+                  <Typography className="groupNameHeader" variant="caption">
+                    {activeGroup.name}
+                  </Typography>
+                </Box>
               ) : null}
             </>
           ) : (
@@ -205,7 +214,12 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({
             </>
           )}
           {/* Mobile Menu */}
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "flex", md: "none", zIndex: 999 },
+            }}
+          >
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -224,7 +238,7 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({
               transformOrigin={{ vertical: "top", horizontal: "left" }}
               open={Boolean(anchorElementNav)}
               onClose={handleCloseNavMenu}
-              sx={{ display: { xs: "block", md: "none" } }}
+              sx={{ display: { xs: "block", md: "none", zIndex: 999 } }}
             >
               {menuConfig
                 .filter((item) => item.mobile && !item.userMenu)
@@ -254,7 +268,12 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({
           </Typography>
 
           {/* Desktop Menu */}
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "none", md: "flex", zIndex: 999 },
+            }}
+          >
             {menuConfig
               .filter(
                 (item) => item.desktop && !item.userMenu && item.type !== "auth"
@@ -266,7 +285,7 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({
           {!isLoaded ? (
             <CircularProgress color="inherit" />
           ) : user ? (
-            <Box sx={{ flexGrow: 0 }}>
+            <Box sx={{ flexGrow: 0, zIndex: 999 }}>
               <Tooltip title={t("common:navigation.profile")}>
                 <IconButton
                   onClick={handleOpenUserMenu}
@@ -297,7 +316,12 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({
             </Box>
           ) : (
             <>
-              <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
+              <Box
+                sx={{
+                  flexGrow: 0,
+                  display: { xs: "none", md: "flex", zIndex: 999 },
+                }}
+              >
                 {menuConfig
                   .filter(
                     (item) => item.desktop && item.roles.includes("GUEST")

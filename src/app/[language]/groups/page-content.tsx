@@ -60,10 +60,10 @@ function PendingInvitationsCount({ groupId }: { groupId: string }) {
 
   return (
     <Chip
-      label={`${pendingCount} ${t("groups:invitations.title")}`}
+      label={`${pendingCount} ${t("groups:invitations.title", { count: pendingCount })}`}
       size="small"
       color="warning"
-      sx={{ mt: 1 }}
+      sx={{ marginLeft: (theme) => theme.spacing(2) }}
     />
   );
 }
@@ -293,18 +293,20 @@ function GroupsPageContent() {
                       <Typography variant="h6" component="div">
                         {group.name}
                       </Typography>
-                      <Chip
-                        label={group.role}
-                        size="small"
-                        sx={{ marginLeft: (theme) => theme.spacing(2) }}
-                        color={
-                          group.role === "admin"
-                            ? "error"
-                            : group.role === "editor"
-                              ? "warning"
-                              : "default"
-                        }
-                      />
+                      <Box display="flex" alignItems="center" gap={1}>
+                        <Chip
+                          label={group.role}
+                          size="small"
+                          sx={{ marginLeft: (theme) => theme.spacing(2) }}
+                          color={
+                            group.role === "admin"
+                              ? "error"
+                              : group.role === "editor"
+                                ? "warning"
+                                : "default"
+                          }
+                        />
+                      </Box>
                     </Box>
                     {group.description && (
                       <Typography

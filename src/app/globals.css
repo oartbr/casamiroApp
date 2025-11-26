@@ -3,6 +3,7 @@
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 body {
   padding: 0px !important;
+  padding-top: 64px !important;
 }
 .logoHeader {
   margin-right: 5rem;
@@ -11,6 +12,7 @@ body {
   left: 50% !important;
   margin-left: -7%;
 }
+
 .logoHeaderShort {
   padding: 0.2rem;
   top: 0px;
@@ -20,10 +22,29 @@ body {
   width: auto !important;
 }
 .groupIconHeader {
-  width: 69px !important;
-  left: 50% !important;
-  margin-left: -7%;
+  width: 100% !important;
+  height: 69px !important;
   padding: 0.1rem;
+  position: absolute;
+  top: 0px;
+  z-index: 5;
+}
+.groupIconHeader img{
+  width: 69px !important;
+  height: 69px !important;
+  margin: 0% 50%;
+  position: absolute!important;
+  left: -34px!important;
+}
+.groupNameHeader{
+  font-size: 0.5rem;
+  z-index: 999;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 300;
 }
 .welcomeMessage {
   display: none;
@@ -109,6 +130,9 @@ body {
   left: 10px;
 }
 
+.footer{
+  height: 200px;
+}
 @keyframes qrScanAnimation {
   0% {
     opacity: 0;
@@ -313,8 +337,16 @@ body {
   }
 
   .groupIconHeader {
+    width: 100% !important;
+    height: 56px !important;
+  }
+  .groupIconHeader img{
     width: 56px !important;
-    margin-left: -7%;
+    height: 56px !important;
+    left: -28px !important;
+  }
+  .groupNameHeader{
+    font-size: 0.6rem !important;
   }
 
   #menu-appbar ul {
@@ -323,9 +355,9 @@ body {
 
   #menu-appbar > div:first-of-type {
     width: 80%;
-    z-index: 0;
+    z-index: 5000;
   }
   #menu-appbar {
-    z-index: 999;
+    z-index: 999!important;
   }
 }

@@ -483,7 +483,10 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
         {(pendingInvitations.length > 0 || canManage) && (
           <Grid item xs={12}>
             <Typography variant="h5" sx={{ mb: 2 }}>
-              {t("groups:invitations.title")} ({pendingInvitations.length})
+              {t("groups:invitations.title", {
+                count: pendingInvitations.length,
+              })}{" "}
+              ({pendingInvitations.length})
             </Typography>
             {pendingInvitations.length > 0 ? (
               <TableContainer component={Paper}>
@@ -576,14 +579,14 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
             >
               {t("actions.back")}
             </Button>
-            <Button
+            {/* <Button
               component={Link}
               href={`/groups/${groupId}/lists`}
               variant="outlined"
               color="primary"
             >
               {t("groups:actions.viewLists")}
-            </Button>
+            </Button> */}
             {canManage && (
               <Button
                 variant="contained"
