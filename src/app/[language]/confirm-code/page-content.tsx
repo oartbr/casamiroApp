@@ -97,10 +97,8 @@ function Form({ params }: Props) {
   const { handleSubmit, setError } = methods;
 
   const onSubmit = handleSubmit(async (formData) => {
-    //const params = new URLSearchParams(window.location.search);
-    //const hash = params.get("hash");
     const phoneNumber = searchParams.get("p");
-    //const returnTo = searchParams.get("returnTo");
+    const returnTo = searchParams.get("returnTo");
 
     const { data, status } = await fetchCheckCode({
       phoneNumber: phoneNumber ?? "",
@@ -148,7 +146,10 @@ function Form({ params }: Props) {
         });
         setUser(data.user);
         setReturningUserCookie();
-        if (params.id) {
+        // If returnTo is provided, redirect there after login
+        if (returnTo) {
+          router.replace(decodeURIComponent(returnTo));
+        } else if (params.id) {
           // console.log({ go: "register" });
           router.replace(`register`);
         } else {
@@ -157,7 +158,10 @@ function Form({ params }: Props) {
         }
       } else {
         // console.log({ go: "sign-up" });
-        router.replace(`sign-up?p=${phoneNumber}`);
+        const signUpUrl = `sign-up?p=${phoneNumber}${
+          returnTo ? `&returnTo=${encodeURIComponent(returnTo)}` : ""
+        }`;
+        router.replace(signUpUrl);
       }
     }
   });
