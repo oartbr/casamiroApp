@@ -29,8 +29,10 @@ import {
 import {
   useAcceptInvitationMutation,
   useDeclineInvitationMutation,
+  useGroupMembershipsQuery,
 } from "@/services/api/react-query/memberships-queries";
 import { Group, CreateGroupRequest } from "@/services/api/types/group";
+import { Membership } from "@/services/api/types/membership";
 
 // Type for pending invitation
 type PendingInvitation = {
@@ -43,6 +45,28 @@ type PendingInvitation = {
 import Link from "@/components/link";
 import withPageRequiredAuth from "@/services/auth/with-page-required-auth";
 import { RoleEnum } from "@/services/api/types/role";
+
+// Component to fetch and display pending invitations count for a group
+function PendingInvitationsCount({ groupId }: { groupId: string }) {
+  const { t } = useTranslation("groups");
+  const { data: membershipsData } = useGroupMembershipsQuery(groupId, {
+    status: "pending",
+  });
+  const pendingCount =
+    membershipsData?.results?.filter((m: Membership) => m.status === "pending")
+      .length || 0;
+
+  if (pendingCount === 0) return null;
+
+  return (
+    <Chip
+      label={`${pendingCount} ${t("groups:invitations.title", { count: pendingCount })}`}
+      size="small"
+      color="warning"
+      sx={{ marginLeft: (theme) => theme.spacing(2) }}
+    />
+  );
+}
 
 function GroupsPageContent() {
   const { t } = useTranslation("groups");
@@ -269,18 +293,20 @@ function GroupsPageContent() {
                       <Typography variant="h6" component="div">
                         {group.name}
                       </Typography>
-                      <Chip
-                        label={group.role}
-                        size="small"
-                        sx={{ marginLeft: (theme) => theme.spacing(2) }}
-                        color={
-                          group.role === "admin"
-                            ? "error"
-                            : group.role === "editor"
-                              ? "warning"
-                              : "default"
-                        }
-                      />
+                      <Box display="flex" alignItems="center" gap={1}>
+                        <Chip
+                          label={group.role}
+                          size="small"
+                          sx={{ marginLeft: (theme) => theme.spacing(2) }}
+                          color={
+                            group.role === "admin"
+                              ? "error"
+                              : group.role === "editor"
+                                ? "warning"
+                                : "default"
+                          }
+                        />
+                      </Box>
                     </Box>
                     {group.description && (
                       <Typography
@@ -295,15 +321,18 @@ function GroupsPageContent() {
                       {t("groups:info.created")}:{" "}
                       {new Date(group.createdAt).toLocaleDateString()}
                     </Typography>
+                    {group.role === "admin" && (
+                      <PendingInvitationsCount groupId={group.id} />
+                    )}
                   </CardContent>
                   <CardActions>
                     {group.role === "admin" && (
                       <Button
                         size="small"
                         component={Link}
-                        href={`/groups/${group.id}/edit`}
+                        href={`/groups/${group.id}`}
                       >
-                        {t("groups:actions.edit")}
+                        {t("groups:actions.open")}
                       </Button>
                     )}
                   </CardActions>

@@ -10,6 +10,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { useRouter } from "next/navigation";
 import {
   AuthActionsContext,
   AuthContext,
@@ -23,6 +24,7 @@ import HTTP_CODES_ENUM from "../api/types/http-codes";
 
 function AuthProvider(props: PropsWithChildren<{}>) {
   const AUTH_TOKEN_KEY = "auth-token-data";
+  const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const isLoadingRef = useRef(false); // Prevent multiple simultaneous loads
@@ -83,21 +85,35 @@ function AuthProvider(props: PropsWithChildren<{}>) {
     ) as TokensInfo;
 
     if (tokensInfoRef.current.token) {
-      await fetchBase(
-        AUTH_LOGOUT_URL,
-        {
-          method: "POST",
-          body: JSON.stringify({ refreshToken: tokens?.refreshToken }),
-        },
-        {
-          token: tokens?.token,
-          refreshToken: tokens?.refreshToken,
-          tokenExpires: tokens?.tokenExpires,
-        }
-      );
+      try {
+        await fetchBase(
+          AUTH_LOGOUT_URL,
+          {
+            method: "POST",
+            body: JSON.stringify({ refreshToken: tokens?.refreshToken }),
+          },
+          {
+            token: tokens?.token,
+            refreshToken: tokens?.refreshToken,
+            tokenExpires: tokens?.tokenExpires,
+          }
+        );
+      } catch (error) {
+        // Continue with logout even if API call fails
+        console.error("Error during logout API call:", error);
+      }
     }
     setTokensInfo(null);
-  }, [setTokensInfo, fetchBase]);
+    // Redirect to home page after logout
+    if (typeof window !== "undefined") {
+      const currentPath = window.location.pathname;
+      // Extract language from path (e.g., /pt/groups -> pt)
+      const languageMatch = currentPath.match(/^\/([^/]+)/);
+      const language = languageMatch ? languageMatch[1] : "pt";
+      // Use replace instead of push to avoid adding to history
+      router.replace(`/${language}`);
+    }
+  }, [setTokensInfo, fetchBase, router]);
 
   useEffect(() => {
     // Only load data once on mount
@@ -121,6 +137,22 @@ function AuthProvider(props: PropsWithChildren<{}>) {
 
         setTokensInfoRef(tokens);
 
+        // Check if token is expired
+        if (tokens?.tokenExpires && tokens.tokenExpires <= Date.now()) {
+          // Token is expired, clear it and redirect
+          setTokensInfo(null);
+          setIsLoaded(true);
+          isLoadingRef.current = false;
+          // Only redirect if we're not already on the check-phone-number page
+          if (
+            typeof window !== "undefined" &&
+            !window.location.pathname.includes("check-phone-number")
+          ) {
+            router.push("/check-phone-number");
+          }
+          return;
+        }
+
         if (tokens?.token) {
           const response = await fetchBase(
             AUTH_ME_URL,
@@ -142,6 +174,13 @@ function AuthProvider(props: PropsWithChildren<{}>) {
             setTokensInfo(null);
             setIsLoaded(true);
             isLoadingRef.current = false;
+            // Only redirect if we're not already on the check-phone-number page
+            if (
+              typeof window !== "undefined" &&
+              !window.location.pathname.includes("check-phone-number")
+            ) {
+              router.push("/check-phone-number");
+            }
             return;
           }
 
@@ -157,6 +196,13 @@ function AuthProvider(props: PropsWithChildren<{}>) {
       } catch (error) {
         console.error("Error loading user data:", error);
         setTokensInfo(null);
+        // Only redirect if we're not already on the check-phone-number page
+        if (
+          typeof window !== "undefined" &&
+          !window.location.pathname.includes("check-phone-number")
+        ) {
+          router.push("/check-phone-number");
+        }
       } finally {
         setIsLoaded(true);
         isLoadingRef.current = false;

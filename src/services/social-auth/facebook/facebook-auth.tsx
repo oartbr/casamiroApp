@@ -4,6 +4,7 @@ import { useAuthFacebookLoginService } from "@/services/api/services/auth";
 import HTTP_CODES_ENUM from "@/services/api/types/http-codes";
 import useAuthActions from "@/services/auth/use-auth-actions";
 import useAuthTokens from "@/services/auth/use-auth-tokens";
+import { setReturningUserCookie } from "@/services/auth/returning-user-cookie";
 import { useState } from "react";
 import { FullPageLoader } from "@/components/full-page-loader";
 import Button from "@mui/material/Button";
@@ -36,6 +37,7 @@ export default function FacebookAuth() {
           tokenExpires: data.tokenExpires,
         });
         setUser(data.user);
+        setReturningUserCookie();
       }
     } finally {
       setIsLoading(false);

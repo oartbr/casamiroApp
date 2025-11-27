@@ -24,7 +24,7 @@ export type MembershipWithDetails = Membership & {
 
 export type CreateInvitationRequest = {
   group_id: string;
-  invitee_phone: string;
+  invitee_phone?: string;
   invited_by: string;
   role?: "admin" | "editor" | "contributor";
 };

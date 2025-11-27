@@ -16,6 +16,7 @@ import HTTP_CODES_ENUM from "@/services/api/types/http-codes";
 import { useTranslation } from "@/services/i18n/client";
 import useAuthTokens from "@/services/auth/use-auth-tokens";
 import Link from "@mui/material/Link/Link";
+import { setReturningUserCookie } from "@/services/auth/returning-user-cookie";
 
 type RegisterFormData = {
   confirmationCode: string;
@@ -96,10 +97,8 @@ function Form({ params }: Props) {
   const { handleSubmit, setError } = methods;
 
   const onSubmit = handleSubmit(async (formData) => {
-    //const params = new URLSearchParams(window.location.search);
-    //const hash = params.get("hash");
     const phoneNumber = searchParams.get("p");
-    //const returnTo = searchParams.get("returnTo");
+    const returnTo = searchParams.get("returnTo");
 
     const { data, status } = await fetchCheckCode({
       phoneNumber: phoneNumber ?? "",
@@ -146,7 +145,11 @@ function Form({ params }: Props) {
           tokenExpires: data.tokenExpires,
         });
         setUser(data.user);
-        if (params.id) {
+        setReturningUserCookie();
+        // If returnTo is provided, redirect there after login
+        if (returnTo) {
+          router.replace(decodeURIComponent(returnTo));
+        } else if (params.id) {
           // console.log({ go: "register" });
           router.replace(`register`);
         } else {
@@ -155,7 +158,10 @@ function Form({ params }: Props) {
         }
       } else {
         // console.log({ go: "sign-up" });
-        router.replace(`sign-up?p=${phoneNumber}`);
+        const signUpUrl = `sign-up?p=${phoneNumber}${
+          returnTo ? `&returnTo=${encodeURIComponent(returnTo)}` : ""
+        }`;
+        router.replace(signUpUrl);
       }
     }
   });

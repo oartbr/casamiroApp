@@ -5,6 +5,7 @@ import { useForm, FormProvider, useFormState } from "react-hook-form";
 import { useAuthSignUpService } from "@/services/api/services/auth";
 import useAuthActions from "@/services/auth/use-auth-actions";
 import useAuthTokens from "@/services/auth/use-auth-tokens";
+import { setReturningUserCookie } from "@/services/auth/returning-user-cookie";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -107,6 +108,7 @@ function Form(props: Props) {
   ];
   const garantiaId = props.params.id;
   const sPhoneNumber = searchParams.get("p");
+  const returnTo = searchParams.get("returnTo");
 
   const methods = useForm<SignUpFormData>({
     resolver: yupResolver<SignUpFormData>(validationSchema),
@@ -160,9 +162,13 @@ function Form(props: Props) {
         tokenExpires: dataSignUp.tokens.tokenExpires,
       });
       setUser(dataSignUp.user);
+      setReturningUserCookie();
 
       setTimeout(() => {
-        if (garantiaId) {
+        // If returnTo is provided, redirect there after sign-up
+        if (returnTo) {
+          router.replace(decodeURIComponent(returnTo));
+        } else if (garantiaId) {
           // console.log({ go: `${props.params.id}/register` });
           router.replace(`${props.params.id}/register`);
         } else {

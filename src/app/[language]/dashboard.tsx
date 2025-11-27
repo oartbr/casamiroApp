@@ -15,6 +15,8 @@ import useAuth from "@/services/auth/use-auth";
 import { useEffect, useMemo, useState } from "react";
 import { useGetListingNotasByUserService } from "@/services/api/services/notas";
 import { useRouter } from "next/navigation";
+import { hasReturningUserCookie } from "@/services/auth/returning-user-cookie";
+import useLanguage from "@/services/i18n/use-language";
 import HTTP_CODES_ENUM from "@/services/api/types/http-codes";
 import {
   useGetDefaultListByGroupService,
@@ -28,9 +30,11 @@ import Alert from "@mui/material/Alert/Alert";
 export default function PageContent() {
   const { t } = useTranslation("dashboard");
   const { t: home } = useTranslation("home");
+  const { t: userHome } = useTranslation("returningUser");
   const { t: notaCardT } = useTranslation("listing");
   const { user, isLoaded } = useAuth();
   const router = useRouter();
+  const language = useLanguage();
 
   const fetchListNotas = useGetListingNotasByUserService();
   const getDefaultListByGroup = useGetDefaultListByGroupService();
@@ -43,6 +47,15 @@ export default function PageContent() {
   const [defaultListItems, setDefaultListItems] = useState<ListItem[]>([]);
 
   const activeGroupId = useMemo(() => user?.activeGroupId || "", [user]);
+
+  const returningUser = hasReturningUserCookie();
+
+  // Redirect to sign-in if user is not logged in but has a returning_user cookie
+  useEffect(() => {
+    if (isLoaded && !user && hasReturningUserCookie()) {
+      // router.replace(`/${language}/check-phone-number`);
+    }
+  }, [isLoaded, user, router, language]);
 
   // Determine greeting based on current time
   const greetingKey = useMemo(() => {
@@ -185,6 +198,50 @@ export default function PageContent() {
               {t("actions.editList", { defaultValue: "Edit list" })}{" "}
               {defaultListName}
             </Button>
+          </Grid>
+        </Grid>
+      </Container>
+    );
+  }
+
+  if (returningUser) {
+    return (
+      <Container maxWidth="lg">
+        <Grid container spacing={3} pt={3} direction="row">
+          <Grid item xs={12} md={6}>
+            <div className="mensagem">
+              <Typography variant="h4" gutterBottom>
+                {userHome("title")}
+              </Typography>
+              <Typography variant="body1" paragraph>
+                <Trans
+                  i18nKey="description"
+                  t={userHome}
+                  components={[
+                    <MuiLink
+                      key="1"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href="https://xpand.international"
+                    >
+                      {}
+                    </MuiLink>,
+                  ]}
+                />
+              </Typography>
+              <Button
+                variant="outlined"
+                LinkComponent={Link}
+                href="/check-phone-number"
+                data-testid="login"
+                sx={{ mb: 2 }}
+              >
+                {userHome("callToAction")}
+              </Button>
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                {userHome("socialProof")}
+              </Typography>
+            </div>
           </Grid>
         </Grid>
       </Container>
