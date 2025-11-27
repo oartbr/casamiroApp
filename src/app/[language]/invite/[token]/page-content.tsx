@@ -19,19 +19,20 @@ import {
   useAcceptInvitationMutation,
   useDeclineInvitationMutation,
 } from "@/services/api/react-query/memberships-queries";
-import withPageRequiredAuth from "@/services/auth/with-page-required-auth";
-import { RoleEnum } from "@/services/api/types/role";
+import { hasReturningUserCookie } from "@/services/auth/returning-user-cookie";
+import useLanguage from "@/services/i18n/use-language";
 
 interface InvitePageContentProps {
   params: { token?: string; language?: string };
 }
 
 function InvitePageContent({ params }: InvitePageContentProps) {
-  const token = params.token || "";
+  const token = params.token || ""; // this is the invitation token
   const { t } = useTranslation("groups");
   const router = useRouter();
-  const { user } = useAuth();
-
+  const { user, isLoaded } = useAuth();
+  const language = useLanguage();
+  const returningUser = hasReturningUserCookie();
   const [actionError, setActionError] = useState<string | null>(null);
 
   const { data, isLoading, isError, error, refetch } =
@@ -56,7 +57,17 @@ function InvitePageContent({ params }: InvitePageContentProps) {
   }, [data]);
 
   const handleAccept = async () => {
-    if (!token || !user?.id) return;
+    if (!token) return;
+
+    // If user is not logged in, redirect to login with returnTo parameter
+    if (isLoaded && !user) {
+      const currentPath = window.location.pathname;
+      const returnTo = encodeURIComponent(currentPath);
+      router.push(`/${language}/check-phone-number?returnTo=${returnTo}`);
+      return;
+    }
+
+    if (!user?.id) return;
 
     try {
       setActionError(null);
@@ -97,7 +108,7 @@ function InvitePageContent({ params }: InvitePageContentProps) {
 
   if (isLoading) {
     return (
-      <Container maxWidth="sm" sx={{ mt: 8, textAlign: "center" }}>
+      <Container maxWidth="sm" sx={{ mt: 0, textAlign: "center" }}>
         <CircularProgress />
         <Typography variant="body1" sx={{ mt: 2 }}>
           {t("common:loading")}
@@ -108,7 +119,7 @@ function InvitePageContent({ params }: InvitePageContentProps) {
 
   if (isError || !data) {
     return (
-      <Container maxWidth="sm" sx={{ mt: 8 }}>
+      <Container maxWidth="sm" sx={{ mt: 0 }}>
         <Card>
           <CardContent>
             <Typography variant="h5" gutterBottom>
@@ -117,7 +128,7 @@ function InvitePageContent({ params }: InvitePageContentProps) {
             <Alert severity="error" sx={{ mt: 2, mb: 2 }}>
               {error instanceof Error
                 ? error.message
-                : "Invitation not found or already used."}
+                : t("invitations.notFoundOrAlreadyUsed")}
             </Alert>
             <Stack direction="row" spacing={2}>
               <Button variant="contained" onClick={() => refetch()}>
@@ -134,44 +145,26 @@ function InvitePageContent({ params }: InvitePageContentProps) {
   }
 
   return (
-    <Container maxWidth="sm" sx={{ mt: 8 }}>
+    <Container maxWidth="sm" sx={{ mt: 0 }}>
       <Card>
         <CardContent>
           <Typography variant="h4" gutterBottom>
-            {t("groups:invitations.title")}
-          </Typography>
-          <Typography variant="subtitle1" color="text.secondary" gutterBottom>
-            {t("groups:invitations.joinPrompt")}
+            {t("groups:invitations.title", {
+              firstName: invitedBy?.firstName,
+              groupName: group?.name,
+            })}
           </Typography>
           <Divider sx={{ my: 2 }} />
-
-          <Stack spacing={1}>
-            <Typography variant="h6">
-              {group?.name || t("groups:invitations.unknownGroup")}
-            </Typography>
-            {group?.description && (
-              <Typography color="text.secondary">
-                {group.description}
-              </Typography>
-            )}
-            <Typography>
-              {t("groups:invitations.roleLabel")}{" "}
-              <strong>{data.role || "contributor"}</strong>
-            </Typography>
-            {invitedBy && (
-              <Typography>
-                {t("groups:invitations.invitedBy")}{" "}
-                <strong>
-                  {invitedBy.firstName} {invitedBy.lastName}
-                </strong>
-              </Typography>
-            )}
-          </Stack>
         </CardContent>
         <CardActions sx={{ p: 3, pt: 0, flexDirection: "column", gap: 2 }}>
           {actionError && (
             <Alert severity="error" sx={{ alignSelf: "stretch" }}>
               {actionError}
+            </Alert>
+          )}
+          {isLoaded && !user && (
+            <Alert severity="info" sx={{ alignSelf: "stretch" }}>
+              {t("groups:invitations.loginRequired")}
             </Alert>
           )}
           <Stack direction="row" spacing={2} width="100%">
@@ -182,42 +175,65 @@ function InvitePageContent({ params }: InvitePageContentProps) {
               onClick={handleAccept}
               disabled={
                 acceptInvitationMutation.isPending ||
-                declineInvitationMutation.isPending
+                declineInvitationMutation.isPending ||
+                !isLoaded ||
+                (isLoaded && !user)
               }
             >
               {acceptInvitationMutation.isPending
                 ? t("groups:actions.loading")
                 : t("groups:actions.accept")}
             </Button>
+            {user && (
+              <Button
+                variant="outlined"
+                color="inherit"
+                fullWidth
+                onClick={handleDecline}
+                disabled={
+                  acceptInvitationMutation.isPending ||
+                  declineInvitationMutation.isPending
+                }
+              >
+                {declineInvitationMutation.isPending
+                  ? t("groups:actions.loading")
+                  : t("groups:actions.reject")}
+              </Button>
+            )}
+          </Stack>
+          {!user && returningUser ? (
             <Button
               variant="outlined"
-              color="inherit"
+              color="primary"
               fullWidth
-              onClick={handleDecline}
-              disabled={
-                acceptInvitationMutation.isPending ||
-                declineInvitationMutation.isPending
-              }
+              onClick={() => {
+                const currentPath = window.location.pathname;
+                const returnTo = encodeURIComponent(currentPath);
+                router.push(
+                  `/${language}/check-phone-number?returnTo=${returnTo}`
+                );
+              }}
             >
-              {declineInvitationMutation.isPending
-                ? t("groups:actions.loading")
-                : t("groups:actions.reject")}
+              {t("invitations.loginToAccept")}
             </Button>
-          </Stack>
-          <Button
-            variant="text"
-            color="primary"
-            fullWidth
-            onClick={() => router.push("/groups")}
-          >
-            {t("groups:actions.back")}
-          </Button>
+          ) : !user ? (
+            <Button
+              variant="outlined"
+              color="primary"
+              fullWidth
+              onClick={() => {
+                const currentPath = window.location.pathname;
+                const returnTo = encodeURIComponent(currentPath);
+                router.push(`/${language}/sign-up?returnTo=${returnTo}`);
+              }}
+            >
+              {t("invitations.signUpToAccept")}
+            </Button>
+          ) : null}
         </CardActions>
       </Card>
     </Container>
   );
 }
 
-export default withPageRequiredAuth(InvitePageContent, {
-  roles: [RoleEnum.ADMIN, RoleEnum.USER],
-});
+export default InvitePageContent;

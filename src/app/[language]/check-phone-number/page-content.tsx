@@ -103,8 +103,8 @@ function Form() {
   const { handleSubmit, setError } = methods;
 
   const onSubmit = handleSubmit(async (formData) => {
-    //const params = new URLSearchParams(window.location.search);
-    //const hash = params.get("hash");
+    const params = new URLSearchParams(window.location.search);
+    const returnTo = params.get("returnTo");
     const country = getCountryData(formData.countryCode.value as TCountryCode);
     const { data, status } = await fetchSendCode({
       phoneNumber: "+" + country.phone + formData.phoneNumber,
@@ -115,7 +115,10 @@ function Form() {
         variant: "success",
       });
 
-      router.replace(`confirm-code?p=${country.phone}${formData.phoneNumber}`);
+      const confirmCodeUrl = `confirm-code?p=${country.phone}${formData.phoneNumber}${
+        returnTo ? `&returnTo=${encodeURIComponent(returnTo)}` : ""
+      }`;
+      router.replace(confirmCodeUrl);
     }
 
     if (status === HTTP_CODES_ENUM.UNPROCESSABLE_ENTITY) {

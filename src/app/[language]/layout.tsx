@@ -24,6 +24,7 @@ import InitColorSchemeScript from "@/components/theme/init-color-scheme-script";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import ThemeProvider from "@/components/theme/theme-provider";
 import Version from "@/components/version/version";
+import Footer from "@/components/footer/footer";
 
 type Props = {
   params: { language: string };
@@ -78,6 +79,7 @@ export default function RootLayout({
           </QueryClientProvider>
         </AppRouterCacheProvider>
         <Version />
+        <Footer />
       </body>
     </html>
   );

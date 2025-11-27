@@ -54,7 +54,9 @@
     "title": "Membros"
   },
   "invitations": {
-    "title": "Convites",
+    "title": "{{firstName}} te convidou ao grupo {{groupName}}",
+    "title_one": "Convite",
+    "title_other": "Convites",
     "email": "Email",
     "role": "Cargo",
     "actions": "Ações",
@@ -69,7 +71,11 @@
     "resendLink": "Reenviar link",
     "noExpiration": "Sem expiração",
     "cancelSuccess": "Convite cancelado com sucesso.",
-    "cancelError": "Não foi possível cancelar o convite."
+    "cancelError": "Não foi possível cancelar o convite.",
+    "loginRequired": "Você precisa fazer login para aceitar este convite.",
+    "loginToAccept": "Fazer login para aceitar",
+    "signUpToAccept": "Criar conta para aceitar",
+    "notFoundOrAlreadyUsed": "Convite não encontrado ou já utilizado."
   },
   "form": {
     "name": "Nome",

@@ -16,5 +16,13 @@
     "viewItem": "Ver item",
     "markAsComplete": "Completar",
     "markAsIncomplete": "Desmarcar"
+  },
+  "messages": {
+    "itemDeleted": "Item excluído com sucesso",
+    "itemDeleteFailed": "Falha ao excluir item",
+    "itemUpdateFailed": "Falha ao atualizar item",
+    "unknownUser": "Usuário desconhecido",
+    "addedBy": "Adicionado por {{adderName}}",
+    "completedBy": "Adicionado por {{adderName}}"
   }
 }

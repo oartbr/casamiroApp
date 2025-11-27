@@ -47,7 +47,7 @@ export function NotaCard({ item, onClick, action, type, t }: NotaCardProps) {
     <>
       <Card elevation={3} className={`${item.status}Card`}>
         <CardContent>
-          <Typography variant="h1" component="div" sx={{ fontSize: 26 }}>
+          <Typography variant="h1" component="div" sx={{ fontSize: 23 }}>
             {(() => {
               const registerDate = new Date(
                 item.registeredAt
@@ -83,6 +83,7 @@ export function NotaCard({ item, onClick, action, type, t }: NotaCardProps) {
             sx={{
               color: "text.secondary",
               marginLeft: (theme) => theme.spacing(5),
+              fontSize: 15,
             }}
           >
             {item.vendorName}
@@ -91,6 +92,7 @@ export function NotaCard({ item, onClick, action, type, t }: NotaCardProps) {
             sx={{
               color: "text.secondary",
               marginLeft: (theme) => theme.spacing(5),
+              fontSize: 12,
             }}
           >
             {dayjs(item.purchaseDate)

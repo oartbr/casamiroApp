@@ -85,21 +85,35 @@ function AuthProvider(props: PropsWithChildren<{}>) {
     ) as TokensInfo;
 
     if (tokensInfoRef.current.token) {
-      await fetchBase(
-        AUTH_LOGOUT_URL,
-        {
-          method: "POST",
-          body: JSON.stringify({ refreshToken: tokens?.refreshToken }),
-        },
-        {
-          token: tokens?.token,
-          refreshToken: tokens?.refreshToken,
-          tokenExpires: tokens?.tokenExpires,
-        }
-      );
+      try {
+        await fetchBase(
+          AUTH_LOGOUT_URL,
+          {
+            method: "POST",
+            body: JSON.stringify({ refreshToken: tokens?.refreshToken }),
+          },
+          {
+            token: tokens?.token,
+            refreshToken: tokens?.refreshToken,
+            tokenExpires: tokens?.tokenExpires,
+          }
+        );
+      } catch (error) {
+        // Continue with logout even if API call fails
+        console.error("Error during logout API call:", error);
+      }
     }
     setTokensInfo(null);
-  }, [setTokensInfo, fetchBase]);
+    // Redirect to home page after logout
+    if (typeof window !== "undefined") {
+      const currentPath = window.location.pathname;
+      // Extract language from path (e.g., /pt/groups -> pt)
+      const languageMatch = currentPath.match(/^\/([^/]+)/);
+      const language = languageMatch ? languageMatch[1] : "pt";
+      // Use replace instead of push to avoid adding to history
+      router.replace(`/${language}`);
+    }
+  }, [setTokensInfo, fetchBase, router]);
 
   useEffect(() => {
     // Only load data once on mount

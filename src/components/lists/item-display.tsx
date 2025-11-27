@@ -17,6 +17,7 @@ import {
   useDeleteListItemMutation,
   useUpdateListItemMutation,
 } from "../../services/api/react-query/lists-queries";
+import { useTranslation } from "@/services/i18n/client";
 import { useSnackbar } from "notistack";
 
 interface ItemDisplayProps {
@@ -45,6 +46,7 @@ export default function ItemDisplay({
   const deleteItemMutation = useDeleteListItemMutation();
   const updateItemMutation = useUpdateListItemMutation();
   const { enqueueSnackbar } = useSnackbar();
+  const { t } = useTranslation("lists");
 
   const handleDeleteItem = async () => {
     try {
@@ -53,9 +55,9 @@ export default function ItemDisplay({
         listId: listId,
       });
       onItemDeleted?.();
-      enqueueSnackbar("Item deleted successfully", { variant: "success" });
+      enqueueSnackbar(t("messages.itemDeleted"), { variant: "success" });
     } catch (error) {
-      enqueueSnackbar("Failed to delete item", { variant: "error" });
+      enqueueSnackbar(t("messages.itemDeleteFailed"), { variant: "error" });
     }
   };
 
@@ -73,18 +75,20 @@ export default function ItemDisplay({
         { variant: "success" }
       );
     } catch (error) {
-      enqueueSnackbar("Failed to update item", { variant: "error" });
+      enqueueSnackbar(t("messages.itemUpdateFailed"), { variant: "error" });
     }
   };
 
   const formatDate = (date: Date) => {
-    return new Date(date).toLocaleDateString("pt-br", {
+    const formattedDate = new Date(date).toLocaleDateString("pt-br", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
       hour: "2-digit",
       minute: "2-digit",
     });
+    console.log({ formattedDate });
+    return formattedDate;
   };
 
   const formatDateShort = (date: Date) => {
@@ -97,19 +101,29 @@ export default function ItemDisplay({
   };
 
   const getTooltipText = () => {
-    const adderName = item.addedBy || "Unknown user";
+    const adderName = item.addedBy || t("messages.unknownUser");
     const addedDate = formatDate(item.createdAt);
+    console.log({ item });
 
     if (item.isCompleted && item.completedBy && item.completedAt) {
       const completerName = item.completedBy
         ? `${item.completedBy.firstName} ${item.completedBy.lastName}`
-        : "Unknown user";
+        : t("messages.unknownUser");
       const completedDate = formatDate(item.completedAt);
 
-      return `Added by ${adderName} on ${addedDate}\nCompleted by ${completerName} on ${completedDate}`;
+      // return `Added by ${adderName} on ${addedDate}\nCompleted by ${completerName} on ${completedDate}`;
+      return t("messages.completedBy", {
+        adderName,
+        addedDate,
+        completerName,
+        completedDate,
+      });
     }
 
-    return `Added by ${adderName} on ${addedDate}`;
+    return t("messages.addedBy", {
+      adderName,
+      addedDate,
+    });
   };
 
   return (
@@ -117,6 +131,7 @@ export default function ItemDisplay({
       disableGutters
       sx={{
         mb: 1,
+        pl: 2,
         bgcolor: item.isCompleted ? "action.hover" : "background.paper",
         opacity: item.isCompleted ? 0.7 : 1,
       }}
