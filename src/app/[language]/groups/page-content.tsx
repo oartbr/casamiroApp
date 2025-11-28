@@ -21,6 +21,7 @@ import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 import useAuth from "@/services/auth/use-auth";
 import {
   useUserGroupsQuery,
@@ -45,6 +46,7 @@ type PendingInvitation = {
 import Link from "@/components/link";
 import withPageRequiredAuth from "@/services/auth/with-page-required-auth";
 import { RoleEnum } from "@/services/api/types/role";
+import { GroupsListSkeleton } from "@/components/skeletons/GroupsListSkeleton";
 
 // Component to fetch and display pending invitations count for a group
 function PendingInvitationsCount({ groupId }: { groupId: string }) {
@@ -162,13 +164,7 @@ function GroupsPageContent() {
   };
 
   if (isLoading) {
-    return (
-      <Container maxWidth="lg">
-        <Typography variant="h4" sx={{ mt: 4, mb: 2 }}>
-          {t("common:loading")}
-        </Typography>
-      </Container>
-    );
+    return <GroupsListSkeleton />;
   }
 
   if (error) {
@@ -407,12 +403,18 @@ function GroupsPageContent() {
                       <CardActions>
                         <Button
                           size="small"
+                          variant="contained"
                           color="success"
                           onClick={() => handleAcceptInvitation(invitation)}
                           disabled={
                             !invitation.token ||
                             acceptInvitationMutation.isPending ||
                             declineInvitationMutation.isPending
+                          }
+                          startIcon={
+                            acceptInvitationMutation.isPending ? (
+                              <CircularProgress size={14} color="inherit" />
+                            ) : null
                           }
                         >
                           {acceptInvitationMutation.isPending
@@ -427,6 +429,11 @@ function GroupsPageContent() {
                             !invitation.token ||
                             acceptInvitationMutation.isPending ||
                             declineInvitationMutation.isPending
+                          }
+                          startIcon={
+                            declineInvitationMutation.isPending ? (
+                              <CircularProgress size={14} color="inherit" />
+                            ) : null
                           }
                         >
                           {declineInvitationMutation.isPending
@@ -519,6 +526,11 @@ function GroupsPageContent() {
               onClick={handleCreateGroup}
               variant="contained"
               disabled={!newGroup.name.trim() || createGroupMutation.isPending}
+              startIcon={
+                createGroupMutation.isPending ? (
+                  <CircularProgress size={16} color="inherit" />
+                ) : null
+              }
             >
               {createGroupMutation.isPending
                 ? t("common:actions.creating")

@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import PageContent from "./page-content";
-import Loading from "../../loading";
+import { GroupDetailSkeleton } from "@/components/skeletons/GroupDetailSkeleton";
 
 type Props = {
   params: { language: string; id: string };
@@ -8,7 +8,7 @@ type Props = {
 
 export default function GroupDetailPage({ params }: Props) {
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<GroupDetailSkeleton />}>
       <PageContent params={{ ...params, slug: "", id: params.id }} />
     </Suspense>
   );

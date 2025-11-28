@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import PageContent from "./page-content";
-import Loading from "../loading";
+import { GroupsListSkeleton } from "@/components/skeletons/GroupsListSkeleton";
 
 interface GroupsPageProps {
   params: { language: string };
@@ -8,7 +8,7 @@ interface GroupsPageProps {
 
 export default function GroupsPage({ params }: GroupsPageProps) {
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<GroupsListSkeleton />}>
       <PageContent params={{ ...params, slug: "", id: "" }} />
     </Suspense>
   );

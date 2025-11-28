@@ -1,5 +1,7 @@
 import { Metadata } from "next";
+import { Suspense } from "react";
 import ListsPageContent from "./page-content";
+import { GroupListsSkeleton } from "@/components/skeletons/GroupListsSkeleton";
 
 export const metadata: Metadata = {
   title: "Lists",
@@ -11,5 +13,9 @@ interface ListsPageProps {
 }
 
 export default function ListsPage({ params }: ListsPageProps) {
-  return <ListsPageContent params={params} />;
+  return (
+    <Suspense fallback={<GroupListsSkeleton />}>
+      <ListsPageContent params={params} />
+    </Suspense>
+  );
 }

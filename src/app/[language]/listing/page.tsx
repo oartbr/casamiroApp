@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Listing from "./page-content";
 import { getServerTranslation } from "@/services/i18n";
+import { ListingSkeleton } from "@/components/skeletons/ListingSkeleton";
 // import { redirect } from "next/navigation";
 import { IS_SIGN_UP_ENABLED } from "@/services/auth/config";
 
@@ -22,5 +24,9 @@ export default function ListingPage(props: Props) {
     //return redirect("/");
   }
 
-  return <Listing {...props} />;
+  return (
+    <Suspense fallback={<ListingSkeleton />}>
+      <Listing {...props} />
+    </Suspense>
+  );
 }
