@@ -17,6 +17,7 @@ export function FullPageLoader({ isLoading }: FullPageLoaderType) {
           transform: "translate(-50%, -50%)",
           outline: "none",
         }}
+        className="fullpageloader"
       >
         <CircularProgress />
       </Box>

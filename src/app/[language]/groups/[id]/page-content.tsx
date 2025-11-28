@@ -16,13 +16,16 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import Skeleton from "@mui/material/Skeleton";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import Box from "@mui/material/Box";
 import useAuth from "@/services/auth/use-auth";
+import useAuthActions from "@/services/auth/use-auth-actions";
 import { useGroupQuery } from "@/services/api/react-query/groups-queries";
 import {
   useGroupMembershipsQuery,
@@ -31,6 +34,7 @@ import {
   useRemoveMemberMutation,
   useCancelInvitationMutation,
 } from "@/services/api/react-query/memberships-queries";
+import { useSetActiveGroupMutation } from "@/services/api/react-query/users-queries";
 import { useQueryClient } from "@tanstack/react-query";
 import { Membership } from "@/services/api/types/membership";
 import Link from "@/components/link";
@@ -38,6 +42,7 @@ import withPageRequiredAuth from "@/services/auth/with-page-required-auth";
 import { RoleEnum } from "@/services/api/types/role";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useSnackbar } from "notistack";
+import { GroupDetailSkeleton } from "@/components/skeletons/GroupDetailSkeleton";
 
 type MembershipWithOptionalId = Membership & { id?: string };
 
@@ -52,6 +57,7 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
   const groupId = params.id!;
   const { t } = useTranslation("groups");
   const { user } = useAuth();
+  const { setUser } = useAuthActions();
   const { enqueueSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -74,6 +80,7 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
   const updateRoleMutation = useUpdateRoleMutation();
   const removeMemberMutation = useRemoveMemberMutation();
   const cancelInvitationMutation = useCancelInvitationMutation();
+  const setActiveGroupMutation = useSetActiveGroupMutation();
 
   const shareInvitationLink = (url: string, message: string) => {
     if (typeof navigator !== "undefined" && navigator.share) {
@@ -208,6 +215,29 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
     }
   };
 
+  const handleSetAsDefault = async () => {
+    if (!user?.id) return;
+
+    try {
+      const updatedUser = await setActiveGroupMutation.mutateAsync({
+        userId: user.id.toString(),
+        groupId: groupId,
+      });
+
+      // Update the user data in auth context
+      setUser(updatedUser);
+
+      enqueueSnackbar(t("groups:actions.setAsDefaultSuccess"), {
+        variant: "success",
+      });
+    } catch (error) {
+      console.error("Failed to set group as default:", error);
+      enqueueSnackbar(t("groups:actions.setAsDefaultError"), {
+        variant: "error",
+      });
+    }
+  };
+
   const handleMenuOpen = (
     event: React.MouseEvent<HTMLElement>,
     membership: Membership
@@ -257,13 +287,7 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
   };
 
   if (groupLoading) {
-    return (
-      <Container maxWidth="lg">
-        <Typography variant="h4" sx={{ mt: 4, mb: 2 }}>
-          {t("actions.loading")}
-        </Typography>
-      </Container>
-    );
+    return <GroupDetailSkeleton />;
   }
 
   if (groupError || !group) {
@@ -373,9 +397,41 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
             </Typography>
           )}
           {membershipsLoading && (
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              {t("actions.loading")}...
-            </Typography>
+            <TableContainer component={Paper} sx={{ mb: 2 }}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>{t("groups:members.name")}</TableCell>
+                    <TableCell>{t("groups:members.role")}</TableCell>
+                    <TableCell>{t("groups:members.joined")}</TableCell>
+                    <TableCell align="right">
+                      {t("groups:members.actions")}
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {[1, 2, 3].map((i) => (
+                    <TableRow key={i}>
+                      <TableCell>
+                        <Box display="flex" alignItems="center" gap={1}>
+                          <Skeleton variant="circular" width={32} height={32} />
+                          <Skeleton variant="text" width={120} />
+                        </Box>
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton variant="text" width={80} />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton variant="text" width={100} />
+                      </TableCell>
+                      <TableCell align="right">
+                        <Skeleton variant="circular" width={40} height={40} />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           )}
           <TableContainer component={Paper}>
             <Table>
@@ -593,11 +649,40 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
                 onClick={handleShareInvite}
                 color="primary"
                 disabled={createInvitationMutation.isPending}
+                startIcon={
+                  createInvitationMutation.isPending ? (
+                    <CircularProgress size={16} color="inherit" />
+                  ) : null
+                }
               >
                 {createInvitationMutation.isPending
                   ? t("actions.inviting")
                   : t("groups:actions.invite")}
               </Button>
+            )}
+            {user?.activeGroupId !== groupId && (
+              <Button
+                variant="outlined"
+                onClick={handleSetAsDefault}
+                color="primary"
+                disabled={setActiveGroupMutation.isPending}
+                startIcon={
+                  setActiveGroupMutation.isPending ? (
+                    <CircularProgress size={16} color="inherit" />
+                  ) : null
+                }
+              >
+                {setActiveGroupMutation.isPending
+                  ? t("groups:actions.settingDefault")
+                  : t("groups:actions.setAsDefault")}
+              </Button>
+            )}
+            {user?.activeGroupId === groupId && (
+              <Chip
+                label={t("groups:actions.defaultGroup")}
+                color="primary"
+                variant="outlined"
+              />
             )}
           </Box>
         </Grid>

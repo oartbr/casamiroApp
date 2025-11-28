@@ -168,7 +168,9 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({
   return (
     <AppBar position="fixed" color="primary" suppressHydrationWarning>
       <Container maxWidth="xl">
-        <div className="PWA_installButton">{pwa && <InstallButton />}</div>
+        {user ? (
+          <div className="PWA_installButton">{pwa && <InstallButton />}</div>
+        ) : null}
         <Toolbar disableGutters>
           {/* Active Group Display */}
           {user && activeGroupId ? (

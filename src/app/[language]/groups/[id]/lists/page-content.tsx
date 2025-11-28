@@ -13,6 +13,7 @@ import { RoleEnum } from "@/services/api/types/role";
 import { useGroupQuery } from "@/services/api/react-query/groups-queries";
 import ListsContainer from "@/components/lists/lists-container";
 import Avatar from "@mui/material/Avatar/Avatar";
+import { GroupListsSkeleton } from "@/components/skeletons/GroupListsSkeleton";
 
 interface ListsPageContentProps {
   params: { [key: string]: string | undefined };
@@ -29,13 +30,7 @@ function ListsPageContent({ params }: ListsPageContentProps) {
   } = useGroupQuery(groupId);
 
   if (groupLoading) {
-    return (
-      <Container maxWidth="lg">
-        <Typography variant="h4" sx={{ mt: 4, mb: 2 }}>
-          Loading...
-        </Typography>
-      </Container>
-    );
+    return <GroupListsSkeleton />;
   }
 
   if (groupError || !group) {

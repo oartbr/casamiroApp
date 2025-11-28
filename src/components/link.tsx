@@ -5,10 +5,12 @@ import {
 } from "@/services/leave-page/leave-page-context";
 // Need for leave page logic
 // eslint-disable-next-line no-restricted-imports
-import NextLink, { LinkProps } from "next/link";
-import { forwardRef, useContext } from "react";
+import NextLink from "next/link";
+import { forwardRef, useContext, ComponentPropsWithoutRef } from "react";
 
-const Link = forwardRef<HTMLAnchorElement, LinkProps>(
+type CustomLinkProps = ComponentPropsWithoutRef<typeof NextLink>;
+
+const Link = forwardRef<HTMLAnchorElement, CustomLinkProps>(
   function Link(props, ref) {
     const language = useLanguage();
     const { isLeavePage } = useContext(LeavePageContext);
