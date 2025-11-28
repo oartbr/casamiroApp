@@ -214,9 +214,9 @@ export default function PageContent() {
 
   if (returningUser) {
     return (
-      <Container maxWidth="lg">
+      <Container maxWidth="sm" className="mainContainer">
         <Grid container spacing={3} pt={3} direction="row">
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={12}>
             <div className="mensagem">
               <Typography variant="h4" gutterBottom>
                 {userHome("title")}
