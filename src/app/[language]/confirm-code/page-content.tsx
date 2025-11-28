@@ -17,6 +17,7 @@ import { useTranslation } from "@/services/i18n/client";
 import useAuthTokens from "@/services/auth/use-auth-tokens";
 import Link from "@mui/material/Link/Link";
 import { setReturningUserCookie } from "@/services/auth/returning-user-cookie";
+import { setPhoneNumberCookie } from "@/services/auth/phone-number-cookie";
 
 type RegisterFormData = {
   confirmationCode: string;
@@ -138,6 +139,14 @@ function Form({ params }: Props) {
       enqueueSnackbar(t("register:alerts.codeConfirmed"), {
         variant: "success",
       });
+      // Save phone number to cookie after successful verification
+      // Add + prefix if not present to match the format used in check-phone-number
+      if (phoneNumber) {
+        const formattedPhone = phoneNumber.startsWith("+")
+          ? phoneNumber
+          : `+${phoneNumber}`;
+        setPhoneNumberCookie(formattedPhone);
+      }
       if (data.user) {
         setTokensInfo({
           token: data.token,
