@@ -11,6 +11,7 @@
   "addItemPlaceholder": "Adicionar item à lista",
   "addItemHelperText": "Pressione Enter para adicionar item",
   "defaultList": "Lista de {{group}}",
+  "lastNota": "Última compra",
   "actions": {
     "deleteItem": "Excluir item",
     "editItem": "Editar item",
