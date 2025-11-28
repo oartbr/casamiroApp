@@ -19,6 +19,8 @@ import {
   ICountryData,
   TCountryCode,
 } from "countries-list";
+import { getPhoneNumberCookie } from "@/services/auth/phone-number-cookie";
+import { useEffect, useMemo } from "react";
 
 type RegisterFormData = {
   phoneNumber: string;
@@ -81,20 +83,56 @@ function Form() {
 
   const countryList = countryVals;
   const countryRenderOption = (option: { label: string }) => option.label;
-  const defaultCountry = countryList.find(
-    (option) => option.value === "BR"
-  ) || {
-    label: "",
-    value: "",
-  };
+
+  // Parse phone number from cookie to extract country code and phone number
+  const parsedPhone = useMemo(() => {
+    const defaultCountry = countryList.find(
+      (option) => option.value === "BR"
+    ) || {
+      label: "",
+      value: "",
+    };
+
+    const savedPhone = getPhoneNumberCookie();
+    if (!savedPhone) {
+      return { phoneNumber: "", countryCode: defaultCountry };
+    }
+
+    // Phone number format: +5511999999999 (e.g., +55 is country code, 11999999999 is phone)
+    // Find matching country by phone code
+    for (const country of countryList) {
+      const countryData = getCountryData(country.value as TCountryCode);
+      if (countryData && savedPhone.startsWith(`+${countryData.phone}`)) {
+        const phoneNumber = savedPhone.substring(
+          `+${countryData.phone}`.length
+        );
+        return {
+          phoneNumber,
+          countryCode: country,
+        };
+      }
+    }
+
+    // If no match found, return default
+    return { phoneNumber: "", countryCode: defaultCountry };
+  }, [countryList]);
 
   const methods = useForm<RegisterFormData>({
     resolver: yupResolver<RegisterFormData>(validationSchema),
     defaultValues: {
-      phoneNumber: "",
-      countryCode: defaultCountry,
+      phoneNumber: parsedPhone.phoneNumber,
+      countryCode: parsedPhone.countryCode,
     },
   });
+
+  // Update form values when component mounts if cookie exists
+  useEffect(() => {
+    if (parsedPhone.phoneNumber) {
+      methods.setValue("phoneNumber", parsedPhone.phoneNumber);
+      methods.setValue("countryCode", parsedPhone.countryCode);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const changeCountry = (country: { label: string; value: string }) => {
     methods.setValue("countryCode", country);
