@@ -4,13 +4,12 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import MuiLink from "@mui/material/Link";
-import Image from "next/image";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import { useTranslation } from "@/services/i18n/client";
 import { Trans } from "react-i18next/TransWithoutContext";
-import scan from "../../../public/assets/images/home.png";
+import { StandardLandingPage } from "@/components/landingPage/standard";
 import useAuth from "@/services/auth/use-auth";
 import { useEffect, useMemo, useState } from "react";
 import { useGetListingNotasByUserService } from "@/services/api/services/notas";
@@ -26,10 +25,10 @@ import { ListItem } from "@/services/api/types/list";
 import { NotaCard } from "@/components/cards/notaCard";
 import { Nota } from "@/services/api/types/nota";
 import Alert from "@mui/material/Alert/Alert";
+import { DashboardSkeleton } from "@/components/skeletons/DashboardSkeleton";
 
 export default function PageContent() {
   const { t } = useTranslation("dashboard");
-  const { t: home } = useTranslation("home");
   const { t: userHome } = useTranslation("returningUser");
   const { t: notaCardT } = useTranslation("listing");
   const { user, isLoaded } = useAuth();
@@ -45,17 +44,21 @@ export default function PageContent() {
     undefined
   );
   const [defaultListItems, setDefaultListItems] = useState<ListItem[]>([]);
+  const [returningUser, setReturningUser] = useState(false);
 
   const activeGroupId = useMemo(() => user?.activeGroupId || "", [user]);
 
-  const returningUser = hasReturningUserCookie();
+  // Check returning user cookie only on client side to avoid hydration mismatch
+  useEffect(() => {
+    setReturningUser(hasReturningUserCookie());
+  }, []);
 
   // Redirect to sign-in if user is not logged in but has a returning_user cookie
   useEffect(() => {
-    if (isLoaded && !user && hasReturningUserCookie()) {
+    if (isLoaded && !user && returningUser) {
       // router.replace(`/${language}/check-phone-number`);
     }
-  }, [isLoaded, user, router, language]);
+  }, [isLoaded, user, router, language, returningUser]);
 
   // Determine greeting based on current time
   const greetingKey = useMemo(() => {
@@ -128,6 +131,11 @@ export default function PageContent() {
     getDefaultListByGroup,
     getListItems,
   ]);
+
+  // Show skeleton while loading or if user not loaded
+  if (!isLoaded) {
+    return <DashboardSkeleton />;
+  }
 
   // If logged in, show dashboard
   if (isLoaded && user) {
@@ -249,63 +257,5 @@ export default function PageContent() {
   }
 
   // Otherwise, show the original public home content
-  return (
-    <Container maxWidth="lg">
-      <Grid container spacing={3} pt={3} direction="row">
-        <Grid item xs={12} md={6}>
-          <div className="mensagem">
-            <Typography variant="h4" gutterBottom>
-              {home("title")}
-            </Typography>
-            <Typography variant="body1" paragraph>
-              <Trans
-                i18nKey="description"
-                t={home}
-                components={[
-                  <MuiLink
-                    key="1"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href="https://xpand.international"
-                  >
-                    {}
-                  </MuiLink>,
-                ]}
-              />
-            </Typography>
-            <Button
-              variant="contained"
-              LinkComponent={Link}
-              href="/sign-up"
-              data-testid="sign-up"
-              className="joinButton"
-              sx={{ mb: 2 }}
-            >
-              {home("callToAction")}
-            </Button>
-            <Typography variant="body2" sx={{ color: "text.secondary" }}>
-              {home("socialProof")}
-            </Typography>
-          </div>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Box
-            component="div"
-            className="scan"
-            sx={{ position: "relative", height: "400px" }}
-          >
-            <div className="scanning">
-              <Image
-                className="qrScan"
-                src={scan.src}
-                alt="scan"
-                fill={true}
-                style={{ objectFit: "contain" }}
-              />
-            </div>
-          </Box>
-        </Grid>
-      </Grid>
-    </Container>
-  );
+  return <StandardLandingPage />;
 }

@@ -3,7 +3,7 @@
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 body {
   padding: 0px !important;
-  padding-top: 64px !important;
+  padding-top: 60px !important;
 }
 .logoHeader {
   margin-right: 5rem;
@@ -172,6 +172,8 @@ body {
 
 .mainContainer {
   margin-bottom: 2rem;
+  width: 100%;
+  margin-top: 0px !important;
 }
 
 .normalCard {
@@ -286,8 +288,6 @@ body {
   }
 
   .joinButton {
-    width: 70%!important;
-    left: -35%!important;
     
   }
 

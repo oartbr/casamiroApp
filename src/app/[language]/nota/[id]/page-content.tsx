@@ -14,6 +14,7 @@ import Grid from "@mui/material/Grid";
 import { NotaCard } from "@/components/cards/notaCard";
 import React, { useEffect, useState } from "react";
 import { Nota } from "@/services/api/types/nota";
+import { NotaDetailSkeleton } from "@/components/skeletons/NotaDetailSkeleton";
 
 type Props = {
   params: { [key: string]: string | undefined };
@@ -60,7 +61,9 @@ function List(props: Props) {
         </Grid>
         <Grid container spacing={3} rowSpacing={3}>
           {isLoading || !notaDetails ? (
-            <p>Loading...</p>
+            <Grid item xs={12}>
+              <NotaDetailSkeleton />
+            </Grid>
           ) : (
             <Grid item xs={12}>
               <NotaCard

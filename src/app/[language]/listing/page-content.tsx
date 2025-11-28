@@ -24,6 +24,7 @@ import React, { useEffect, useState } from "react";
 import { Nota } from "@/services/api/types/nota";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar/Avatar";
+import { ListingSkeleton } from "@/components/skeletons/ListingSkeleton";
 
 type Props = {
   params: { [key: string]: string | undefined };
@@ -158,7 +159,9 @@ function List(props: Props) {
       )}
       <Grid container spacing={3} rowSpacing={3}>
         {isLoading ? (
-          <p>Loading...</p>
+          <Grid item xs={12}>
+            <ListingSkeleton />
+          </Grid>
         ) : (
           items.map((item, index) => (
             <Grid item xs={12} key={index}>

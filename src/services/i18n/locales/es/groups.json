@@ -20,7 +20,12 @@
     "remove": "Remover",
     "loading": "Carregando...",
     "canceling": "Cancelando...",
-    "retry": "Tentar novamente"
+    "retry": "Tentar novamente",
+    "setAsDefault": "Definir como padrão",
+    "settingDefault": "Definindo...",
+    "defaultGroup": "Grupo padrão",
+    "setAsDefaultSuccess": "Grupo definido como padrão com sucesso!",
+    "setAsDefaultError": "Não foi possível definir o grupo como padrão."
   },
   "sections": {
     "active": "Ativos",

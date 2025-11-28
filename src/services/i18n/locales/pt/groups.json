@@ -23,7 +23,12 @@
     "open": "Abrir",
     "canceling": "Cancelando...",
     "retry": "Tentar novamente",
-    "viewLists": "Ver listas"
+    "viewLists": "Ver listas",
+    "setAsDefault": "Definir como padrão",
+    "settingDefault": "Definindo...",
+    "defaultGroup": "Grupo padrão",
+    "setAsDefaultSuccess": "Grupo definido como padrão com sucesso!",
+    "setAsDefaultError": "Não foi possível definir o grupo como padrão."
   },
   "sections": {
     "active": "Grupos Ativos",

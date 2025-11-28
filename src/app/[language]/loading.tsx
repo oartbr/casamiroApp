@@ -3,8 +3,8 @@ import LinearProgress from "@mui/material/LinearProgress";
 
 function Loading() {
   return (
-    <Box sx={{ width: "100%" }}>
-      <LinearProgress />
+    <Box sx={{ width: "100%" }} className="fullpageloader">
+      <LinearProgress color="primary" sx={{ mt: "-4px" }} />
     </Box>
   );
 }

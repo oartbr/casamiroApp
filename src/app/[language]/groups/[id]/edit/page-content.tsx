@@ -13,6 +13,7 @@ import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 import useAuth from "@/services/auth/use-auth";
 import {
   useGroupQuery,
@@ -343,7 +344,13 @@ function GroupEditPageContent({ params }: GroupEditPageContentProps) {
                       <Button
                         type="submit"
                         variant="contained"
-                        startIcon={<SaveIcon />}
+                        startIcon={
+                          updateGroupMutation.isPending ? (
+                            <CircularProgress size={16} color="inherit" />
+                          ) : (
+                            <SaveIcon />
+                          )
+                        }
                         disabled={
                           !isFormDirty ||
                           !formData.name?.trim() ||

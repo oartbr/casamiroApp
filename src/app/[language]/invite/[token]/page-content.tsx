@@ -108,18 +108,13 @@ function InvitePageContent({ params }: InvitePageContentProps) {
 
   if (isLoading) {
     return (
-      <Container maxWidth="sm" sx={{ mt: 0, textAlign: "center" }}>
-        <CircularProgress />
-        <Typography variant="body1" sx={{ mt: 2 }}>
-          {t("common:loading")}
-        </Typography>
-      </Container>
+      <Container maxWidth="sm" sx={{ mt: 4, textAlign: "center" }}></Container>
     );
   }
 
   if (isError || !data) {
     return (
-      <Container maxWidth="sm" sx={{ mt: 0 }}>
+      <Container maxWidth="sm" sx={{ mt: 4 }}>
         <Card>
           <CardContent>
             <Typography variant="h5" gutterBottom>
@@ -145,7 +140,7 @@ function InvitePageContent({ params }: InvitePageContentProps) {
   }
 
   return (
-    <Container maxWidth="sm" sx={{ mt: 0 }}>
+    <Container maxWidth="sm" sx={{ mt: 4 }}>
       <Card>
         <CardContent>
           <Typography variant="h4" gutterBottom>
@@ -179,6 +174,11 @@ function InvitePageContent({ params }: InvitePageContentProps) {
                 !isLoaded ||
                 (isLoaded && !user)
               }
+              startIcon={
+                acceptInvitationMutation.isPending ? (
+                  <CircularProgress size={16} color="inherit" />
+                ) : null
+              }
             >
               {acceptInvitationMutation.isPending
                 ? t("groups:actions.loading")
@@ -193,6 +193,11 @@ function InvitePageContent({ params }: InvitePageContentProps) {
                 disabled={
                   acceptInvitationMutation.isPending ||
                   declineInvitationMutation.isPending
+                }
+                startIcon={
+                  declineInvitationMutation.isPending ? (
+                    <CircularProgress size={16} color="inherit" />
+                  ) : null
                 }
               >
                 {declineInvitationMutation.isPending
