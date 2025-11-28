@@ -26,6 +26,7 @@ import { NotaCard } from "@/components/cards/notaCard";
 import { Nota } from "@/services/api/types/nota";
 import Alert from "@mui/material/Alert/Alert";
 import { DashboardSkeleton } from "@/components/skeletons/DashboardSkeleton";
+import { UserTasks } from "@/components/dashboard/user-tasks";
 
 export default function PageContent() {
   const { t } = useTranslation("dashboard");
@@ -149,8 +150,45 @@ export default function PageContent() {
           sx={{ minHeight: "60vh", alignItems: "start" }}
         >
           <Grid item xs={12} md={6}>
-            <h1 style={{ marginTop: 0, textAlign: "left" }}>
+            <h1 style={{ margin: 0, textAlign: "left" }}>
               {t(greetingKey, { user: user.firstName })}
+            </h1>
+            <UserTasks
+              latestNota={latestNota}
+              defaultListItems={defaultListItems}
+              activeGroupId={activeGroupId}
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <h1 style={{ marginTop: 0, textAlign: "left", fontSize: "1.5rem" }}>
+              {t("defaultList", { group: defaultListName })}
+            </h1>
+            <Box component="div" sx={{ position: "relative" }}>
+              {defaultListItems?.length ? (
+                <ul>
+                  {defaultListItems.map((it) => (
+                    <li key={it.id}>
+                      <Typography variant="body2">{it.text}</Typography>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <Alert severity="info">{t("noItemsMessage")}</Alert>
+              )}
+            </Box>
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ mt: 1 }}
+              onClick={() => router.replace("/lists")}
+            >
+              {t("actions.editList", { defaultValue: "Edit list" })}{" "}
+              {defaultListName}
+            </Button>
+          </Grid>
+          <Grid item xs={12} md={12}>
+            <h1 style={{ marginTop: 0, textAlign: "left", fontSize: "1.5rem" }}>
+              {t("lastNota", { group: "Última compra registrada" })}
             </h1>
             <div>
               {latestNota ? ( // show the latest receipt
@@ -179,33 +217,6 @@ export default function PageContent() {
                 </Box>
               )}
             </div>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <h1 style={{ marginTop: 0, textAlign: "left" }}>
-              {t("defaultList", { group: defaultListName })}
-            </h1>
-            <Box component="div" sx={{ position: "relative" }}>
-              {defaultListItems?.length ? (
-                <ul>
-                  {defaultListItems.map((it) => (
-                    <li key={it.id}>
-                      <Typography variant="body2">{it.text}</Typography>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <Alert severity="info">{t("noItemsMessage")}</Alert>
-              )}
-            </Box>
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{ mt: 1 }}
-              onClick={() => router.replace("/lists")}
-            >
-              {t("actions.editList", { defaultValue: "Edit list" })}{" "}
-              {defaultListName}
-            </Button>
           </Grid>
         </Grid>
       </Container>
