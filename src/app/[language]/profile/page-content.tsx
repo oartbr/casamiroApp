@@ -55,10 +55,10 @@ function Profile() {
       // Update the user data in auth context
       setUser(updatedUser);
 
-      setSnackbarMessage("Active group updated successfully!");
+      setSnackbarMessage(t("groups.activeGroupUpdatedSuccessfully"));
       setSnackbarOpen(true);
     } catch (error) {
-      setSnackbarMessage("Failed to update active group");
+      setSnackbarMessage(t("groups.failedToUpdateActiveGroup"));
       setSnackbarOpen(true);
     }
   };
