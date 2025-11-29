@@ -9,7 +9,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { t } = await getServerTranslation(params.language, "register");
   return {
-    title: t("title") + params.language + params.id,
+    title: t("workflow.confirm-phone.title"),
   };
 }
 

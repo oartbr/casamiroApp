@@ -25,5 +25,12 @@
     "morning": "Bom dia {{user}}!",
     "afternoon": "Boa tarde {{user}}!",
     "night": "Boa noite {{user}}!"
-  }
+  },
+  "tasks": {
+    "learning": "O Casamiro está aprendendo sobre os seus hábitos. Em alguns dias, você vai começar a ver recomendações para melhorar sua vida financeira.",
+    "scanNotas": "Escaneie suas notas fiscais",
+    "useList": "Use a lista para preparar suas compras",
+    "inviteFamily": "Você pode convidar sua família ou amigos para seus grupos."
+  },
+  "lastNotaTitle": "Última compra registrada"
 }

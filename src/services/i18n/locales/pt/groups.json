@@ -89,6 +89,12 @@
     "loadingGroup": "Carregando grupo",
     "groupNotFound": "Grupo não encontrado"
   },
+  "error": {
+    "loadingGroup": "Erro ao carregar grupo",
+    "groupNotFound": "Grupo não encontrado",
+    "loadingMembers": "Erro ao carregar membros",
+    "unknownError": "Erro desconhecido"
+  },
   "form": {
     "name": "Nome",
     "description": "Descrição",

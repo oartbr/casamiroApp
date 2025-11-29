@@ -107,7 +107,7 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
 
   const handleShareInvite = async () => {
     if (!group || !user?.id) return;
-
+    console.log({ group, user });
     try {
       setShareError(null);
       const invitation = await createInvitationMutation.mutateAsync({
@@ -393,8 +393,8 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
           </Typography>
           {membershipsError && (
             <Typography variant="body2" color="error" sx={{ mb: 2 }}>
-              {"Error loading members: "}
-              {membershipsError.message || "Unknown error"}
+              {t("groups:error.loadingMembers")}:{" "}
+              {membershipsError.message || t("groups:error.unknownError")}
             </Typography>
           )}
           {membershipsLoading && (
@@ -501,7 +501,17 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
                       </TableCell>
                       <TableCell>
                         <Chip
-                          label={membership.role}
+                          label={
+                            membership.role === "admin"
+                              ? t("groups:roles.admin")
+                              : membership.role === "editor"
+                                ? t("groups:roles.editor")
+                                : membership.role === "contributor"
+                                  ? t("groups:roles.contributor")
+                                  : membership.role === "viewer"
+                                    ? t("groups:roles.viewer")
+                                    : membership.role
+                          }
                           size="small"
                           color={
                             membership.role === "admin"
