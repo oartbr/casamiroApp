@@ -80,7 +80,13 @@
     "loginRequired": "Você precisa fazer login para aceitar este convite.",
     "loginToAccept": "Fazer login para aceitar",
     "signUpToAccept": "Criar conta para aceitar",
-    "notFoundOrAlreadyUsed": "Convite não encontrado ou já utilizado."
+    "notFoundOrAlreadyUsed": "Convite não encontrado ou já utilizado.",
+    "missingToken": "Token de convite não encontrado.",
+    "joinGroup": "Entrar no grupo {{group}}",
+    "unableToShareLink": "Não foi possível compartilhar o link do convite. Por favor, tente novamente.",
+    "unableToCancelInvitation": "Não foi possível cancelar o convite. Por favor, tente novamente.",
+    "loadingGroup": "Carregando grupo",
+    "groupNotFound": "Grupo não encontrado"
   },
   "form": {
     "name": "Nome",
