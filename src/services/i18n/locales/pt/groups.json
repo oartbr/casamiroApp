@@ -83,11 +83,13 @@
     "signUpToAccept": "Criar conta para aceitar",
     "notFoundOrAlreadyUsed": "Convite não encontrado ou já utilizado.",
     "missingToken": "Token de convite não encontrado.",
-    "joinGroup": "Entrar no grupo {{group}}",
+    "joinGroup": "{{user}} convidou você para entrar no grupo {{group}}.",
     "unableToShareLink": "Não foi possível compartilhar o link do convite. Por favor, tente novamente.",
     "unableToCancelInvitation": "Não foi possível cancelar o convite. Por favor, tente novamente.",
     "loadingGroup": "Carregando grupo",
-    "groupNotFound": "Grupo não encontrado"
+    "groupNotFound": "Grupo não encontrado",
+    "selfInvitationMessage": "Você não pode aceitar um convite que você mesmo enviou. Este convite permanece válido para outros usuários.",
+    "invite": "{{user}} quer você no seu grupo do Casamiro!"
   },
   "error": {
     "loadingGroup": "Erro ao carregar grupo",

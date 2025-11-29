@@ -12,17 +12,23 @@ import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import { useTranslation } from "@/services/i18n/client";
+import Button from "@mui/material/Button/Button";
 
 interface UserTasksProps {
   latestNota: Nota | null;
   defaultListItems: ListItemType[];
   activeGroupId: string;
+  action: {
+    title: string;
+    href: string;
+  };
 }
 
 export function UserTasks({
   latestNota,
   defaultListItems,
   activeGroupId,
+  action,
 }: UserTasksProps) {
   const { t } = useTranslation("dashboard");
   // Fetch group memberships to check if user is alone
@@ -43,28 +49,31 @@ export function UserTasks({
 
   // Build tasks list
   const tasks = useMemo(() => {
-    const taskList: string[] = [];
+    const taskList: {
+      label: string;
+      action?: { title: string; href: string };
+    }[] = [];
 
     // Always show this task
-    taskList.push(t("tasks.learning"));
+    taskList.push({ label: t("tasks.learning") });
 
     // Check if user has no notas
     if (!latestNota) {
-      taskList.push(t("tasks.scanNotas"));
+      taskList.push({ label: t("tasks.scanNotas") });
     }
 
     // Check if user has no items in their standard list
     if (!defaultListItems || defaultListItems.length === 0) {
-      taskList.push(t("tasks.useList"));
+      taskList.push({ label: t("tasks.useList") });
     }
 
     // Check if user is alone in their group
     if (isAlone && activeGroupId) {
-      taskList.push(t("tasks.inviteFamily"));
+      taskList.push({ label: t("tasks.inviteFamily"), action: action });
     }
 
     return taskList;
-  }, [latestNota, defaultListItems, isAlone, activeGroupId, t]);
+  }, [latestNota, defaultListItems, isAlone, activeGroupId, t, action]);
 
   if (tasks.length === 0) {
     return null;
@@ -90,7 +99,17 @@ export function UserTasks({
                   variant="square"
                 />
               </ListItemAvatar>
-              {task}
+              {task.label}
+              {task.action && (
+                <Button
+                  href={task.action.href}
+                  variant="contained"
+                  color="primary"
+                  sx={{ ml: 1 }}
+                >
+                  {task.action.title}
+                </Button>
+              )}
             </ListItem>
           ))}
         </List>
