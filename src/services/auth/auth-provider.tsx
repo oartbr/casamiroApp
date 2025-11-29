@@ -106,12 +106,12 @@ function AuthProvider(props: PropsWithChildren<{}>) {
     setTokensInfo(null);
     // Redirect to home page after logout
     if (typeof window !== "undefined") {
-      const currentPath = window.location.pathname;
+      // const currentPath = window.location.pathname;
       // Extract language from path (e.g., /pt/groups -> pt)
-      const languageMatch = currentPath.match(/^\/([^/]+)/);
-      const language = languageMatch ? languageMatch[1] : "pt";
+      // const languageMatch = currentPath.match(/^\/([^/]+)/);
+      //const language = languageMatch ? languageMatch[1] : "pt";
       // Use replace instead of push to avoid adding to history
-      router.replace(`/${language}`);
+      router.replace(`/`);
     }
   }, [setTokensInfo, fetchBase, router]);
 

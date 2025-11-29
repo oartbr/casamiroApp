@@ -56,6 +56,23 @@ function InvitePageContent({ params }: InvitePageContentProps) {
     return null;
   }, [data]);
 
+  // Check if the current user is the one who sent the invitation
+  const isSelfInvitation = useMemo(() => {
+    if (!user?.id || !data) return false;
+
+    // Handle invited_by as object
+    if (invitedBy && typeof invitedBy === "object" && "id" in invitedBy) {
+      return invitedBy.id?.toString() === user.id.toString();
+    }
+
+    // Handle invited_by as string
+    if (typeof data.invited_by === "string") {
+      return data.invited_by === user.id.toString();
+    }
+
+    return false;
+  }, [user, invitedBy, data]);
+
   const handleAccept = async () => {
     if (!token) return;
 
@@ -157,7 +174,12 @@ function InvitePageContent({ params }: InvitePageContentProps) {
               {actionError}
             </Alert>
           )}
-          {isLoaded && !user && (
+          {isSelfInvitation && (
+            <Alert severity="info" sx={{ alignSelf: "stretch" }}>
+              {t("groups:invitations.selfInvitationMessage")}
+            </Alert>
+          )}
+          {isLoaded && !user && !isSelfInvitation && (
             <Alert severity="info" sx={{ alignSelf: "stretch" }}>
               {t("groups:invitations.loginRequired")}
             </Alert>
@@ -169,6 +191,7 @@ function InvitePageContent({ params }: InvitePageContentProps) {
               fullWidth
               onClick={handleAccept}
               disabled={
+                isSelfInvitation ||
                 acceptInvitationMutation.isPending ||
                 declineInvitationMutation.isPending ||
                 !isLoaded ||
@@ -184,7 +207,7 @@ function InvitePageContent({ params }: InvitePageContentProps) {
                 ? t("groups:actions.loading")
                 : t("groups:actions.accept")}
             </Button>
-            {user && (
+            {user && !isSelfInvitation && (
               <Button
                 variant="outlined"
                 color="inherit"
@@ -206,7 +229,7 @@ function InvitePageContent({ params }: InvitePageContentProps) {
               </Button>
             )}
           </Stack>
-          {!user && returningUser ? (
+          {!user && !isSelfInvitation && returningUser ? (
             <Button
               variant="outlined"
               color="primary"
@@ -221,7 +244,7 @@ function InvitePageContent({ params }: InvitePageContentProps) {
             >
               {t("invitations.loginToAccept")}
             </Button>
-          ) : !user ? (
+          ) : !user && !isSelfInvitation ? (
             <Button
               variant="outlined"
               color="primary"

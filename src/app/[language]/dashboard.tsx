@@ -157,6 +157,10 @@ export default function PageContent() {
               latestNota={latestNota}
               defaultListItems={defaultListItems}
               activeGroupId={activeGroupId}
+              action={{
+                title: t("actions.sendInvite"),
+                href: `/groups/${activeGroupId}`,
+              }}
             />
           </Grid>
           <Grid item xs={12} md={6}>
