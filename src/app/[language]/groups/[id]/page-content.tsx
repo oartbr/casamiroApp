@@ -87,7 +87,7 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
       // Include URL in text for better WhatsApp compatibility
       const shareText = `${message}\n\n${url}`;
       return navigator.share({
-        title: "Invite",
+        title: t("groups:invitations.invite"),
         text: shareText,
         url, // Keep url property for other apps
       });
@@ -123,7 +123,7 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
 
       const identifier = invitation.token || invitation._id;
       if (!identifier) {
-        throw new Error("Missing invitation token");
+        throw new Error(t("groups:invitations.missingToken"));
       }
 
       const origin =
@@ -131,12 +131,12 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
       const invitationUrl = `${
         origin || process.env.NEXT_PUBLIC_APP_URL || "https://casamiro.ai"
       }/invite/${identifier}`;
-      const message = `Join my group "${group.name}" on Casamiro.`;
+      const message = t("groups:invitations.joinGroup", { group: group.name });
 
       await shareInvitationLink(invitationUrl, message);
     } catch (error) {
       console.error("Failed to trigger share:", error);
-      setShareError("Unable to share invitation link. Please try again.");
+      setShareError(t("groups:invitations.unableToShareLink"));
     }
   };
 
@@ -150,19 +150,19 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
       setShareError(null);
       const identifier = invitation.token || invitationId;
       if (!identifier) {
-        throw new Error("Missing invitation token");
+        throw new Error(t("groups:invitations.missingToken"));
       }
       const origin =
         typeof window !== "undefined" ? window.location.origin : "";
       const invitationUrl = `${
         origin || process.env.NEXT_PUBLIC_APP_URL || "https://casamiro.ai"
       }/invite/${identifier}`;
-      const message = `Join my group "${group.name}" on Casamiro.`;
+      const message = t("groups:invitations.joinGroup", { group: group.name });
 
       await shareInvitationLink(invitationUrl, message);
     } catch (error) {
       console.error("Failed to share invitation link:", error);
-      setShareError("Unable to share invitation link. Please try again.");
+      setShareError(t("groups:invitations.unableToShareLink"));
     }
   };
 
@@ -198,7 +198,7 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
       const errorMessage =
         error instanceof Error
           ? error.message
-          : "Unable to cancel invitation. Please try again.";
+          : t("groups:invitations.unableToCancelInvitation");
       console.error("Failed to cancel invitation:", {
         error,
         invitationId,
@@ -294,7 +294,8 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
     return (
       <Container maxWidth="lg">
         <Typography variant="h4" color="error" sx={{ mt: 4, mb: 2 }}>
-          Error loading group: {groupError?.message || "Group not found"}
+          {t("groups:error.loadingGroup")}:{" "}
+          {groupError?.message || t("groups:error.groupNotFound")}
         </Typography>
       </Container>
     );
