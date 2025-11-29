@@ -19,7 +19,7 @@ const clientTheme = {
         secondary: { main: "#004310" },
         background: {
           default: "#222229", // Dark mode default background
-          paper: "#003c4a", // toolbar bg color
+          paper: "#333333", // toolbar bg color
           bar: "#09141f", // for the appBar
         },
       },
