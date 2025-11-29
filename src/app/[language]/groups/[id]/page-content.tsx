@@ -87,7 +87,9 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
       // Include URL in text for better WhatsApp compatibility
       const shareText = `${message}`;
       return navigator.share({
-        title: t("groups:invitations.invite"),
+        title: t("groups:invitations.invite", {
+          user: user?.firstName,
+        }),
         text: shareText,
         url, // Keep url property for other apps
       });
@@ -131,7 +133,10 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
       const invitationUrl = `${
         origin || process.env.NEXT_PUBLIC_APP_URL || "https://casamiro.ai"
       }/invite/${identifier}`;
-      const message = t("groups:invitations.joinGroup", { group: group.name });
+      const message = t("groups:invitations.joinGroup", {
+        group: group.name,
+        user: user?.firstName,
+      });
 
       await shareInvitationLink(invitationUrl, message);
     } catch (error) {
@@ -157,7 +162,10 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
       const invitationUrl = `${
         origin || process.env.NEXT_PUBLIC_APP_URL || "https://casamiro.ai"
       }/invite/${identifier}`;
-      const message = t("groups:invitations.joinGroup", { group: group.name });
+      const message = t("groups:invitations.joinGroup", {
+        group: group.name,
+        user: user?.firstName,
+      });
 
       await shareInvitationLink(invitationUrl, message);
     } catch (error) {
