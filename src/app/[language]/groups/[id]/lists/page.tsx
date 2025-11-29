@@ -2,14 +2,20 @@ import { Metadata } from "next";
 import { Suspense } from "react";
 import ListsPageContent from "./page-content";
 import { GroupListsSkeleton } from "@/components/skeletons/GroupListsSkeleton";
-
-export const metadata: Metadata = {
-  title: "Lists",
-  description: "Manage group lists and items",
-};
+import { getServerTranslation } from "@/services/i18n";
 
 interface ListsPageProps {
   params: { language: string; id: string };
+}
+
+export async function generateMetadata({
+  params,
+}: ListsPageProps): Promise<Metadata> {
+  const { t } = await getServerTranslation(params.language, "lists");
+
+  return {
+    title: t("title"),
+  };
 }
 
 export default function ListsPage({ params }: ListsPageProps) {
