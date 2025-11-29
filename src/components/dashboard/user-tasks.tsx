@@ -11,6 +11,7 @@ import { useMemo } from "react";
 import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
+import { useTranslation } from "@/services/i18n/client";
 
 interface UserTasksProps {
   latestNota: Nota | null;
@@ -23,6 +24,7 @@ export function UserTasks({
   defaultListItems,
   activeGroupId,
 }: UserTasksProps) {
+  const { t } = useTranslation("dashboard");
   // Fetch group memberships to check if user is alone
   const { data: membershipsData } = useGroupMembershipsQuery(activeGroupId, {
     limit: 100,
@@ -44,29 +46,25 @@ export function UserTasks({
     const taskList: string[] = [];
 
     // Always show this task
-    taskList.push(
-      "O Casamiro está aprendendo sobre os seus hábitos. Em alguns dias, você vai começar a ver recomendações para melhorar sua vida financeira."
-    );
+    taskList.push(t("tasks.learning"));
 
     // Check if user has no notas
     if (!latestNota) {
-      taskList.push("Escaneie suas notas fiscais");
+      taskList.push(t("tasks.scanNotas"));
     }
 
     // Check if user has no items in their standard list
     if (!defaultListItems || defaultListItems.length === 0) {
-      taskList.push("Use a lista para preparar suas compras");
+      taskList.push(t("tasks.useList"));
     }
 
     // Check if user is alone in their group
     if (isAlone && activeGroupId) {
-      taskList.push(
-        "Você pode convidar sua família ou amigos para seus grupos."
-      );
+      taskList.push(t("tasks.inviteFamily"));
     }
 
     return taskList;
-  }, [latestNota, defaultListItems, isAlone, activeGroupId]);
+  }, [latestNota, defaultListItems, isAlone, activeGroupId, t]);
 
   if (tasks.length === 0) {
     return null;

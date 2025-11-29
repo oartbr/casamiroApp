@@ -188,7 +188,7 @@ export default function PageContent() {
           </Grid>
           <Grid item xs={12} md={12}>
             <h1 style={{ marginTop: 0, textAlign: "left", fontSize: "1.5rem" }}>
-              {t("lastNota", { group: "Última compra registrada" })}
+              {t("lastNotaTitle")}
             </h1>
             <div>
               {latestNota ? ( // show the latest receipt
