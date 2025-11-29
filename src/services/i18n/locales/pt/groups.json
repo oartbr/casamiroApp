@@ -62,6 +62,7 @@
     "title": "{{firstName}} te convidou ao grupo {{groupName}}",
     "title_one": "Convite",
     "title_other": "Convites",
+    "title_invitation": "Casamiro - Participe do Grupo",
     "email": "Email",
     "role": "Cargo",
     "actions": "Ações",
@@ -132,5 +133,7 @@
   "editor": "Editor",
   "viewer": "Visualizador",
   "contributor": "Colaborador",
-  "or": "OR"
+  "or": "OR",
+  "activeGroupUpdatedSuccessfully": "Grupo atualizado com sucesso!",
+  "failedToUpdateActiveGroup": "Não foi possível atualizar o grupo. Por favor, tente novamente."
 }

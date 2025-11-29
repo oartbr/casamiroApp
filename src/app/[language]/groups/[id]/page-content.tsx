@@ -85,7 +85,7 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
   const shareInvitationLink = (url: string, message: string) => {
     if (typeof navigator !== "undefined" && navigator.share) {
       // Include URL in text for better WhatsApp compatibility
-      const shareText = `${message}\n\n${url}`;
+      const shareText = `${message}`;
       return navigator.share({
         title: t("groups:invitations.invite"),
         text: shareText,

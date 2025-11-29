@@ -7,7 +7,7 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { t } = await getServerTranslation(params.language, "admin-panel-home");
+  const { t } = await getServerTranslation(params.language, "scan");
 
   return {
     title: t("title"),
