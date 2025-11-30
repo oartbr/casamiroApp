@@ -13,5 +13,12 @@
     "switchCamera": "Cambiar Cámara",
     "openingCameras": "Abriendo Cámaras...",
     "switchCameraTitle": "Cambiar Cámara"
+  },
+  "success": {
+    "title": "¡Nota Fiscal Registrada con Éxito!",
+    "message": "Tu nota fiscal ha sido registrada y está disponible a continuación.",
+    "viewDetails": "Ver Detalles",
+    "scanAnother": "Escanear Otro Documento",
+    "continueToListing": "Continuar a Listado"
   }
 }

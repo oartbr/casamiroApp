@@ -13,5 +13,23 @@
     "switchCamera": "Trocar Câmera",
     "openingCameras": "Abrindo Câmaras...",
     "switchCameraTitle": "Trocar Câmera"
+  },
+  "success": {
+    "title": "Nota Registrada com Sucesso!",
+    "message": "Sua nota foi registrada e está disponível abaixo.",
+    "viewDetails": "Ver Detalhes",
+    "scanAnother": "Escanear outra nota",
+    "continueToListing": "Sair"
+  },
+  "status": {
+    "registered": "Registrada",
+    "pending": "Pendente",
+    "rejected": "Rejeitada",
+    "approved": "Aprovada",
+    "cancelled": "Cancelada",
+    "expired": "Expirada",
+    "revoked": "Revogada",
+    "suspended": "Suspensa",
+    "registeredAt": "Registrada em"
   }
 }

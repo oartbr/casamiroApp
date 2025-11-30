@@ -15,8 +15,11 @@ import { useRouter } from "next/navigation";
 import useAuth from "@/services/auth/use-auth";
 import HTTP_CODES_ENUM from "@/services/api/types/http-codes";
 import Button from "@mui/material/Button";
-import Link from "@mui/material/Link";
 import { Nota } from "@/services/api/types/nota";
+import { NotaCard } from "@/components/cards/notaCard";
+import Box from "@mui/material/Box";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
 
 function checkScannedData(url: string, checkQRcode: (id: string) => void) {
   const aUrl = url.split("/");
@@ -28,6 +31,7 @@ function checkScannedData(url: string, checkQRcode: (id: string) => void) {
 function Scan() {
   const { t } = useTranslation("scan");
   const [oNota, setNotaStatus] = useState<Nota | null>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
   const checkNota = useCheckNotaService();
 
   const router = useRouter();
@@ -80,8 +84,8 @@ function Scan() {
       if (response.data && "nota" in response.data) {
         if (response.data.nota) {
           setNotaStatus(response.data.nota);
+          setShowSuccess(true);
           console.log({ nota: response.data.nota });
-          router.push(`listing`);
         }
       }
     } catch (error) {
@@ -89,34 +93,76 @@ function Scan() {
     }
   };
 
+  const handleScanAnother = () => {
+    setShowSuccess(false);
+    setNotaStatus(null);
+  };
+
+  const handleContinueToListing = () => {
+    router.push(`listing`);
+  };
+
   return (
     <Container maxWidth="md">
-      <Grid container spacing={3} wrap="nowrap" pt={3}>
-        <Grid item xs={12} style={{ width: "100%" }}>
-          <QRscanner callBack={(url) => checkScannedData(url, checkQRcode)} />
+      <Box sx={{ position: "relative", width: "100%" }}>
+        <Grid container spacing={3} wrap="nowrap" pt={3}>
+          <Grid item xs={12} style={{ width: "100%" }}>
+            <QRscanner callBack={(url) => checkScannedData(url, checkQRcode)} />
+          </Grid>
         </Grid>
-      </Grid>
-      <Grid container spacing={3} wrap="nowrap" pt={3}>
-        {oNota?.url && oNota.url === "" && (
-          <Grid item className="scanScreenButton">
-            <Button
-              variant="contained"
-              LinkComponent={Link}
-              href="/"
-              data-testid="scan-qr"
-            >
-              {t("cancel")}
-            </Button>
-          </Grid>
-        )}
-        {oNota?.url && oNota.url !== "" && (
-          <Grid item className="scanScreenSuccess">
-            <Typography variant="h1" component="h1">
-              {"✅"}
+
+        {/* Modal overlay when scan is successful */}
+        <Dialog
+          open={showSuccess}
+          onClose={handleScanAnother}
+          maxWidth="sm"
+          fullWidth
+          PaperProps={{
+            sx: {
+              borderRadius: 2,
+              p: 2,
+            },
+          }}
+        >
+          <DialogContent>
+            <Typography variant="h5" component="h2" gutterBottom>
+              {t("success.title")}
             </Typography>
-          </Grid>
-        )}
-      </Grid>
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+              {t("success.message")}
+            </Typography>
+            {oNota && (
+              <Box sx={{ mb: 3 }}>
+                <NotaCard
+                  item={oNota}
+                  onClick={() => {
+                    router.replace(`nota/${oNota.id}`);
+                  }}
+                  action={t("success.viewDetails")}
+                  type="listing"
+                  t={t}
+                />
+              </Box>
+            )}
+            <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
+              <Button
+                variant="outlined"
+                onClick={handleScanAnother}
+                size="large"
+              >
+                {t("success.scanAnother")}
+              </Button>
+              <Button
+                variant="contained"
+                onClick={handleContinueToListing}
+                size="large"
+              >
+                {t("success.continueToListing")}
+              </Button>
+            </Box>
+          </DialogContent>
+        </Dialog>
+      </Box>
     </Container>
   );
 }
