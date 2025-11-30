@@ -65,7 +65,7 @@ export function NotaCard({ item, onClick, action, type, t }: NotaCardProps) {
 
               switch (item.status) {
                 case "pending":
-                  return `${typeof t === "function" ? t("status.registeredAt") : ""}, ${registerDate}, ${dayjs(item.registeredAt).locale("pt-br").fromNow()}.`;
+                  return `${typeof t === "function" ? t("status.registeredAt") : ""} ${registerDate}, ${dayjs(item.registeredAt).locale("pt-br").fromNow()}.`;
                 case "read":
                   return `${typeof t === "function" ? t("status.purchasedAt") : ""} ${dayjs(item.purchaseDate).locale("pt-br").fromNow()}`;
                 case "canceled":
@@ -82,7 +82,7 @@ export function NotaCard({ item, onClick, action, type, t }: NotaCardProps) {
             component="div"
             sx={{
               color: "text.secondary",
-              marginLeft: (theme) => theme.spacing(5),
+              marginLeft: (theme) => theme.spacing(0),
               fontSize: 15,
             }}
           >
@@ -91,7 +91,7 @@ export function NotaCard({ item, onClick, action, type, t }: NotaCardProps) {
           <Typography
             sx={{
               color: "text.secondary",
-              marginLeft: (theme) => theme.spacing(5),
+              marginLeft: (theme) => theme.spacing(0),
               fontSize: 12,
             }}
           >
