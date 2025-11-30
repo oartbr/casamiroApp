@@ -32,13 +32,13 @@ type Props = {
 
 type ItemCardProps = Nota;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function List(props: Props) {
   // const { setUser } = useAuthActions();
   // const { setTokensInfo } = useAuthTokens();
   // const fetchAuthLogin = useAuthLoginService();
   // const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
-  console.log(props);
   const { t } = useTranslation("listing");
   const { user } = useAuth();
 
