@@ -4,5 +4,14 @@
   "registerWarranty": "Registrar Garantia",
   "notFound": "Código no identificado",
   "notFoundMessage": "El código que ingresaste no existe en nuestra base de datos, por favor verifica que sea correcto o entra en contacto con la empresa.",
-  "privacy-policy": "Política de Privacidad"
+  "privacy-policy": "Política de Privacidad",
+  "camera": {
+    "noCameraAvailable": "No hay cámara disponible",
+    "errorAccessingCameras": "Error al acceder a las cámaras",
+    "errorAccessingCamera": "Error al acceder a la cámara: {{errorName}}. Intenta cambiar de cámara.",
+    "unknownError": "Error desconocido al acceder a la cámara",
+    "switchCamera": "Cambiar Cámara",
+    "openingCameras": "Abriendo Cámaras...",
+    "switchCameraTitle": "Cambiar Cámara"
+  }
 }

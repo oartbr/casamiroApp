@@ -80,6 +80,7 @@ function Scan() {
       if (response.data && "nota" in response.data) {
         if (response.data.nota) {
           setNotaStatus(response.data.nota);
+          console.log({ nota: response.data.nota });
           router.push(`listing`);
         }
       }
