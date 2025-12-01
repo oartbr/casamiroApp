@@ -33,5 +33,11 @@
     "useList": "Use a lista para preparar suas compras",
     "inviteFamily": "Convide sua família ou amigos para seus grupos."
   },
-  "lastNotaTitle": "Última compra registrada"
+  "lastNotaTitle": "Última compra registrada",
+  "spendingStatistics": "Estatísticas de Gastos",
+  "currentWeek": "Esta Semana",
+  "last7Days": "Últimos 7 Dias",
+  "last30Days": "Últimos 30 Dias",
+  "currentMonth": "Mês Atual",
+  "previousMonth": "Mês Anterior"
 }

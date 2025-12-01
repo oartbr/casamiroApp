@@ -1,0 +1,44 @@
+{
+  "title": "Listas",
+  "selectGroup": "Seleccionar Lista",
+  "failedToLoadGroups": "Error al cargar grupos. Por favor, intente nuevamente.",
+  "noGroupsMessage": "Aún no eres miembro de ningún grupo. Únete a un grupo para comenzar a usar las listas.",
+  "failedToLoadList": "Error al cargar la lista. Por favor, intente nuevamente.",
+  "failedToLoadItems": "Error al cargar elementos. Por favor, intente nuevamente.",
+  "noItemsMessage": "¡Agrega tu primer elemento arriba!",
+  "noDefaultListFound": "No se encontró lista predeterminada para este grupo.",
+  "noNotasFound": "Escanea tus facturas.",
+  "addItemPlaceholder": "Agregar elemento a la lista",
+  "addItemHelperText": "Presiona Enter para agregar elemento",
+  "defaultList": "Lista de {{group}}",
+  "lastNota": "Última compra",
+  "actions": {
+    "deleteItem": "Eliminar elemento",
+    "editItem": "Editar elemento",
+    "viewItem": "Ver Factura",
+    "markAsComplete": "Completar",
+    "markAsIncomplete": "Desmarcar",
+    "editList": "Editar Lista",
+    "scanNota": "Escanear Factura",
+    "sendInvite": "Invitar"
+  },
+  "greetings": {
+    "morning": "¡Buenos días {{user}}!",
+    "afternoon": "¡Buenas tardes {{user}}!",
+    "night": "¡Buenas noches {{user}}!"
+  },
+  "tasks": {
+    "learning": "Casamiro está aprendiendo sobre tus hábitos. En unos días, comenzarás a ver recomendaciones para mejorar tu vida financiera.",
+    "scanNotas": "Escanea tus facturas",
+    "useList": "Usa la lista para preparar tus compras",
+    "inviteFamily": "Invita a tu familia o amigos a tus grupos."
+  },
+  "lastNotaTitle": "Última compra registrada",
+  "spendingStatistics": "Estadísticas de Gastos",
+  "currentWeek": "Esta Semana",
+  "last7Days": "Últimos 7 Días",
+  "last30Days": "Últimos 30 Días",
+  "currentMonth": "Mes Actual",
+  "previousMonth": "Mes Anterior"
+}
+

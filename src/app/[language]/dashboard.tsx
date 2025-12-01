@@ -12,7 +12,11 @@ import { Trans } from "react-i18next/TransWithoutContext";
 import { StandardLandingPage } from "@/components/landingPage/standard";
 import useAuth from "@/services/auth/use-auth";
 import { useEffect, useMemo, useState } from "react";
-import { useGetListingNotasByUserService } from "@/services/api/services/notas";
+import {
+  useGetListingNotasByUserService,
+  useGetSpendingStatisticsService,
+  SpendingStatistics,
+} from "@/services/api/services/notas";
 import { useRouter } from "next/navigation";
 import { hasReturningUserCookie } from "@/services/auth/returning-user-cookie";
 import useLanguage from "@/services/i18n/use-language";
@@ -36,7 +40,12 @@ export default function PageContent() {
   const router = useRouter();
   const language = useLanguage();
 
+  // Get locale for date formatting
+  const locale =
+    language === "pt" ? "pt-BR" : language === "es" ? "es-ES" : "en-US";
+
   const fetchListNotas = useGetListingNotasByUserService();
+  const getSpendingStatistics = useGetSpendingStatisticsService();
   const getDefaultListByGroup = useGetDefaultListByGroupService();
   const getListItems = useGetListItemsService();
 
@@ -46,6 +55,9 @@ export default function PageContent() {
   );
   const [defaultListItems, setDefaultListItems] = useState<ListItem[]>([]);
   const [returningUser, setReturningUser] = useState(false);
+  const [spendingStats, setSpendingStats] = useState<SpendingStatistics | null>(
+    null
+  );
 
   const activeGroupId = useMemo(() => user?.activeGroupId || "", [user]);
 
@@ -94,6 +106,20 @@ export default function PageContent() {
       }
     });
 
+    // Fetch spending statistics
+    getSpendingStatistics({
+      userId: String(user.id),
+      groupId: activeGroupId || undefined,
+    }).then((response) => {
+      if (
+        response.status === HTTP_CODES_ENUM.OK &&
+        response.data &&
+        "currentWeek" in response.data
+      ) {
+        setSpendingStats(response.data as SpendingStatistics);
+      }
+    });
+
     // Fetch default list for active group and its items
     if (activeGroupId) {
       getDefaultListByGroup(activeGroupId).then((listResponse) => {
@@ -129,9 +155,29 @@ export default function PageContent() {
     user,
     activeGroupId,
     fetchListNotas,
+    getSpendingStatistics,
     getDefaultListByGroup,
     getListItems,
   ]);
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(amount);
+  };
+
+  // Get month names for current and previous month
+  const getCurrentMonthName = () => {
+    const now = new Date();
+    return now.toLocaleDateString(locale, { month: "long" });
+  };
+
+  const getPreviousMonthName = () => {
+    const now = new Date();
+    const previousMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    return previousMonth.toLocaleDateString(locale, { month: "long" });
+  };
 
   // Show skeleton while loading or if user not loaded
   if (!isLoaded) {
@@ -190,6 +236,104 @@ export default function PageContent() {
               {defaultListName}
             </Button>
           </Grid>
+          {spendingStats && (
+            <Grid item xs={12} md={12}>
+              <h1
+                style={{ marginTop: 0, textAlign: "left", fontSize: "1.5rem" }}
+              >
+                {t("spendingStatistics")}
+              </h1>
+              <Grid container spacing={2} sx={{ mb: 3 }}>
+                <Grid item xs={6} sm={4}>
+                  <Box
+                    sx={{
+                      p: 2,
+                      border: "1px solid",
+                      borderColor: "divider",
+                      borderRadius: 1,
+                    }}
+                  >
+                    <Typography variant="caption" color="text.secondary">
+                      {t("currentWeek")}
+                    </Typography>
+                    <Typography variant="h6">
+                      {formatCurrency(spendingStats.currentWeek)}
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={6} sm={4}>
+                  <Box
+                    sx={{
+                      p: 2,
+                      border: "1px solid",
+                      borderColor: "divider",
+                      borderRadius: 1,
+                    }}
+                  >
+                    <Typography variant="caption" color="text.secondary">
+                      {t("last7Days")}
+                    </Typography>
+                    <Typography variant="h6">
+                      {formatCurrency(spendingStats.last7Days)}
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={6} sm={4}>
+                  <Box
+                    sx={{
+                      p: 2,
+                      border: "1px solid",
+                      borderColor: "divider",
+                      borderRadius: 1,
+                    }}
+                  >
+                    <Typography variant="caption" color="text.secondary">
+                      {t("last30Days")}
+                    </Typography>
+                    <Typography variant="h6">
+                      {formatCurrency(spendingStats.last30Days)}
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={6} sm={4}>
+                  <Box
+                    sx={{
+                      p: 2,
+                      border: "1px solid",
+                      borderColor: "divider",
+                      borderRadius: 1,
+                    }}
+                  >
+                    <Typography variant="caption" color="text.secondary">
+                      {getCurrentMonthName().charAt(0).toUpperCase() +
+                        getCurrentMonthName().slice(1)}
+                    </Typography>
+                    <Typography variant="h6">
+                      {formatCurrency(spendingStats.currentMonth)}
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={6} sm={4}>
+                  <Box
+                    sx={{
+                      p: 2,
+                      border: "1px solid",
+                      borderColor: "divider",
+                      borderRadius: 1,
+                    }}
+                  >
+                    <Typography variant="caption" color="text.secondary">
+                      {getPreviousMonthName().charAt(0).toUpperCase() +
+                        getPreviousMonthName().slice(1)}
+                    </Typography>
+                    <Typography variant="h6">
+                      {formatCurrency(spendingStats.previousMonth)}
+                    </Typography>
+                  </Box>
+                </Grid>
+              </Grid>
+            </Grid>
+          )}
           <Grid item xs={12} md={12}>
             <h1 style={{ marginTop: 0, textAlign: "left", fontSize: "1.5rem" }}>
               {t("lastNotaTitle")}

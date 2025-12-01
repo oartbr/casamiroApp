@@ -107,6 +107,7 @@ export type NotasRequest = {
     groupId?: Object;
   };
   sort?: Array<{
+    orderBy: string;
     order: SortEnum;
   }>;
   userId: string;
@@ -206,5 +207,82 @@ export function useGetNotaService() {
       return wrapperFetchJsonResponse<GetNotaResponse>(response);
     },
     [fetchBase]
+  );
+}
+
+// ## useGetSpendingStatisticsService()
+// Get spending statistics for different time periods
+export type GetSpendingStatisticsRequest = {
+  userId: string;
+  groupId?: string;
+};
+
+export type SpendingStatistics = {
+  currentWeek: number;
+  last7Days: number;
+  last30Days: number;
+  currentMonth: number;
+  previousMonth: number;
+};
+
+export type GetSpendingStatisticsResponse = SpendingStatistics;
+
+export function useGetSpendingStatisticsService() {
+  const fetch = useFetch();
+
+  return useCallback(
+    (data: GetSpendingStatisticsRequest, requestConfig?: RequestConfigType) => {
+      const requestUrl = new URL(`${API_URL}/v1/nota/spending-statistics`);
+      requestUrl.searchParams.append("userId", data.userId);
+      if (data.groupId) {
+        requestUrl.searchParams.append("groupId", data.groupId);
+      }
+
+      return fetch(requestUrl, {
+        method: "GET",
+        ...requestConfig,
+      }).then(wrapperFetchJsonResponse<GetSpendingStatisticsResponse>);
+    },
+    [fetch]
+  );
+}
+
+// ## useGetLast30DaysNotasService()
+// Get basic nota details from last 30 days
+export type GetLast30DaysNotasRequest = {
+  userId: string;
+  groupId?: string;
+};
+
+export type Last30DaysNota = {
+  date: Date | string;
+  total: number;
+  vendor: string;
+};
+
+export type GetLast30DaysNotasResponse = {
+  data: {
+    notas: Last30DaysNota[];
+  };
+  status: HTTP_CODES_ENUM;
+};
+
+export function useGetLast30DaysNotasService() {
+  const fetch = useFetch();
+
+  return useCallback(
+    (data: GetLast30DaysNotasRequest, requestConfig?: RequestConfigType) => {
+      const requestUrl = new URL(`${API_URL}/v1/nota/last-30-days`);
+      requestUrl.searchParams.append("userId", data.userId);
+      if (data.groupId) {
+        requestUrl.searchParams.append("groupId", data.groupId);
+      }
+
+      return fetch(requestUrl, {
+        method: "GET",
+        ...requestConfig,
+      }).then(wrapperFetchJsonResponse<GetLast30DaysNotasResponse>);
+    },
+    [fetch]
   );
 }
