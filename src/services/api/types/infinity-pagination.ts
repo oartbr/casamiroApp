@@ -1,5 +1,9 @@
 export type InfinityPaginationType<T> = {
-  results: unknown;
+  results: T[];
   hasNextPage: boolean;
-  data: T[];
+  page?: number;
+  limit?: number;
+  totalPages?: number;
+  totalResults?: number;
+  data?: T[];
 };
