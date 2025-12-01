@@ -16,28 +16,42 @@ const QRscanner = ({ callBack }: { callBack: (data: string) => void }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoadingCamera, setIsLoadingCamera] = useState(false);
   const [showScanner, setShowScanner] = useState(true);
+  const [isScanningEnabled, setIsScanningEnabled] = useState(true);
   const scannerKeyRef = useRef(0);
   const handlingErrorRef = useRef(false);
   const switchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isSwitchingRef = useRef(false);
+  const lastScannedRef = useRef<string | null>(null);
 
   useEffect(() => {
     let mounted = true;
 
     const getDevices = async () => {
       try {
-        // Request camera permission first (required to get deviceIds)
-        await navigator.mediaDevices.getUserMedia({ video: true });
-
-        const mediaDevices = await navigator.mediaDevices.enumerateDevices();
-        const videoDevices = mediaDevices.filter(
+        // Try to enumerate devices first (might work if permission already granted)
+        let mediaDevices = await navigator.mediaDevices.enumerateDevices();
+        let videoDevices = mediaDevices.filter(
           (device) => device.kind === "videoinput"
         );
 
         // Filter out devices with empty deviceIds (they're not usable)
-        const validVideoDevices = videoDevices.filter(
+        let validVideoDevices = videoDevices.filter(
           (device) => device.deviceId && device.deviceId.trim() !== ""
         );
+
+        // If no valid device IDs found, request permission first
+        // This is necessary for first-time users or when permission was revoked
+        if (validVideoDevices.length === 0 || !validVideoDevices[0].deviceId) {
+          await navigator.mediaDevices.getUserMedia({ video: true });
+          // Enumerate again after permission granted
+          mediaDevices = await navigator.mediaDevices.enumerateDevices();
+          videoDevices = mediaDevices.filter(
+            (device) => device.kind === "videoinput"
+          );
+          validVideoDevices = videoDevices.filter(
+            (device) => device.deviceId && device.deviceId.trim() !== ""
+          );
+        }
 
         console.log(
           "Available video devices:",
@@ -53,14 +67,13 @@ const QRscanner = ({ callBack }: { callBack: (data: string) => void }) => {
           // Always use the first camera
           const firstDeviceId = validVideoDevices[0].deviceId;
           setCurrentDeviceId(firstDeviceId);
+          console.log("Initial device set to:", {
+            deviceId: firstDeviceId,
+            device: validVideoDevices[0],
+          });
           setHasError(false);
           setErrorMessage(null);
           setIsLoadingCamera(true);
-
-          console.log("Initial device set to:", {
-            deviceId: firstDeviceId,
-            label: validVideoDevices[0].label,
-          });
         } else if (mounted) {
           setHasError(true);
           setErrorMessage(t("camera.noCameraAvailable"));
@@ -79,6 +92,7 @@ const QRscanner = ({ callBack }: { callBack: (data: string) => void }) => {
     };
 
     getDevices();
+
     return () => {
       mounted = false;
     };
@@ -86,16 +100,39 @@ const QRscanner = ({ callBack }: { callBack: (data: string) => void }) => {
 
   const handleScan = useCallback(
     (detectedCodes: IDetectedBarcode[]) => {
+      if (!isScanningEnabled) {
+        return; // Scanning is temporarily disabled
+      }
+
       const data = detectedCodes[0] || null;
       if (data) {
+        const scannedValue = data.rawValue.toString();
+
+        // Prevent scanning the same code multiple times
+        if (lastScannedRef.current === scannedValue) {
+          return;
+        }
+
+        lastScannedRef.current = scannedValue;
+
+        // Temporarily disable scanning to prevent multiple callbacks
+        setIsScanningEnabled(false);
+
         // Clear any previous errors and loading state on successful scan
         setHasError(false);
         setErrorMessage(null);
         setIsLoadingCamera(false);
-        callBack(data.rawValue.toString());
+
+        callBack(scannedValue);
+
+        // Re-enable scanning after a short delay (2 seconds)
+        setTimeout(() => {
+          setIsScanningEnabled(true);
+          lastScannedRef.current = null;
+        }, 2000);
       }
     },
-    [callBack]
+    [callBack, isScanningEnabled]
   );
 
   const switchCamera = useCallback(() => {

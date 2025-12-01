@@ -21,6 +21,9 @@
     "scanAnother": "Escanear outra nota",
     "continueToListing": "Sair"
   },
+  "error": {
+    "invalidQRCode": "Código QR inválido"
+  },
   "status": {
     "registered": "Registrada",
     "pending": "Pendente",

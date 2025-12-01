@@ -20,24 +20,20 @@ import { NotaCard } from "@/components/cards/notaCard";
 import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
-
-function checkScannedData(url: string, checkQRcode: (id: string) => void) {
-  const aUrl = url.split("/");
-  if (aUrl[2] === "www.sefaz.rs.gov.br" || aUrl[2] === "localhost:3000") {
-    checkQRcode(url);
-  }
-}
+import { useSnackbar } from "notistack";
 
 function Scan() {
   const { t } = useTranslation("scan");
   const [oNota, setNotaStatus] = useState<Nota | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const checkNota = useCheckNotaService();
+  const { enqueueSnackbar } = useSnackbar();
 
   const router = useRouter();
   const { user } = useAuth();
 
   const checkQRcode = async (notaUrl: string) => {
+    // enqueueSnackbar({ message: notaUrl, variant: "info" });
     try {
       const requestData: CheckNotaRequest = {
         notaUrl,
@@ -93,6 +89,16 @@ function Scan() {
     }
   };
 
+  const useScanData = (url: string) => {
+    const aUrl = url.split("/");
+    if (aUrl[2] === "www.sefaz.rs.gov.br" || aUrl[2] === "localhost:3000") {
+      checkQRcode(url);
+    } else {
+      enqueueSnackbar({ message: t("error.invalidQRCode"), variant: "error" });
+    }
+    return;
+  };
+
   const handleScanAnother = () => {
     setShowSuccess(false);
     setNotaStatus(null);
@@ -107,7 +113,7 @@ function Scan() {
       <Box sx={{ position: "relative", width: "100%" }}>
         <Grid container spacing={3} wrap="nowrap" pt={3}>
           <Grid item xs={12} style={{ width: "100%" }}>
-            <QRscanner callBack={(url) => checkScannedData(url, checkQRcode)} />
+            <QRscanner callBack={useScanData} />
           </Grid>
         </Grid>
 
