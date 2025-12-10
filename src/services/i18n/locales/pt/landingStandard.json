@@ -1,0 +1,36 @@
+{
+  "hero": {
+    "title": "O jeito inteligênte da sua família economizar nas compras.",
+    "subtitle": "Desbloqueie preços melhores e reduza gastos desnecessários com a ajuda da inteligência artificial.",
+    "button": "Comece agora!",
+    "socialProof": "🔆 Economize tempo e dinheiro com ajuda de Inteligência Artificial."
+  },
+  "images": {
+    "heroAlt": "O app Casamiro no celular de um casal",
+    "easyAndPracticalAlt": "Fácil e prático!",
+    "familyTimeAlt": "Mais tempo para a familia!"
+  },
+  "easyAndPractical": {
+    "title": "Fácil e prático!",
+    "features": {
+      "readReceipts": "Leia suas notas fiscais.",
+      "organizeLists": "Organize suas listas e acompanhe gastos com segurança.",
+      "enjoyOffers": "Aproveite ofertas e oportunidades de economia.",
+      "organizeFamily": "Organize as compras da sua família.",
+      "financialTranquility": "Tenha mais tranquilidade na sua vida financeira."
+    }
+  },
+  "benefits": {
+    "title": "Benefícios",
+    "spendLess": "Gaste menos todo mês.",
+    "receiveOffers": "Receba ofertas realmente vantajosas.",
+    "organizedHome": "Sua casa mais organizada, sem esforço.",
+    "comparePrices": "Compare preços sem procurar.",
+    "familyHelping": "Família toda ajudando, sem confusão."
+  },
+  "cta": {
+    "button": "Crie sua conta",
+    "socialProof": "🔆 Venha economizar tempo e dinheiro."
+  }
+}
+

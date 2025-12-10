@@ -57,7 +57,7 @@ const clientTheme = {
     // this images need to stay in the public folder, including the favicon.ico which is not listed here
     long: "/logo.casamiro.svg", // svg 503x138px
     short: "/logo.casamiro.short.svg", // svg 177x135px
-    hero: "/assets/images/home.png", // check why this one is not really there
+    hero: "/assets/images/hero1.png", // check why this one is not really there
     pwa: "/logo.casamiro.pwa.png", // png 150x150px
   },
 };

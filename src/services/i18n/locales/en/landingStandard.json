@@ -1,0 +1,36 @@
+{
+  "hero": {
+    "title": "The smart way for your family to save on shopping.",
+    "subtitle": "Unlock better prices and reduce unnecessary spending with the help of artificial intelligence.",
+    "button": "Sign up for free",
+    "socialProof": "🔆 Save time and money with the help of Artificial Intelligence."
+  },
+  "images": {
+    "heroAlt": "two phones with the Casamiro app",
+    "easyAndPracticalAlt": "Easy and practical!",
+    "familyTimeAlt": "More time for the family!"
+  },
+  "easyAndPractical": {
+    "title": "Easy and practical!",
+    "features": {
+      "readReceipts": "Read your receipts.",
+      "organizeLists": "Organize your lists and track expenses securely.",
+      "enjoyOffers": "Enjoy offers and savings opportunities.",
+      "organizeFamily": "Organize your family's shopping.",
+      "financialTranquility": "Have more peace of mind in your financial life."
+    }
+  },
+  "benefits": {
+    "title": "Benefits",
+    "spendLess": "Spend less every month.",
+    "receiveOffers": "Receive truly advantageous offers.",
+    "organizedHome": "Your home more organized, effortlessly.",
+    "comparePrices": "Compare prices without searching.",
+    "familyHelping": "Whole family helping, without confusion."
+  },
+  "cta": {
+    "button": "Create your account now",
+    "socialProof": "🔆 Come save time and money."
+  }
+}
+
