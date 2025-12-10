@@ -9,7 +9,7 @@ export default function Version() {
 
   return (
     <div className="version">
-      [ V: {date} | {commitSha.slice(0, 7)} ]
+      [ BETA @ {date} | {commitSha.slice(0, 7)} ]
       {process.env.NEXT_PUBLIC_VERCEL_ENV &&
         ` • ${process.env.NEXT_PUBLIC_VERCEL_ENV}`}
     </div>

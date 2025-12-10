@@ -107,6 +107,53 @@ body {
   animation: qrScanAnimation 4s 1s forwards;
 }
 
+.beneficios {
+  width: 350px;
+  height: auto;
+  margin: 0px 30px;
+}
+
+.beneficiosB {
+  width: 350px;
+  height: auto;
+  margin: 0px 30px;
+  display: none;
+}
+
+.beneficiosC {
+  width: 350px;
+  height: auto;
+  margin: 0px 30px;
+  margin-top: -80px;
+  float: right;
+  position: absolute;
+  left: 400px;
+}
+
+.beneficiosD {
+  width: 50%;
+  height: auto;
+  margin: 0px 30px;
+  display: none;
+}
+.beneficiosContainer {
+  margin-left: 30px;
+  padding-top: 80px!important;
+}
+.beneficioItem{
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #4caf50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 12px;
+  flex-shrink: 0;
+  margin-left: 10px;
+}
+
 .MuiAvatar-circular{
   border: 1px solid #ccc;
 }
@@ -118,6 +165,11 @@ body {
 
 .scanScreenButton a {
   width: 100%;
+}
+
+.ctaContainerBottom {
+  margin-top: 180px!important;
+  text-align: center;
 }
 
 .version {
@@ -157,6 +209,33 @@ body {
   }
   .logoHeader{
     display: none;
+  }
+  .beneficios {
+    display: none;
+  }
+  
+  .beneficiosB {
+    display: block;
+    margin: 0px 0px;
+    margin-bottom: 50px;
+  }
+
+  .beneficiosC {
+    display: none;
+  }
+  .beneficiosD {
+    width: 80%;
+    height: auto;
+    margin: 0px 0px;
+    display: block;
+    margin-top: 30px!important;
+  }
+  .beneficiosContainer {
+    padding-top: 0px!important;
+    padding-left: 30px!important;
+  }
+  .ctaContainerBottom {
+    margin-top: 30px!important;
   }
 }
 
@@ -293,7 +372,7 @@ body {
   }
 
   .qrScan{
-    margin-top: -50px!important;
+    margin-top: -20px!important;
   }
 }
 
