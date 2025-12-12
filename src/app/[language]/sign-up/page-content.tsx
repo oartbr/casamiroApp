@@ -3,9 +3,6 @@ import Button from "@mui/material/Button";
 import withPageRequiredGuest from "@/services/auth/with-page-required-guest";
 import { useForm, FormProvider, useFormState } from "react-hook-form";
 import { useAuthSignUpService } from "@/services/api/services/auth";
-import useAuthActions from "@/services/auth/use-auth-actions";
-import useAuthTokens from "@/services/auth/use-auth-tokens";
-import { setReturningUserCookie } from "@/services/auth/returning-user-cookie";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -25,6 +22,8 @@ import SocialAuth from "@/services/social-auth/social-auth";
 import { isGoogleAuthEnabled } from "@/services/social-auth/google/google-config";
 import { isFacebookAuthEnabled } from "@/services/social-auth/facebook/facebook-config";
 import { useRouter, useSearchParams } from "next/navigation";
+import { getReferralCodeCookie } from "@/services/auth/referral-cookie";
+import { useSnackbar } from "notistack";
 // import { Phone } from "@mui/icons-material";
 
 type Props = {
@@ -95,11 +94,9 @@ function FormActions() {
 }
 
 function Form(props: Props) {
-  const { setUser } = useAuthActions();
-  const { setTokensInfo } = useAuthTokens();
-  //const fetchAuthLogin = useAuthLoginService();
   const fetchAuthSignUp = useAuthSignUpService();
   const { t } = useTranslation("sign-up");
+  const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
   const searchParams = useSearchParams();
   const validationSchema = useValidationSchema();
@@ -109,6 +106,10 @@ function Form(props: Props) {
   const garantiaId = props.params.id;
   const sPhoneNumber = searchParams.get("p");
   const returnTo = searchParams.get("returnTo");
+  // Get referral code from URL parameter first, then from cookie
+  const referralCodeFromUrl = searchParams.get("ref");
+  const referralCodeFromCookie = getReferralCodeCookie();
+  const referralCode = referralCodeFromUrl || referralCodeFromCookie;
 
   const methods = useForm<SignUpFormData>({
     resolver: yupResolver<SignUpFormData>(validationSchema),
@@ -130,8 +131,17 @@ function Form(props: Props) {
 
     delete formData.phNumber;
     delete formData.areaCode;
+
+    // Add referral code if present in URL
+    const signUpData: SignUpFormData & { referredByCode?: string } = {
+      ...formData,
+    };
+    if (referralCode) {
+      signUpData.referredByCode = referralCode.toUpperCase();
+    }
+
     const { data: dataSignUp, status: statusSignUp } =
-      await fetchAuthSignUp(formData);
+      await fetchAuthSignUp(signUpData);
 
     if (statusSignUp === HTTP_CODES_ENUM.UNPROCESSABLE_ENTITY) {
       (Object.keys(dataSignUp.errors) as Array<keyof SignUpFormData>).forEach(
@@ -148,34 +158,25 @@ function Form(props: Props) {
       return;
     }
 
-    /*
-    const { data: dataSignIn, status: statusSignIn } = await fetchAuthLogin({
-      email: formData.email,
-      password: formData.password,
-    }); 
-    */
-
     if (statusSignUp === HTTP_CODES_ENUM.CREATED) {
-      setTokensInfo({
-        token: dataSignUp.tokens.token,
-        refreshToken: dataSignUp.tokens.refreshToken,
-        tokenExpires: dataSignUp.tokens.tokenExpires,
-      });
-      setUser(dataSignUp.user);
-      setReturningUserCookie();
+      // User created with GUEST role - verification code sent to WhatsApp
+      // Don't set tokens yet - user needs to verify phone first
 
-      setTimeout(() => {
-        // If returnTo is provided, redirect there after sign-up
-        if (returnTo) {
-          router.replace(decodeURIComponent(returnTo));
-        } else if (garantiaId) {
-          // console.log({ go: `${props.params.id}/register` });
-          router.replace(`${props.params.id}/register`);
-        } else {
-          // console.log({ go: "listing" });
-          router.replace("listing");
-        }
-      }, 1000); // 2 seconds delay to make this work because of the API. To-do: fix this with a better solution.
+      // Redirect to confirm-code page with phone number
+      // Format phone number with + prefix for confirm-code page
+      let phoneNumberForUrl = formData.phoneNumber;
+      if (phoneNumberForUrl && !phoneNumberForUrl.startsWith("+")) {
+        phoneNumberForUrl = `+${phoneNumberForUrl}`;
+      }
+      const confirmCodeUrl = `confirm-code?p=${phoneNumberForUrl}${
+        returnTo ? `&returnTo=${encodeURIComponent(returnTo)}` : ""
+      }${garantiaId ? `&garantiaId=${garantiaId}` : ""}`;
+
+      enqueueSnackbar(t("sign-up:alerts.codeSent"), {
+        variant: "success",
+      });
+
+      router.replace(confirmCodeUrl);
     }
   });
 

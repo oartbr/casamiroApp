@@ -20,7 +20,8 @@
     "markAsIncomplete": "Desmarcar",
     "editList": "Editar Lista",
     "scanNota": "Escanear Nota Fiscal",
-    "sendInvite": "Convidar"
+    "sendInvite": "Convidar",
+    "viewReferrals": "Ver Indicações"
   },
   "greetings": {
     "morning": "Bom dia {{user}}!",
@@ -31,7 +32,9 @@
     "learning": "O Casamiro está aprendendo sobre os seus hábitos. Em alguns dias, você vai começar a ver recomendações para melhorar sua vida financeira.",
     "scanNotas": "Escaneie suas notas fiscais",
     "useList": "Use a lista para preparar suas compras",
-    "inviteFamily": "Convide sua família ou amigos para seus grupos."
+    "inviteFamily": "Convide sua família ou amigos para seus grupos.",
+    "startRecommending": "Indique amigos.",
+    "shareRecommendations": "Você já indicou {{count}} pessoa(s)! Continue compartilhando seu link."
   },
   "lastNotaTitle": "Última compra registrada",
   "spendingStatistics": "Estatísticas de Gastos",

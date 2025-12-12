@@ -24,6 +24,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import LoginIcon from "@mui/icons-material/Login";
 import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
+import LoyaltyIcon from "@mui/icons-material/Loyalty";
 import Image from "next/image";
 import Link from "@/components/link";
 import { menuConfig, MenuItemConfig } from "../menu.config";
@@ -98,6 +99,7 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({
       Login: <LoginIcon />,
       Profile: <PersonIcon />,
       Logout: <LogoutIcon />,
+      Referrals: <LoyaltyIcon />,
     };
     const icon = iconMap[iconName];
     if (!icon) return null;

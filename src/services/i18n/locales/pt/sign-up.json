@@ -57,5 +57,8 @@
       }
     }
   },
-  "or": "OU"
+  "or": "OU",
+  "alerts": {
+    "codeSent": "Código de verificação enviado para o WhatsApp!"
+  }
 }

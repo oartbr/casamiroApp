@@ -7,12 +7,14 @@ import ListItem from "@mui/material/ListItem";
 import { useGroupMembershipsQuery } from "@/services/api/react-query/memberships-queries";
 import { Nota } from "@/services/api/types/nota";
 import { ListItem as ListItemType } from "@/services/api/types/list";
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import { useTranslation } from "@/services/i18n/client";
 import Button from "@mui/material/Button/Button";
+import { useReferralStatsService } from "@/services/api/services/referral";
+import { ShareReferralButton } from "@/components/referral/share-referral-button";
 
 interface UserTasksProps {
   latestNota: Nota | null;
@@ -31,11 +33,35 @@ export function UserTasks({
   action,
 }: UserTasksProps) {
   const { t } = useTranslation("dashboard");
+  const fetchReferralStats = useReferralStatsService();
+  const [referralStats, setReferralStats] = useState<{
+    referralCode: string;
+    totalReferrals: number;
+    weeklyReferrals: number;
+    monthlyReferrals: number;
+  } | null>(null);
+
   // Fetch group memberships to check if user is alone
   const { data: membershipsData } = useGroupMembershipsQuery(activeGroupId, {
     limit: 100,
     status: "active",
   });
+
+  // Fetch referral stats
+  useEffect(() => {
+    const loadStats = async () => {
+      try {
+        const response = await fetchReferralStats();
+        if (response.data && "referralCode" in response.data) {
+          setReferralStats(response.data);
+        }
+      } catch (error) {
+        console.error("Failed to load referral stats:", error);
+      }
+    };
+
+    loadStats();
+  }, [fetchReferralStats]);
 
   // Check if user is alone in the group
   const isAlone = useMemo(() => {
@@ -51,7 +77,8 @@ export function UserTasks({
   const tasks = useMemo(() => {
     const taskList: {
       label: string;
-      action?: { title: string; href: string };
+      action?: { title: string; href: string; onClick?: () => void };
+      referralCode?: string;
     }[] = [];
 
     // Always show this task
@@ -72,8 +99,30 @@ export function UserTasks({
       taskList.push({ label: t("tasks.inviteFamily"), action: action });
     }
 
+    // Show recommendation task if user has referral code
+    if (referralStats?.referralCode) {
+      const referralCount = referralStats.totalReferrals || 0;
+      const taskLabel =
+        referralCount > 0
+          ? t("tasks.shareRecommendations", { count: referralCount })
+          : t("tasks.startRecommending");
+
+      taskList.push({
+        label: taskLabel,
+        referralCode: referralStats.referralCode,
+      });
+    }
+
     return taskList;
-  }, [latestNota, defaultListItems, isAlone, activeGroupId, t, action]);
+  }, [
+    latestNota,
+    defaultListItems,
+    isAlone,
+    activeGroupId,
+    referralStats,
+    t,
+    action,
+  ]);
 
   if (tasks.length === 0) {
     return null;
@@ -100,15 +149,21 @@ export function UserTasks({
                 />
               </ListItemAvatar>
               {task.label}
-              {task.action && (
-                <Button
-                  href={task.action.href}
-                  variant="contained"
-                  color="primary"
-                  sx={{ ml: 1 }}
-                >
-                  {task.action.title}
-                </Button>
+              {(task.action || task.referralCode) && (
+                <Box sx={{ ml: 1, display: "flex", gap: 1 }}>
+                  {task.action && (
+                    <Button
+                      href={task.action.href}
+                      variant={task.referralCode ? "outlined" : "contained"}
+                      color="primary"
+                    >
+                      {task.action.title}
+                    </Button>
+                  )}
+                  {task.referralCode && (
+                    <ShareReferralButton referralCode={task.referralCode} />
+                  )}
+                </Box>
               )}
             </ListItem>
           ))}

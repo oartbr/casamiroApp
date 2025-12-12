@@ -87,6 +87,16 @@ export const menuConfig: MenuItemConfig[] = [
     icon: "Groups",
   },
   {
+    label: "common:navigation.referrals",
+    href: "/referrals",
+    roles: ["USER"],
+    mobile: false,
+    desktop: true,
+    userMenu: true,
+    type: "page",
+    icon: "Referrals",
+  },
+  {
     label: "common:navigation.logout",
     href: null,
     roles: [],

@@ -45,5 +45,8 @@
       }
     }
   },
-  "or": "OR"
+  "or": "OR",
+  "alerts": {
+    "codeSent": "Verification code sent to WhatsApp!"
+  }
 }

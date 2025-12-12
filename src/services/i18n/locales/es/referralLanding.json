@@ -1,0 +1,42 @@
+{
+  "title": "Recomienda y Gana - Casamiro",
+  "invalidCode": "Código de referido inválido",
+  "referralCodeMessage": "Fuiste referido por:",
+  "hero": {
+    "title": "¡Has sido invitado! 🎉",
+    "titleDefault": "La forma inteligente de que tu familia ahorre en las compras.",
+    "subtitle": "Crea tu cuenta y comienza a ahorrar ahora. ¡Tu código de referido ya está guardado!",
+    "subtitleDefault": "Desbloquea mejores precios y reduce gastos innecesarios con la ayuda de la inteligencia artificial.",
+    "button": "¡Comienza ahora!",
+    "socialProof": "🔆 Ahorra tiempo y dinero con ayuda de Inteligencia Artificial."
+  },
+  "images": {
+    "heroAlt": "La aplicación Casamiro en el teléfono de una pareja",
+    "easyAndPracticalAlt": "¡Fácil y práctico!",
+    "familyTimeAlt": "¡Más tiempo para la familia!"
+  },
+  "easyAndPractical": {
+    "title": "¡Fácil y práctico!",
+    "features": {
+      "readReceipts": "Lee tus recibos.",
+      "organizeLists": "Organiza tus listas y realiza un seguimiento de los gastos con seguridad.",
+      "enjoyOffers": "Aprovecha ofertas y oportunidades de ahorro.",
+      "organizeFamily": "Organiza las compras de tu familia.",
+      "financialTranquility": "Ten más tranquilidad en tu vida financiera."
+    }
+  },
+  "benefits": {
+    "title": "Beneficios",
+    "spendLess": "Gasta menos cada mes.",
+    "receiveOffers": "Recibe ofertas realmente ventajosas.",
+    "organizedHome": "Tu hogar más organizado, sin esfuerzo.",
+    "comparePrices": "Compara precios sin buscar.",
+    "familyHelping": "Toda la familia ayudando, sin confusión."
+  },
+  "cta": {
+    "button": "Crea tu cuenta",
+    "socialProof": "🔆 Ven a ahorrar tiempo y dinero."
+  },
+  "ogDescription": "La forma inteligente para que tu familia ahorre en compras. Desbloquea mejores precios y reduce gastos innecesarios con la ayuda de la inteligencia artificial."
+}
+

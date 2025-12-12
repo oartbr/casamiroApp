@@ -1,4 +1,6 @@
 {
+  "title": "Casamiro - Economize nas Compras com Inteligência Artificial",
+  "ogDescription": "O jeito inteligente da sua família economizar nas compras. Desbloqueie preços melhores e reduza gastos desnecessários com a ajuda da inteligência artificial.",
   "app-name": "Registro de Garantias",
   "install": {
     "button": "Instalar como App"
@@ -23,7 +25,8 @@
     "edit-garantia": "Editar Garantias",
     "scan": "Escanear",
     "profile-menu": "Perfil",
-    "lists": "Listas"
+    "lists": "Listas",
+    "referrals": "Indicações"
   },
   "formInputs": {
     "avatarInput": {
