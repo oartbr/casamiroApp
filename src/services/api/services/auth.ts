@@ -78,6 +78,7 @@ export function useAuthFacebookLoginService() {
 export type AuthSignUpRequest = {
   email: string;
   password: string;
+  referredByCode?: string;
 };
 
 export type AuthSignUpResponse = Tokens & {

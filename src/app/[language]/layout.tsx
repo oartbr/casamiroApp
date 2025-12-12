@@ -25,6 +25,7 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import ThemeProvider from "@/components/theme/theme-provider";
 import Version from "@/components/version/version";
 import Footer from "@/components/footer/footer";
+import { generateOpenGraphMetadata } from "@/lib/metadata";
 
 type Props = {
   params: { language: string };
@@ -34,7 +35,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { t } = await getServerTranslation(params.language, "common");
 
   return {
-    title: t("title"),
+    ...generateOpenGraphMetadata({
+      title: t("title"),
+      description: t("ogDescription", {
+        defaultValue:
+          "O jeito inteligente da sua família economizar nas compras. Desbloqueie preços melhores e reduza gastos desnecessários com a ajuda da inteligência artificial.",
+      }),
+    }),
     manifest: "/manifest.json",
   };
 }

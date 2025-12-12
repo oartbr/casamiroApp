@@ -18,6 +18,7 @@ import useAuthTokens from "@/services/auth/use-auth-tokens";
 import Link from "@mui/material/Link/Link";
 import { setReturningUserCookie } from "@/services/auth/returning-user-cookie";
 import { setPhoneNumberCookie } from "@/services/auth/phone-number-cookie";
+import { clearReferralCodeCookie } from "@/services/auth/referral-cookie";
 
 type RegisterFormData = {
   confirmationCode: string;
@@ -100,6 +101,7 @@ function Form({ params }: Props) {
   const onSubmit = handleSubmit(async (formData) => {
     const phoneNumber = searchParams.get("p");
     const returnTo = searchParams.get("returnTo");
+    const garantiaId = searchParams.get("garantiaId" + params);
 
     const { data, status } = await fetchCheckCode({
       phoneNumber: phoneNumber ?? "",
@@ -155,14 +157,17 @@ function Form({ params }: Props) {
         });
         setUser(data.user);
         setReturningUserCookie();
+
+        // Clear referral code cookie after successful phone verification
+        clearReferralCodeCookie();
+
         // If returnTo is provided, redirect there after login
         if (returnTo) {
           router.replace(decodeURIComponent(returnTo));
-        } else if (params.id) {
-          // console.log({ go: "register" });
-          router.replace(`register`);
+        } else if (garantiaId) {
+          router.replace(`${garantiaId}/register`);
         } else {
-          // console.log({ go: "listing" });
+          // Redirect to dashboard (home page)
           router.replace(`/`);
         }
       } else {

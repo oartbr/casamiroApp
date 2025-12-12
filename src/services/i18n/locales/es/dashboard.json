@@ -20,7 +20,8 @@
     "markAsIncomplete": "Desmarcar",
     "editList": "Editar Lista",
     "scanNota": "Escanear Factura",
-    "sendInvite": "Invitar"
+    "sendInvite": "Invitar",
+    "viewReferrals": "Ver Referidos"
   },
   "greetings": {
     "morning": "¡Buenos días {{user}}!",
@@ -31,7 +32,9 @@
     "learning": "Casamiro está aprendiendo sobre tus hábitos. En unos días, comenzarás a ver recomendaciones para mejorar tu vida financiera.",
     "scanNotas": "Escanea tus facturas",
     "useList": "Usa la lista para preparar tus compras",
-    "inviteFamily": "Invita a tu familia o amigos a tus grupos."
+    "inviteFamily": "Invita a tu familia o amigos a tus grupos.",
+    "startRecommending": "¡Comparte tu enlace de referido y gana reconocimiento!",
+    "shareRecommendations": "¡Ya has referido {{count}} persona(s)! Sigue compartiendo tu enlace."
   },
   "lastNotaTitle": "Última compra registrada",
   "spendingStatistics": "Estadísticas de Gastos",

@@ -23,6 +23,7 @@ import Chip from "@mui/material/Chip";
 import { isGoogleAuthEnabled } from "@/services/social-auth/google/google-config";
 import { isFacebookAuthEnabled } from "@/services/social-auth/facebook/facebook-config";
 import { IS_SIGN_UP_ENABLED } from "@/services/auth/config";
+import { useRouter } from "next/navigation";
 
 type SignInFormData = {
   email: string;
@@ -66,6 +67,7 @@ function Form() {
   const { setTokensInfo } = useAuthTokens();
   const fetchAuthLogin = useAuthLoginService();
   const { t } = useTranslation("sign-in");
+  const router = useRouter();
   const validationSchema = useValidationSchema();
 
   const methods = useForm<SignInFormData>({
@@ -104,6 +106,11 @@ function Form() {
       });
       setUser(data.user);
       setReturningUserCookie();
+
+      // Redirect to dashboard after successful login
+      setTimeout(() => {
+        router.replace("/");
+      }, 100);
     }
   });
 

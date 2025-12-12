@@ -18,11 +18,15 @@ const roles = Object.values(RoleEnum).filter(
   (value) => !Number.isNaN(Number(value))
 ) as RoleEnum[];
 
+// Default allowed roles - exclude GUEST (3) from protected routes
+const defaultAllowedRoles = roles.filter((role) => role !== RoleEnum.GUEST);
+
 function withPageRequiredAuth(
   Component: FunctionComponent<PropsTy>,
   options?: OptionsType
 ) {
-  const optionRoles = options?.roles || roles;
+  // Compute allowed roles once - stable value from HOC options
+  const allowedRoles = options?.roles || defaultAllowedRoles;
 
   return function WithPageRequiredAuth(props: PropsTy) {
     const { user, isLoaded } = useAuth();
@@ -31,14 +35,25 @@ function withPageRequiredAuth(
 
     useEffect(() => {
       const check = () => {
-        if (
-          (user &&
-            user?.role?.id &&
-            optionRoles.includes(Number(user?.role.id))) ||
-          !isLoaded
-        )
-          return;
+        if (!isLoaded) return;
 
+        // If user exists but is GUEST, redirect to confirm-code
+        if (user && user?.role?.id === RoleEnum.GUEST) {
+          const phoneNumber = user.phoneNumber?.toString() || "";
+          router.replace(`confirm-code?p=${phoneNumber}`);
+          return;
+        }
+
+        // If user has valid role, allow access
+        if (
+          user &&
+          user?.role?.id &&
+          allowedRoles.includes(Number(user?.role.id))
+        ) {
+          return;
+        }
+
+        // No user or invalid role - redirect to login
         const currentLocation = window.location.toString();
         const returnToPath =
           currentLocation.replace(new URL(currentLocation).origin, "") ||
@@ -57,11 +72,12 @@ function withPageRequiredAuth(
       };
 
       check();
-    }, [user, isLoaded, router, language]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user, isLoaded, router, language]); // allowedRoles is stable from HOC closure
 
     return user &&
       user?.role?.id &&
-      optionRoles.includes(Number(user?.role.id)) ? (
+      allowedRoles.includes(Number(user?.role.id)) ? (
       <Component {...props} />
     ) : null;
   };
