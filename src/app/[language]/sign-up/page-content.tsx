@@ -245,7 +245,7 @@ function Form(props: Props) {
                 keyExtractor={(option) => option.id.toString()}
                 renderOption={(option) => (
                   <span>
-                    {option.name}
+                    {option.name}{" "}
                     <MuiLink href="/privacy-policy" target="_blank">
                       {t("sign-up:inputs.policy.label")}
                     </MuiLink>

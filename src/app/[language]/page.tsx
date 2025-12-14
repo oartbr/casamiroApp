@@ -19,7 +19,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       defaultValue:
         "O jeito inteligente da sua família economizar nas compras. Desbloqueie preços melhores e reduza gastos desnecessários com a ajuda da inteligência artificial.",
     }),
-    url: `/${params.language}`,
+    url: `/`,
+    image: "shopping.png",
   });
 }
 
