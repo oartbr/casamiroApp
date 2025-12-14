@@ -55,23 +55,10 @@ export function ReferralLanding(props: Props) {
               gutterBottom
               sx={{ fontWeight: "light", width: "80%" }}
             >
-              {isValidCode ? t("hero.subtitle") : t("hero.subtitleDefault")}
+              {isValidCode
+                ? `${t("hero.subtitle")} ${t("referralCodeMessage", { referralCode })}`
+                : t("hero.subtitleDefault")}
             </Typography>
-            {isValidCode && (
-              <Box
-                sx={{
-                  backgroundColor: "primary.light",
-                  color: "primary.contrastText",
-                  p: 2,
-                  borderRadius: 2,
-                  mb: 2,
-                }}
-              >
-                <Typography variant="body1" sx={{ fontWeight: "bold" }}>
-                  {t("referralCodeMessage")} {referralCode}
-                </Typography>
-              </Box>
-            )}
             <Button
               variant="contained"
               LinkComponent={Link}
@@ -111,7 +98,7 @@ export function ReferralLanding(props: Props) {
                 className="beneficios"
               />
             </Box>
-            <Typography variant="body1" paragraph className="featureList">
+            <Box className="featureList">
               <Box
                 component="ul"
                 sx={{ listStyle: "none", pl: 0, mb: 2, fontWeight: "light" }}
@@ -132,7 +119,11 @@ export function ReferralLanding(props: Props) {
                   >
                     ✓
                   </Typography>
-                  <Typography variant="body1" component="span">
+                  <Typography
+                    variant="body1"
+                    component="span"
+                    sx={{ fontWeight: "100" }}
+                  >
                     {t("easyAndPractical.features.readReceipts")}
                   </Typography>
                 </Box>
@@ -145,7 +136,11 @@ export function ReferralLanding(props: Props) {
                   >
                     ✓
                   </Typography>
-                  <Typography variant="body1" component="span">
+                  <Typography
+                    variant="body1"
+                    component="span"
+                    sx={{ fontWeight: "100" }}
+                  >
                     {t("easyAndPractical.features.organizeLists")}
                   </Typography>
                 </Box>
@@ -158,7 +153,11 @@ export function ReferralLanding(props: Props) {
                   >
                     ✓
                   </Typography>
-                  <Typography variant="body1" component="span">
+                  <Typography
+                    variant="body1"
+                    component="span"
+                    sx={{ fontWeight: "100" }}
+                  >
                     {t("easyAndPractical.features.enjoyOffers")}
                   </Typography>
                 </Box>
@@ -171,7 +170,11 @@ export function ReferralLanding(props: Props) {
                   >
                     ✓
                   </Typography>
-                  <Typography variant="body1" component="span">
+                  <Typography
+                    variant="body1"
+                    component="span"
+                    sx={{ fontWeight: "100" }}
+                  >
                     {t("easyAndPractical.features.organizeFamily")}
                   </Typography>
                 </Box>
@@ -184,12 +187,16 @@ export function ReferralLanding(props: Props) {
                   >
                     ✓
                   </Typography>
-                  <Typography variant="body1" component="span">
+                  <Typography
+                    variant="body1"
+                    component="span"
+                    sx={{ fontWeight: "100" }}
+                  >
                     {t("easyAndPractical.features.financialTranquility")}
                   </Typography>
                 </Box>
               </Box>
-            </Typography>
+            </Box>
           </Box>
           <Box display="flex" flexDirection="row" gap={4}>
             <Image
@@ -206,7 +213,7 @@ export function ReferralLanding(props: Props) {
           <Typography variant="h4" gutterBottom sx={{ fontWeight: "light" }}>
             {t("benefits.title")}
           </Typography>
-          <Typography variant="body1" paragraph className="featureList">
+          <Box className="featureList">
             <Box
               component="ul"
               sx={{ listStyle: "none", pl: 0, mb: 2, fontWeight: "light" }}
@@ -230,7 +237,11 @@ export function ReferralLanding(props: Props) {
                 />
               </Box>
               <Box component="li" display="flex" alignItems="center" mb={1}>
-                <Typography variant="body1" component="span">
+                <Typography
+                  variant="body1"
+                  component="span"
+                  sx={{ fontWeight: "100" }}
+                >
                   {t("benefits.spendLess")}
                 </Typography>
                 <Box component="span" mr={1} className="beneficioItem">
@@ -238,7 +249,11 @@ export function ReferralLanding(props: Props) {
                 </Box>
               </Box>
               <Box component="li" display="flex" alignItems="center" mb={1}>
-                <Typography variant="body1" component="span">
+                <Typography
+                  variant="body1"
+                  component="span"
+                  sx={{ fontWeight: "100" }}
+                >
                   {t("benefits.receiveOffers")}
                 </Typography>
                 <Box component="span" mr={1} className="beneficioItem">
@@ -246,7 +261,11 @@ export function ReferralLanding(props: Props) {
                 </Box>
               </Box>
               <Box component="li" display="flex" alignItems="center" mb={1}>
-                <Typography variant="body1" component="span">
+                <Typography
+                  variant="body1"
+                  component="span"
+                  sx={{ fontWeight: "100" }}
+                >
                   {t("benefits.organizedHome")}
                 </Typography>
                 <Box component="span" mr={1} className="beneficioItem">
@@ -254,7 +273,11 @@ export function ReferralLanding(props: Props) {
                 </Box>
               </Box>
               <Box component="li" display="flex" alignItems="center" mb={1}>
-                <Typography variant="body1" component="span">
+                <Typography
+                  variant="body1"
+                  component="span"
+                  sx={{ fontWeight: "100" }}
+                >
                   {t("benefits.comparePrices")}
                 </Typography>
                 <Box component="span" mr={1} className="beneficioItem">
@@ -262,7 +285,11 @@ export function ReferralLanding(props: Props) {
                 </Box>
               </Box>
               <Box component="li" display="flex" alignItems="center">
-                <Typography variant="body1" component="span">
+                <Typography
+                  variant="body1"
+                  component="span"
+                  sx={{ fontWeight: "100" }}
+                >
                   {t("benefits.familyHelping")}
                 </Typography>
                 <Box component="span" mr={1} className="beneficioItem">
@@ -284,7 +311,7 @@ export function ReferralLanding(props: Props) {
                 />
               </Box>
             </Box>
-          </Typography>
+          </Box>
           <Box
             display="flex"
             flexDirection="column"

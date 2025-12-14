@@ -1,11 +1,11 @@
 {
-  "title": "Indique e Ganhe - Casamiro",
+  "title": "Junte-se a nossa família e economize tempo e dinheiro.",
   "invalidCode": "Código de indicação inválido",
-  "referralCodeMessage": "Você foi indicado por:",
+  "referralCodeMessage": "Seu código de indicação, já está salvo e será contabilizado para seu amigo quando você se cadastrar!",
   "hero": {
-    "title": "Você foi convidado! 🎉",
+    "title": "Alguém quer que você também aproveite os benefícios do Casamiro!",
     "titleDefault": "O jeito inteligente da sua família economizar nas compras.",
-    "subtitle": "Crie sua conta e comece a economizar agora. Seu código de indicação já está salvo!",
+    "subtitle": "Conheça mais sobre as vantagens de usar o Casamiro e economize tempo e dinheiro.",
     "subtitleDefault": "Desbloqueie preços melhores e reduza gastos desnecessários com a ajuda da inteligência artificial.",
     "button": "Comece agora!",
     "socialProof": "🔆 Economize tempo e dinheiro com ajuda de Inteligência Artificial."

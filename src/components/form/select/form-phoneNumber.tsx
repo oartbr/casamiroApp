@@ -32,19 +32,21 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({
   areaCodeDefault,
   numberLabel,
   defaultValue,
-  region,
+  // region,
 }) => {
   const { control, setValue } = useFormContext();
   const areaCode = useWatch({ name: `areaCode` });
   const phNumber = useWatch({ name: `phNumber` });
 
   const countryCodes = getCountryDataList()
-    .filter((country: ICountryData) =>
-      region ? country.continent === region : true
+    .filter(
+      (country: ICountryData) =>
+        // region ? country.continent === region : true
+        country.name === "Brazil"
     )
     .map((country: ICountryData) => {
       return {
-        label: country.name,
+        label: "Brasil +55",
         value: country.iso2,
         code: country.phone,
       };

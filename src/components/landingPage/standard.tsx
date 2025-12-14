@@ -90,7 +90,11 @@ export function StandardLandingPage() {
                   >
                     ✓
                   </Typography>
-                  <Typography variant="body1" component="span">
+                  <Typography
+                    variant="body1"
+                    component="span"
+                    sx={{ fontWeight: "100" }}
+                  >
                     {t("easyAndPractical.features.readReceipts")}
                   </Typography>
                 </Box>
@@ -103,7 +107,11 @@ export function StandardLandingPage() {
                   >
                     ✓
                   </Typography>
-                  <Typography variant="body1" component="span">
+                  <Typography
+                    variant="body1"
+                    component="span"
+                    sx={{ fontWeight: "100" }}
+                  >
                     {t("easyAndPractical.features.organizeLists")}
                   </Typography>
                 </Box>
@@ -116,7 +124,11 @@ export function StandardLandingPage() {
                   >
                     ✓
                   </Typography>
-                  <Typography variant="body1" component="span">
+                  <Typography
+                    variant="body1"
+                    component="span"
+                    sx={{ fontWeight: "100" }}
+                  >
                     {t("easyAndPractical.features.enjoyOffers")}
                   </Typography>
                 </Box>
@@ -129,7 +141,11 @@ export function StandardLandingPage() {
                   >
                     ✓
                   </Typography>
-                  <Typography variant="body1" component="span">
+                  <Typography
+                    variant="body1"
+                    component="span"
+                    sx={{ fontWeight: "100" }}
+                  >
                     {t("easyAndPractical.features.organizeFamily")}
                   </Typography>
                 </Box>
@@ -142,7 +158,11 @@ export function StandardLandingPage() {
                   >
                     ✓
                   </Typography>
-                  <Typography variant="body1" component="span">
+                  <Typography
+                    variant="body1"
+                    component="span"
+                    sx={{ fontWeight: "100" }}
+                  >
                     {t("easyAndPractical.features.financialTranquility")}
                   </Typography>
                 </Box>
@@ -188,7 +208,11 @@ export function StandardLandingPage() {
                 />
               </Box>
               <Box component="li" display="flex" alignItems="center" mb={1}>
-                <Typography variant="body1" component="span">
+                <Typography
+                  variant="body1"
+                  component="span"
+                  sx={{ fontWeight: "100" }}
+                >
                   {t("benefits.spendLess")}
                 </Typography>
                 <Box component="span" mr={1} className="beneficioItem">
@@ -196,7 +220,11 @@ export function StandardLandingPage() {
                 </Box>
               </Box>
               <Box component="li" display="flex" alignItems="center" mb={1}>
-                <Typography variant="body1" component="span">
+                <Typography
+                  variant="body1"
+                  component="span"
+                  sx={{ fontWeight: "100" }}
+                >
                   {t("benefits.receiveOffers")}
                 </Typography>
                 <Box component="span" mr={1} className="beneficioItem">
@@ -204,7 +232,11 @@ export function StandardLandingPage() {
                 </Box>
               </Box>
               <Box component="li" display="flex" alignItems="center" mb={1}>
-                <Typography variant="body1" component="span">
+                <Typography
+                  variant="body1"
+                  component="span"
+                  sx={{ fontWeight: "100" }}
+                >
                   {t("benefits.organizedHome")}
                 </Typography>
                 <Box component="span" mr={1} className="beneficioItem">
@@ -212,7 +244,11 @@ export function StandardLandingPage() {
                 </Box>
               </Box>
               <Box component="li" display="flex" alignItems="center" mb={1}>
-                <Typography variant="body1" component="span">
+                <Typography
+                  variant="body1"
+                  component="span"
+                  sx={{ fontWeight: "100" }}
+                >
                   {t("benefits.comparePrices")}
                 </Typography>
                 <Box component="span" mr={1} className="beneficioItem">
@@ -220,7 +256,11 @@ export function StandardLandingPage() {
                 </Box>
               </Box>
               <Box component="li" display="flex" alignItems="center">
-                <Typography variant="body1" component="span">
+                <Typography
+                  variant="body1"
+                  component="span"
+                  sx={{ fontWeight: "100" }}
+                >
                   {t("benefits.familyHelping")}
                 </Typography>
                 <Box component="span" mr={1} className="beneficioItem">
