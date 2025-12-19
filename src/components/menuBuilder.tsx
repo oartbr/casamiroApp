@@ -187,7 +187,11 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({
                   alignItems="center"
                   gap={1}
                   className="groupIconHeader"
-                  sx={{ cursor: "pointer", textDecoration: "none", color: "inherit" }}
+                  sx={{
+                    cursor: "pointer",
+                    textDecoration: "none",
+                    color: "inherit",
+                  }}
                 >
                   <Image
                     src={activeGroup.iconUrl}
