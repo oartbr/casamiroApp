@@ -181,10 +181,17 @@ const MenuBuilder: React.FC<MenuBuilderProps> = ({
                 <CircularProgress size={20} color="inherit" />
               ) : activeGroup?.iconUrl ? (
                 <Box
+                  component={Link}
+                  href="/groups"
                   display="flex"
                   alignItems="center"
                   gap={1}
                   className="groupIconHeader"
+                  sx={{
+                    cursor: "pointer",
+                    textDecoration: "none",
+                    color: "inherit",
+                  }}
                 >
                   <Image
                     src={activeGroup.iconUrl}
