@@ -22,16 +22,25 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import DeleteIcon from "@mui/icons-material/Delete";
 import useAuth from "@/services/auth/use-auth";
+import useAuthActions from "@/services/auth/use-auth-actions";
 import {
   useUserGroupsQuery,
   useCreateGroupMutation,
+  useDeleteGroupMutation,
 } from "@/services/api/react-query/groups-queries";
 import {
   useAcceptInvitationMutation,
   useDeclineInvitationMutation,
   useGroupMembershipsQuery,
 } from "@/services/api/react-query/memberships-queries";
+import { useSetActiveGroupMutation } from "@/services/api/react-query/users-queries";
+import { useSnackbar } from "notistack";
 import { Group, CreateGroupRequest } from "@/services/api/types/group";
 import { Membership } from "@/services/api/types/membership";
 
@@ -73,7 +82,16 @@ function PendingInvitationsCount({ groupId }: { groupId: string }) {
 function GroupsPageContent() {
   const { t } = useTranslation("groups");
   const { user } = useAuth();
+  const { setUser } = useAuthActions();
+  const { enqueueSnackbar } = useSnackbar();
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
+  const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [groupToDelete, setGroupToDelete] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
   const [newGroup, setNewGroup] = useState<CreateGroupRequest>({
     name: "",
     description: "",
@@ -91,6 +109,8 @@ function GroupsPageContent() {
   const createGroupMutation = useCreateGroupMutation();
   const acceptInvitationMutation = useAcceptInvitationMutation();
   const declineInvitationMutation = useDeclineInvitationMutation();
+  const setActiveGroupMutation = useSetActiveGroupMutation();
+  const deleteGroupMutation = useDeleteGroupMutation();
 
   // Don't render anything until user is loaded
   if (!user) {
@@ -161,6 +181,99 @@ function GroupsPageContent() {
     } catch (error) {
       console.error("Failed to decline invitation:", error);
     }
+  };
+
+  const handleSetAsActive = async (groupId: string) => {
+    if (!user?.id) return;
+
+    try {
+      const updatedUser = await setActiveGroupMutation.mutateAsync({
+        userId: user.id.toString(),
+        groupId: groupId,
+      });
+
+      // Update the user data in auth context
+      setUser(updatedUser);
+
+      enqueueSnackbar(t("groups:actions.setAsDefaultSuccess"), {
+        variant: "success",
+      });
+      handleMenuClose();
+    } catch (error) {
+      console.error("Failed to set group as active:", error);
+      enqueueSnackbar(t("groups:actions.setAsDefaultError"), {
+        variant: "error",
+      });
+    }
+  };
+
+  const handleMenuOpen = (
+    event: React.MouseEvent<HTMLElement>,
+    groupId: string
+  ) => {
+    setMenuAnchorEl(event.currentTarget);
+    setSelectedGroupId(groupId);
+  };
+
+  const handleMenuClose = () => {
+    setMenuAnchorEl(null);
+    setSelectedGroupId(null);
+  };
+
+  const handleDeleteClick = (groupId: string) => {
+    const group = transformedGroups.find((g) => g.id === groupId);
+    if (!group) return;
+
+    // Check if it's the default group
+    if (user?.activeGroupId === groupId) {
+      enqueueSnackbar(
+        t("groups:actions.cannotDeleteDefaultGroup") ||
+          "Cannot delete your default group",
+        { variant: "error" }
+      );
+      handleMenuClose();
+      return;
+    }
+
+    // Check if it's the only group
+    if (transformedGroups.length <= 1) {
+      enqueueSnackbar(
+        t("groups:actions.cannotDeleteOnlyGroup") ||
+          "Cannot delete your only group",
+        { variant: "error" }
+      );
+      handleMenuClose();
+      return;
+    }
+
+    setGroupToDelete({ id: groupId, name: group.name });
+    setDeleteDialogOpen(true);
+    handleMenuClose();
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!groupToDelete) return;
+
+    try {
+      await deleteGroupMutation.mutateAsync(groupToDelete.id);
+      enqueueSnackbar(
+        t("groups:actions.deleteGroupSuccess") || "Group deleted successfully",
+        { variant: "success" }
+      );
+      setDeleteDialogOpen(false);
+      setGroupToDelete(null);
+    } catch (error) {
+      console.error("Failed to delete group:", error);
+      enqueueSnackbar(
+        t("groups:actions.deleteGroupError") || "Failed to delete group",
+        { variant: "error" }
+      );
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false);
+    setGroupToDelete(null);
   };
 
   if (isLoading) {
@@ -241,7 +354,7 @@ function GroupsPageContent() {
     .filter((invitation) => invitation !== null) as PendingInvitation[];
 
   return (
-    <Container maxWidth="md" className="mainContainer">
+    <Container maxWidth="lg" className="mainContainer">
       <Grid
         container
         spacing={3}
@@ -267,7 +380,7 @@ function GroupsPageContent() {
         <Grid item lg={12}>
           <Grid container spacing={3}>
             {transformedGroups.map((group) => (
-              <Grid item xs={12} sm={6} md={4} key={group.id}>
+              <Grid item xs={12} sm={6} md={6} lg={6} key={group.id}>
                 <Card>
                   <CardContent>
                     <Box display="flex" alignItems="center" mb={2}>
@@ -322,15 +435,35 @@ function GroupsPageContent() {
                     )}
                   </CardContent>
                   <CardActions>
-                    {group.role === "admin" && (
-                      <Button
-                        size="small"
-                        component={Link}
-                        href={`/groups/${group.id}`}
+                    <Box
+                      display="flex"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      width="100%"
+                    >
+                      {user?.activeGroupId === group.id && (
+                        <Chip
+                          label={t("groups:actions.defaultGroup")}
+                          color="primary"
+                          size="small"
+                          variant="outlined"
+                        />
+                      )}
+                      <Box
+                        display="flex"
+                        alignItems="center"
+                        gap={1}
+                        marginLeft="auto"
                       >
-                        {t("groups:actions.open")}
-                      </Button>
-                    )}
+                        <IconButton
+                          onClick={(e) => handleMenuOpen(e, group.id)}
+                          size="small"
+                          aria-label="group actions"
+                        >
+                          <MoreVertIcon />
+                        </IconButton>
+                      </Box>
+                    </Box>
                   </CardActions>
                 </Card>
               </Grid>
@@ -352,6 +485,63 @@ function GroupsPageContent() {
             )}
           </Grid>
         </Grid>
+
+        {/* Group Actions Menu */}
+        <Menu
+          anchorEl={menuAnchorEl}
+          open={Boolean(menuAnchorEl)}
+          onClose={handleMenuClose}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+        >
+          {selectedGroupId && user?.activeGroupId !== selectedGroupId && (
+            <MenuItem
+              onClick={() =>
+                selectedGroupId && handleSetAsActive(selectedGroupId)
+              }
+              disabled={setActiveGroupMutation.isPending}
+            >
+              {setActiveGroupMutation.isPending ? (
+                <Box display="flex" alignItems="center" gap={1}>
+                  <CircularProgress size={16} />
+                  {t("groups:actions.settingDefault")}
+                </Box>
+              ) : (
+                t("groups:actions.setAsDefault")
+              )}
+            </MenuItem>
+          )}
+          {selectedGroupId &&
+            transformedGroups.find((g) => g.id === selectedGroupId)?.role ===
+              "admin" && (
+              <MenuItem
+                component={Link}
+                href={`/groups/${selectedGroupId}`}
+                onClick={handleMenuClose}
+              >
+                {t("groups:actions.open")}
+              </MenuItem>
+            )}
+          {selectedGroupId &&
+            transformedGroups.find((g) => g.id === selectedGroupId)?.role ===
+              "admin" && (
+              <MenuItem
+                onClick={() =>
+                  selectedGroupId && handleDeleteClick(selectedGroupId)
+                }
+                sx={{ color: "error.main" }}
+              >
+                <DeleteIcon sx={{ mr: 1, fontSize: 20 }} />
+                {t("groups:actions.delete")}
+              </MenuItem>
+            )}
+        </Menu>
 
         {/* Pending Invitations */}
         {transformedPendingInvitations.length > 0 && (
@@ -448,6 +638,51 @@ function GroupsPageContent() {
             </Grid>
           </Grid>
         )}
+
+        {/* Delete Group Confirmation Dialog */}
+        <Dialog
+          open={deleteDialogOpen}
+          onClose={handleDeleteCancel}
+          maxWidth="sm"
+          fullWidth
+        >
+          <DialogTitle>
+            {t("groups:actions.deleteGroupConfirm") || "Delete Group"}
+          </DialogTitle>
+          <DialogContent>
+            <Typography>
+              {t("groups:actions.deleteGroupMessage") ||
+                "Are you sure you want to delete this group? This action cannot be undone."}
+            </Typography>
+            {groupToDelete && (
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+                <strong>{groupToDelete.name}</strong>
+              </Typography>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleDeleteCancel}>
+              {t("groups:actions.cancel")}
+            </Button>
+            <Button
+              onClick={handleDeleteConfirm}
+              variant="contained"
+              color="error"
+              disabled={deleteGroupMutation.isPending}
+              startIcon={
+                deleteGroupMutation.isPending ? (
+                  <CircularProgress size={16} color="inherit" />
+                ) : (
+                  <DeleteIcon />
+                )
+              }
+            >
+              {deleteGroupMutation.isPending
+                ? t("groups:actions.deleting")
+                : t("groups:actions.delete")}
+            </Button>
+          </DialogActions>
+        </Dialog>
 
         {/* Create Group Dialog */}
         <Dialog

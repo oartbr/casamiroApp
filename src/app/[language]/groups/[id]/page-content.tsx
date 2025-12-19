@@ -41,6 +41,7 @@ import Link from "@/components/link";
 import withPageRequiredAuth from "@/services/auth/with-page-required-auth";
 import { RoleEnum } from "@/services/api/types/role";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import EditIcon from "@mui/icons-material/Edit";
 import { useSnackbar } from "notistack";
 import { GroupDetailSkeleton } from "@/components/skeletons/GroupDetailSkeleton";
 
@@ -663,21 +664,32 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
               {t("groups:actions.viewLists")}
             </Button> */}
             {canManage && (
-              <Button
-                variant="contained"
-                onClick={handleShareInvite}
-                color="primary"
-                disabled={createInvitationMutation.isPending}
-                startIcon={
-                  createInvitationMutation.isPending ? (
-                    <CircularProgress size={16} color="inherit" />
-                  ) : null
-                }
-              >
-                {createInvitationMutation.isPending
-                  ? t("actions.inviting")
-                  : t("groups:actions.invite")}
-              </Button>
+              <>
+                <Button
+                  component={Link}
+                  href={`/groups/${groupId}/edit`}
+                  variant="outlined"
+                  color="primary"
+                  startIcon={<EditIcon />}
+                >
+                  {t("groups:actions.edit")}
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={handleShareInvite}
+                  color="primary"
+                  disabled={createInvitationMutation.isPending}
+                  startIcon={
+                    createInvitationMutation.isPending ? (
+                      <CircularProgress size={16} color="inherit" />
+                    ) : null
+                  }
+                >
+                  {createInvitationMutation.isPending
+                    ? t("actions.inviting")
+                    : t("groups:actions.invite")}
+                </Button>
+              </>
             )}
             {user?.activeGroupId !== groupId && (
               <Button

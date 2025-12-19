@@ -25,7 +25,14 @@
     "settingDefault": "Definindo...",
     "defaultGroup": "Grupo padrão",
     "setAsDefaultSuccess": "Grupo definido como padrão com sucesso!",
-    "setAsDefaultError": "Não foi possível definir o grupo como padrão."
+    "setAsDefaultError": "Não foi possível definir o grupo como padrão.",
+    "cannotDeleteDefaultGroup": "No se puede eliminar tu grupo predeterminado",
+    "cannotDeleteOnlyGroup": "No se puede eliminar tu único grupo",
+    "deleteGroupSuccess": "¡Grupo eliminado con éxito!",
+    "deleteGroupError": "No se pudo eliminar el grupo",
+    "deleteGroupConfirm": "Eliminar Grupo",
+    "deleteGroupMessage": "¿Estás seguro de que deseas eliminar este grupo? Esta acción no se puede deshacer.",
+    "deleting": "Eliminando..."
   },
   "sections": {
     "active": "Ativos",
