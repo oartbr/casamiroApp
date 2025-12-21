@@ -19,6 +19,8 @@ import Link from "@mui/material/Link/Link";
 import { setReturningUserCookie } from "@/services/auth/returning-user-cookie";
 import { setPhoneNumberCookie } from "@/services/auth/phone-number-cookie";
 import { clearReferralCodeCookie } from "@/services/auth/referral-cookie";
+// import { useGetOnboardingStatusService } from "@/services/api/services/onboarding";
+import { API_URL } from "@/services/api/config";
 
 type RegisterFormData = {
   confirmationCode: string;
@@ -87,6 +89,7 @@ function Form({ params }: Props) {
   const searchParams = useSearchParams();
   const { setTokensInfo } = useAuthTokens();
   const { setUser } = useAuthActions();
+  // fetchOnboardingStatus is imported but not used, so we remove it to fix the unused import warning.
   //console.log({ validation: searchParams.get("p") });
 
   const methods = useForm<RegisterFormData>({
@@ -167,8 +170,62 @@ function Form({ params }: Props) {
         } else if (garantiaId) {
           router.replace(`${garantiaId}/register`);
         } else {
-          // Redirect to dashboard (home page)
-          router.replace(`/`);
+          // Check if user needs onboarding
+          // Make direct fetch call with token to avoid timing issues with useFetch hook
+          try {
+            const userId = data.user.id || data.user._id;
+            console.log("Checking onboarding status for user:", userId);
+
+            // API_URL already includes /v1, so we use it directly
+            const onboardingUrl = `${API_URL}/v1/onboarding/${userId}/status`;
+            console.log("Fetching onboarding status from:", onboardingUrl);
+            const response = await fetch(onboardingUrl, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${data.token}`,
+                "x-custom-lang": params.language || "pt",
+              },
+            });
+
+            console.log(
+              "Onboarding status response:",
+              response.status,
+              response.statusText
+            );
+
+            if (response.ok) {
+              const onboardingData = await response.json();
+              console.log("Onboarding data:", onboardingData);
+
+              if (onboardingData.needsOnboarding) {
+                console.log(
+                  "User needs onboarding, redirecting to /onboarding"
+                );
+                // Include language in the path to avoid middleware redirect
+                router.replace(`/${params.language}/onboarding`);
+              } else {
+                console.log(
+                  "User does not need onboarding, redirecting to home"
+                );
+                // Redirect to dashboard (home page)
+                router.replace(`/`);
+              }
+            } else {
+              // If request fails, redirect to dashboard
+              const errorText = await response.text();
+              console.error(
+                "Failed to check onboarding status:",
+                response.status,
+                errorText
+              );
+              router.replace(`/`);
+            }
+          } catch (error) {
+            console.error("Error checking onboarding status:", error);
+            // If onboarding check fails, redirect to dashboard
+            router.replace(`/`);
+          }
         }
       } else {
         // console.log({ go: "sign-up" });

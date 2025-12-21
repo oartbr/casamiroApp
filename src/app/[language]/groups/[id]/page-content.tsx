@@ -29,7 +29,6 @@ import useAuthActions from "@/services/auth/use-auth-actions";
 import { useGroupQuery } from "@/services/api/react-query/groups-queries";
 import {
   useGroupMembershipsQuery,
-  useCreateInvitationMutation,
   useUpdateRoleMutation,
   useRemoveMemberMutation,
   useCancelInvitationMutation,
@@ -44,6 +43,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import EditIcon from "@mui/icons-material/Edit";
 import { useSnackbar } from "notistack";
 import { GroupDetailSkeleton } from "@/components/skeletons/GroupDetailSkeleton";
+import WhatsAppInviteButton from "@/components/groups/whatsapp-invite-button";
 
 type MembershipWithOptionalId = Membership & { id?: string };
 
@@ -77,12 +77,23 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
     isLoading: membershipsLoading,
     error: membershipsError,
   } = useGroupMembershipsQuery(groupId, { limit: 100 });
-  const createInvitationMutation = useCreateInvitationMutation();
   const updateRoleMutation = useUpdateRoleMutation();
   const removeMemberMutation = useRemoveMemberMutation();
   const cancelInvitationMutation = useCancelInvitationMutation();
   const setActiveGroupMutation = useSetActiveGroupMutation();
 
+  const handleShareInviteSuccess = () => {
+    // Manually invalidate all group memberships queries to refresh the list
+    queryClient.invalidateQueries({
+      queryKey: ["memberships", "list", "byGroup", groupId],
+    });
+  };
+
+  const handleShareInviteError = (error: Error) => {
+    setShareError(error.message || t("groups:invitations.unableToShareLink"));
+  };
+
+  // Helper function to share invitation link (used for existing invitations)
   const shareInvitationLink = (url: string, message: string) => {
     if (typeof navigator !== "undefined" && navigator.share) {
       // Include URL in text for better WhatsApp compatibility
@@ -106,44 +117,6 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
     }
 
     return Promise.resolve();
-  };
-
-  const handleShareInvite = async () => {
-    if (!group || !user?.id) return;
-    console.log({ group, user });
-    try {
-      setShareError(null);
-      const invitation = await createInvitationMutation.mutateAsync({
-        group_id: groupId,
-        invited_by: user.id.toString(),
-        role: "contributor",
-      });
-
-      // Manually invalidate all group memberships queries to refresh the list
-      queryClient.invalidateQueries({
-        queryKey: ["memberships", "list", "byGroup", groupId],
-      });
-
-      const identifier = invitation.token || invitation._id;
-      if (!identifier) {
-        throw new Error(t("groups:invitations.missingToken"));
-      }
-
-      const origin =
-        typeof window !== "undefined" ? window.location.origin : "";
-      const invitationUrl = `${
-        origin || process.env.NEXT_PUBLIC_APP_URL || "https://casamiro.ai"
-      }/invite/${identifier}`;
-      const message = t("groups:invitations.joinGroup", {
-        group: group.name,
-        user: user?.firstName,
-      });
-
-      await shareInvitationLink(invitationUrl, message);
-    } catch (error) {
-      console.error("Failed to trigger share:", error);
-      setShareError(t("groups:invitations.unableToShareLink"));
-    }
   };
 
   const handleShareExistingInvitation = async (invitation: Membership) => {
@@ -391,6 +364,15 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
               >
                 {shareError}
               </Typography>
+            )}
+          </Box>
+          <Box flex={1} display="flex" justifyContent="flex-start">
+            {user?.activeGroupId === groupId && (
+              <Chip
+                label={t("groups:actions.defaultGroup")}
+                color="primary"
+                variant="outlined"
+              />
             )}
           </Box>
         </Grid>
@@ -674,21 +656,18 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
                 >
                   {t("groups:actions.edit")}
                 </Button>
-                <Button
-                  variant="contained"
-                  onClick={handleShareInvite}
-                  color="primary"
-                  disabled={createInvitationMutation.isPending}
-                  startIcon={
-                    createInvitationMutation.isPending ? (
-                      <CircularProgress size={16} color="inherit" />
-                    ) : null
-                  }
-                >
-                  {createInvitationMutation.isPending
-                    ? t("actions.inviting")
-                    : t("groups:actions.invite")}
-                </Button>
+                {group && (
+                  <WhatsAppInviteButton
+                    groupId={groupId}
+                    groupName={group.name}
+                    variant="contained"
+                    color="primary"
+                    onSuccess={handleShareInviteSuccess}
+                    onError={handleShareInviteError}
+                  >
+                    {t("groups:actions.invite")}
+                  </WhatsAppInviteButton>
+                )}
               </>
             )}
             {user?.activeGroupId !== groupId && (
@@ -707,13 +686,6 @@ function GroupDetailPageContent({ params }: GroupDetailPageContentProps) {
                   ? t("groups:actions.settingDefault")
                   : t("groups:actions.setAsDefault")}
               </Button>
-            )}
-            {user?.activeGroupId === groupId && (
-              <Chip
-                label={t("groups:actions.defaultGroup")}
-                color="primary"
-                variant="outlined"
-              />
             )}
           </Box>
         </Grid>
