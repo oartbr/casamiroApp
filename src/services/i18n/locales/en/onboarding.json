@@ -1,0 +1,121 @@
+{
+  "step1": {
+    "title": "Welcome to Casamiro",
+    "subtitle": "How are you going to use the app?",
+    "continue": "Continue",
+    "contexts": {
+      "casa": {
+        "label": "House / Family",
+        "description": "daily shopping"
+      },
+      "casal": {
+        "label": "Couple",
+        "description": "share tasks and expenses"
+      },
+      "republica": {
+        "label": "Shared house / friends",
+        "description": "lists and collective shopping"
+      },
+      "escritorio": {
+        "label": "Office",
+        "description": "team items"
+      },
+      "condominio": {
+        "label": "Condominium",
+        "description": "expenses and needs"
+      }
+    }
+  },
+  "step2": {
+    "invited": {
+      "title": "You joined the group {{groupName}}",
+      "subtitle": "Besides it, you also have a personal group for private things.",
+      "activeGroup": "Active group:",
+      "personalGroup": "Personal group:",
+      "active": "active",
+      "viewMyGroup": "View my group",
+      "continueInGroup": "Continue in group {{groupName}}"
+    },
+    "notInvited": {
+      "title": "We created your group: \"{{groupName}}\"",
+      "subtitle": "We've already set up a group ready for you to start now.",
+      "yourGroup": "Your group:",
+      "continue": "Continue"
+    },
+    "rename": "Rename",
+    "save": "Save",
+    "cancel": "Cancel",
+    "renameSuccess": "Group renamed successfully",
+    "renameError": "Error renaming group"
+  },
+  "step3": {
+    "title": "Who uses together, decides together",
+    "subtitle_casa": "Invite your family to the group. You can also have a personal group for private things.",
+    "subtitle_casal": "Invite your partner to the group. You can also have a personal group for private things.",
+    "subtitle_republica": "Invite your friends to the group. You can also have a personal group for private things.",
+    "subtitle_escritorio": "Invite your coworkers to the group. You can also have a personal group or for family.",
+    "subtitle_condominio": "Invite your neighbors to the group. You can also have a personal group or for family.",
+    "inviteWhatsApp": "Invite via WhatsApp",
+    "skip": "Skip for now",
+    "error": {
+      "groupNotFound": "Error: group not found."
+    }
+  },
+  "step4": {
+    "titleWithItems": "Want to add more 1–3 items?",
+    "titleWithoutItems": "What is the next purchase or need for this group?",
+    "subtitleWithItems": "Add a few more items to the list.",
+    "subtitleWithoutItems": "It doesn't have to be perfect. Add at least 1 item and you're done.",
+    "suggestions": "Suggestions:",
+    "currentItems": "Items in list:",
+    "placeholder": "Type an item...",
+    "add": "Add",
+    "itemsAdded": "Items added:",
+    "continue": "Continue",
+    "addSuccess": "Item added",
+    "addError": "Error adding item",
+    "addErrorWithStatus": "Error adding item (status: {{status}})"
+  },
+  "step5": {
+    "title": "Now try adding an item by sending a message",
+    "subtitle": "It can be text or voice! Use WhatsApp like you already do.",
+    "examples": "Examples:",
+    "openWhatsApp": "Open WhatsApp",
+    "notNow": "Not now",
+    "example1": "add coffee to the list",
+    "example2": "what's missing?",
+    "example3": "mark purchased: milk"
+  },
+  "step6": {
+    "title": "Want to make Casamiro smarter?",
+    "titleScanned": "✅ Receipt scanned successfully!",
+    "subtitle": "With 1 receipt it understands brands, prices and frequency — and starts suggesting what to do.",
+    "successMessageScanned": "Casamiro will analyze your purchase and better understand how to save.",
+    "scanNow": "Scan receipt now",
+    "doLater": "Do later",
+    "cancelScan": "Cancel",
+    "successMessage": "Receipt scanned successfully! Casamiro now understands your purchases better.",
+    "continue": "Continue",
+    "scanningImageAlt": "How to scan a receipt"
+  },
+  "step7": {
+    "title": "Ready. Casamiro takes care of the next step.",
+    "subtitle": "From now on you'll receive simple suggestions, at the right time, based on what happens in your group.",
+    "referralTitle": "Recommend Casamiro and earn benefits",
+    "referralDescription": "Share your referral link and earn rewards when your friends sign up. You can share via WhatsApp or copy the link.",
+    "goToHome": "Go to home page"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": {
+      "loadData": "Error loading onboarding data. Please reload the page.",
+      "loadOnboarding": "Error loading onboarding",
+      "loadOnboardingStatus": "Error loading onboarding (status: {{status}})",
+      "noData": "Error: response without data",
+      "saveContext": "Error saving context",
+      "complete": "Error completing onboarding"
+    },
+    "noStepAvailable": "No step available"
+  }
+}
+

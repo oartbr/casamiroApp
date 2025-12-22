@@ -246,22 +246,29 @@ export function useCreateListItemMutation() {
     mutationFn: async (data: CreateListItemRequest) => {
       const { status, data: responseData } = await createListItemService(data);
       if (status === HTTP_CODES_ENUM.CREATED) {
-        return responseData;
+        return { ...responseData, listId: data.listId };
       }
       throw new Error("Failed to create list item");
     },
-    onSuccess: (updatedList) => {
+    onSuccess: (updatedList, variables) => {
+      const listId = updatedList.id || variables.listId;
       // Invalidate list queries since items are now embedded
       queryClient.invalidateQueries({
-        queryKey: listQueryKeys.list().sub.byId(updatedList.id).key,
+        queryKey: listQueryKeys.list().sub.byId(listId).key,
+      });
+      // Invalidate items query for this list
+      queryClient.invalidateQueries({
+        queryKey: listQueryKeys.items().sub.byList(listId).key,
       });
       const groupId =
         typeof updatedList.groupId === "string"
           ? updatedList.groupId
-          : updatedList.groupId.id;
-      queryClient.invalidateQueries({
-        queryKey: listQueryKeys.list().sub.byGroup(groupId).key,
-      });
+          : updatedList.groupId?.id;
+      if (groupId) {
+        queryClient.invalidateQueries({
+          queryKey: listQueryKeys.list().sub.byGroup(groupId).key,
+        });
+      }
     },
   });
 }
