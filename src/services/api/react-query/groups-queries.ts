@@ -123,7 +123,10 @@ export const useDeleteGroupMutation = () => {
   return useMutation({
     mutationFn: async (groupId: string) => {
       const { status } = await fetch(groupId);
-      if (status === HTTP_CODES_ENUM.OK) {
+      if (
+        status === HTTP_CODES_ENUM.OK ||
+        status === HTTP_CODES_ENUM.NO_CONTENT
+      ) {
         return groupId;
       }
       throw new Error("Failed to delete group");

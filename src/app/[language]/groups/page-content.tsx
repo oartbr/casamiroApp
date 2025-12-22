@@ -126,12 +126,21 @@ function GroupsPageContent() {
   const handleCreateGroup = async () => {
     if (!user?.id || !newGroup.name.trim()) return;
 
-    try {
-      await createGroupMutation.mutateAsync({
-        ...newGroup,
-        name: newGroup.name.trim(),
-      });
+    // Omit description if it's empty to avoid API validation errors
+    const requestData: CreateGroupRequest = {
+      name: newGroup.name.trim(),
+      settings: newGroup.settings,
+      ...(newGroup.description?.trim() && {
+        description: newGroup.description.trim(),
+      }),
+    };
 
+    try {
+      await createGroupMutation.mutateAsync(requestData);
+      enqueueSnackbar(
+        t("groups:actions.createGroupSuccess") || "Group created successfully",
+        { variant: "success" }
+      );
       setCreateDialogOpen(false);
       setNewGroup({
         name: "",
@@ -143,6 +152,10 @@ function GroupsPageContent() {
       });
     } catch (error) {
       console.error("Failed to create group:", error);
+      enqueueSnackbar(
+        t("groups:actions.createGroupError") || "Failed to create group",
+        { variant: "error" }
+      );
     }
   };
 
@@ -366,23 +379,31 @@ function GroupsPageContent() {
           <h1 style={{ marginTop: 0, textAlign: "left" }}>
             {t("groups:sections.active")} ({transformedGroups.length})
           </h1>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={() => setCreateDialogOpen(true)}
-            color="primary"
-          >
-            {t("groups:actions.create")}
-          </Button>
         </Grid>
 
         {/* Active Groups */}
-        <Grid item lg={12}>
+        <Grid
+          item
+          lg={12}
+          sx={{
+            minWidth: {
+              lg: ((transformedGroups.length % 3) + 2) * 250,
+              md: ((transformedGroups.length % 2) + 2) * 200,
+              sm: ((transformedGroups.length % 2) + 2) * 200,
+            },
+          }}
+        >
           <Grid container spacing={3}>
             {transformedGroups.map((group) => (
-              <Grid item xs={12} sm={6} md={6} lg={6} key={group.id}>
+              <Grid item xs={12} sm={6} md={6} lg={4} key={group.id}>
                 <Card>
-                  <CardContent>
+                  <CardContent
+                    sx={{
+                      flexDirection: "column",
+                      alignItems: "start",
+                      minHeight: 200,
+                    }}
+                  >
                     <Box display="flex" alignItems="center" mb={2}>
                       <Avatar
                         src={group.iconUrl}
@@ -468,6 +489,57 @@ function GroupsPageContent() {
                 </Card>
               </Grid>
             ))}
+            {/* Phantom "New Group" Card */}
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              lg={4}
+              key={0}
+              sx={{ width: "100%" }}
+            >
+              <Card
+                sx={{
+                  cursor: "pointer",
+                  border: "2px dashed",
+                  borderColor: "divider",
+                  "&:hover": {
+                    borderColor: "primary.main",
+                    bgcolor: "action.hover",
+                  },
+                  transition: "all 0.1s ease-in-out",
+                }}
+                onClick={() => setCreateDialogOpen(true)}
+              >
+                <CardContent
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    minHeight: 235,
+                    textAlign: "center",
+                  }}
+                >
+                  <Avatar
+                    sx={{
+                      width: 80,
+                      height: 80,
+                      bgcolor: "transparent",
+                      border: "2px dashed",
+                      borderColor: "primary.main",
+                      mb: 2,
+                    }}
+                  >
+                    <AddIcon sx={{ fontSize: 40, color: "primary.main" }} />
+                  </Avatar>
+                  <Typography variant="h6" component="div">
+                    {t("groups:actions.create")}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
             {transformedGroups.length === 0 && (
               <Grid item xs={12}>
                 <Card>
@@ -756,7 +828,9 @@ function GroupsPageContent() {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCloseDialog}>{t("actions.cancel")}</Button>
+            <Button onClick={handleCloseDialog}>
+              {t("groups:actions.cancel")}
+            </Button>
             <Button
               onClick={handleCreateGroup}
               variant="contained"
@@ -768,7 +842,7 @@ function GroupsPageContent() {
               }
             >
               {createGroupMutation.isPending
-                ? t("common:actions.creating")
+                ? t("groups:actions.creating") || "Criando..."
                 : t("groups:actions.create")}
             </Button>
           </DialogActions>

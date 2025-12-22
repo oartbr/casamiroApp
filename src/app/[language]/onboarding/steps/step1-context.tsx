@@ -91,6 +91,9 @@ export default function Step1Context({ onComplete }: Props) {
                 backgroundPosition: "center",
                 minHeight: 200,
                 overflow: "hidden",
+                border: selectedContext === option.id ? 0 : 0,
+                borderColor: "primary.main",
+                boxSizing: "border-box",
                 "&::before": {
                   content: '""',
                   position: "absolute",
@@ -98,11 +101,17 @@ export default function Step1Context({ onComplete }: Props) {
                   left: 0,
                   right: 0,
                   bottom: 0,
-                  backgroundColor: "rgba(0, 0, 0, 0.5)",
+                  backgroundColor:
+                    selectedContext === option.id
+                      ? "rgba(0, 0, 0, 0.2)"
+                      : "rgba(0, 0, 0, 0.5)",
                   transition: "background-color 0.3s ease",
                 },
                 "&:hover::before": {
-                  backgroundColor: "rgba(0, 0, 0, 0)",
+                  backgroundColor:
+                    selectedContext === option.id
+                      ? "rgba(0, 0, 0, 0.1)"
+                      : "rgba(0, 0, 0, 0)",
                 },
                 transition: "all 0.3s ease",
               }}

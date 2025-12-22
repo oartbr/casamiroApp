@@ -32,7 +32,10 @@
     "deleteGroupError": "No se pudo eliminar el grupo",
     "deleteGroupConfirm": "Eliminar Grupo",
     "deleteGroupMessage": "¿Estás seguro de que deseas eliminar este grupo? Esta acción no se puede deshacer.",
-    "deleting": "Eliminando..."
+    "deleting": "Eliminando...",
+    "creating": "Creando...",
+    "createGroupSuccess": "¡Grupo creado con éxito!",
+    "createGroupError": "No se pudo crear el grupo"
   },
   "sections": {
     "active": "Ativos",
