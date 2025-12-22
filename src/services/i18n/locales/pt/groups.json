@@ -35,7 +35,10 @@
     "deleteGroupError": "Não foi possível excluir o grupo",
     "deleteGroupConfirm": "Excluir Grupo",
     "deleteGroupMessage": "Tem certeza de que deseja excluir este grupo? Esta ação não pode ser desfeita.",
-    "deleting": "Excluindo..."
+    "deleting": "Excluindo...",
+    "creating": "Criando...",
+    "createGroupSuccess": "Grupo criado com sucesso!",
+    "createGroupError": "Não foi possível criar o grupo"
   },
   "sections": {
     "active": "Grupos Ativos",
