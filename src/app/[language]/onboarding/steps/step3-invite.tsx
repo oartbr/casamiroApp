@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import WhatsAppInviteButton from "@/components/groups/whatsapp-invite-button";
+import { useTranslation } from "@/services/i18n/client";
 import type { OnboardingStatusResponse } from "@/services/api/services/onboarding";
 
 type Props = {
@@ -11,19 +12,35 @@ type Props = {
 };
 
 export default function Step3Invite({ onComplete, onboardingData }: Props) {
+  const { t } = useTranslation("onboarding");
   const activeGroup = onboardingData.activeGroup;
+  const onboardingContext = onboardingData.onboardingContext;
+
+  // Get the subtitle key based on onboarding context
+  const getSubtitleKey = () => {
+    if (!onboardingContext) return "step3.subtitle_casa"; // default fallback
+    return `step3.subtitle_${onboardingContext}`;
+  };
 
   if (!activeGroup) {
     return (
       <Box>
-        <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 3 }}>
-          Quem usa junto, decide junto
+        <Typography
+          variant="h4"
+          component="h1"
+          gutterBottom
+          sx={{ mb: 3, fontWeight: "100" }}
+        >
+          {t("step3.title")}
         </Typography>
-        <Typography variant="body1" sx={{ mb: 4, color: "text.secondary" }}>
-          Erro: grupo não encontrado.
+        <Typography
+          variant="body1"
+          sx={{ mb: 4, color: "text.secondary", fontWeight: "100" }}
+        >
+          {t("step3.error.groupNotFound")}
         </Typography>
         <Button variant="text" size="medium" onClick={onComplete}>
-          Pular por enquanto
+          {t("step3.skip")}
         </Button>
       </Box>
     );
@@ -31,12 +48,20 @@ export default function Step3Invite({ onComplete, onboardingData }: Props) {
 
   return (
     <Box>
-      <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 3 }}>
-        Quem usa junto, decide junto
+      <Typography
+        variant="h4"
+        component="h1"
+        gutterBottom
+        sx={{ mb: 3, fontWeight: "100" }}
+      >
+        {t("step3.title")}
       </Typography>
 
-      <Typography variant="body1" sx={{ mb: 4, color: "text.secondary" }}>
-        Convide agora. Leva 5 segundos e melhora tudo depois.
+      <Typography
+        variant="body1"
+        sx={{ mb: 4, color: "text.secondary", fontWeight: "100" }}
+      >
+        {t(getSubtitleKey())}
       </Typography>
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -47,11 +72,11 @@ export default function Step3Invite({ onComplete, onboardingData }: Props) {
           size="large"
           fullWidth
         >
-          Convidar pelo WhatsApp
+          {t("step3.inviteWhatsApp")}
         </WhatsAppInviteButton>
 
         <Button variant="text" size="medium" onClick={onComplete}>
-          Pular por enquanto
+          {t("step3.skip")}
         </Button>
       </Box>
     </Box>

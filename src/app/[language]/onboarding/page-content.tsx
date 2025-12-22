@@ -11,6 +11,7 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { useSnackbar } from "notistack";
+import { useTranslation } from "@/services/i18n/client";
 import HTTP_CODES_ENUM from "@/services/api/types/http-codes";
 import type { OnboardingStatusResponse } from "@/services/api/services/onboarding";
 
@@ -31,6 +32,7 @@ type OnboardingStep = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function OnboardingPageContent({ params }: Props) {
+  const { t } = useTranslation("onboarding");
   const router = useRouter();
   const { user, isLoaded } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
@@ -101,7 +103,7 @@ export default function OnboardingPageContent({ params }: Props) {
             }
           } else {
             console.error("Response OK but no data received:", response);
-            enqueueSnackbar("Erro: resposta sem dados", { variant: "error" });
+            enqueueSnackbar(t("common.error.noData"), { variant: "error" });
           }
         } else {
           console.error(
@@ -110,13 +112,13 @@ export default function OnboardingPageContent({ params }: Props) {
             response
           );
           enqueueSnackbar(
-            `Erro ao carregar onboarding (status: ${response.status})`,
+            t("common.error.loadOnboardingStatus", { status: response.status }),
             { variant: "error" }
           );
         }
       } catch (error) {
         console.error("Error loading onboarding status:", error);
-        enqueueSnackbar("Erro ao carregar onboarding", { variant: "error" });
+        enqueueSnackbar(t("common.error.loadOnboarding"), { variant: "error" });
         router.replace("/");
       } finally {
         console.log("Setting loading to false");
@@ -125,7 +127,7 @@ export default function OnboardingPageContent({ params }: Props) {
     };
 
     loadOnboardingStatus();
-  }, [isLoaded, user, router, fetchOnboardingStatus, enqueueSnackbar]);
+  }, [isLoaded, user, router, fetchOnboardingStatus, enqueueSnackbar, t]);
 
   const handleStep1Complete = async (context: string) => {
     if (!user?.id) return;
@@ -150,7 +152,7 @@ export default function OnboardingPageContent({ params }: Props) {
       );
       setCurrentStep(2);
     } catch (error) {
-      enqueueSnackbar("Erro ao salvar contexto", { variant: "error" });
+      enqueueSnackbar(t("common.error.saveContext"), { variant: "error" });
     }
   };
 
@@ -181,7 +183,7 @@ export default function OnboardingPageContent({ params }: Props) {
       await completeOnboarding({ userId: String(user.id) });
       router.replace("/");
     } catch (error) {
-      enqueueSnackbar("Erro ao completar onboarding", { variant: "error" });
+      enqueueSnackbar(t("common.error.complete"), { variant: "error" });
     }
   };
 
@@ -197,7 +199,7 @@ export default function OnboardingPageContent({ params }: Props) {
     return (
       <Container maxWidth="sm">
         <Box sx={{ py: 4, textAlign: "center" }}>
-          <Typography>Carregando...</Typography>
+          <Typography>{t("common.loading")}</Typography>
         </Box>
       </Container>
     );
@@ -207,10 +209,7 @@ export default function OnboardingPageContent({ params }: Props) {
     return (
       <Container maxWidth="sm">
         <Box sx={{ py: 4, textAlign: "center" }}>
-          <Typography>
-            Erro ao carregar dados do onboarding. Por favor, recarregue a
-            página.
-          </Typography>
+          <Typography>{t("common.error.loadData")}</Typography>
         </Box>
       </Container>
     );
@@ -244,13 +243,13 @@ export default function OnboardingPageContent({ params }: Props) {
           />
         )}
         {currentStep === 5 && (
-          <Step5Nota
+          <Step6WhatsApp
             onComplete={handleStep5Complete}
             onboardingData={onboardingData}
           />
         )}
         {currentStep === 6 && (
-          <Step6WhatsApp
+          <Step5Nota
             onComplete={handleStep6Complete}
             onboardingData={onboardingData}
           />
@@ -263,7 +262,7 @@ export default function OnboardingPageContent({ params }: Props) {
         )}
         {!onboardingData && (
           <Box sx={{ py: 4, textAlign: "center" }}>
-            <Typography>Nenhum step disponível</Typography>
+            <Typography>{t("common.noStepAvailable")}</Typography>
           </Box>
         )}
       </Box>

@@ -8,6 +8,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
+import { useTranslation } from "@/services/i18n/client";
 import type { OnboardingStatusResponse } from "@/services/api/services/onboarding";
 
 type Props = {
@@ -15,13 +16,15 @@ type Props = {
   onboardingData: OnboardingStatusResponse;
 };
 
-const examples = [
-  "adicionar café na lista da Casa",
-  "o que está faltando?",
-  "marcar comprado: leite",
-];
-
 export default function Step6WhatsApp({ onComplete }: Props) {
+  const { t } = useTranslation("onboarding");
+
+  const examples = [
+    t("step5.example1"),
+    t("step5.example2"),
+    t("step5.example3"),
+  ];
+
   const handleOpenWhatsApp = () => {
     // This would open WhatsApp Web or the app
     // For now, we'll just show a message
@@ -30,21 +33,40 @@ export default function Step6WhatsApp({ onComplete }: Props) {
 
   return (
     <Box>
-      <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 3 }}>
-        Use como você já usa o WhatsApp
+      <Typography
+        variant="h4"
+        component="h1"
+        gutterBottom
+        sx={{ mb: 3, fontWeight: "100" }}
+      >
+        {t("step5.title")}
+      </Typography>
+
+      <Typography
+        variant="body1"
+        sx={{ mb: 4, color: "text.secondary", fontWeight: "100" }}
+      >
+        {t("step5.subtitle")}
       </Typography>
 
       <Box sx={{ mb: 4 }}>
         <Card variant="outlined">
           <CardContent>
-            <Typography variant="subtitle2" gutterBottom>
-              Exemplos:
+            <Typography
+              variant="subtitle2"
+              gutterBottom
+              sx={{ fontWeight: "100" }}
+            >
+              {t("step5.examples")}
             </Typography>
             <List dense>
               {examples.map((example, index) => (
                 <Box key={index}>
                   <ListItem>
-                    <ListItemText primary={example} />
+                    <ListItemText
+                      primary={example}
+                      sx={{ fontWeight: "100" }}
+                    />
                   </ListItem>
                   {index < examples.length - 1 && <Divider />}
                 </Box>
@@ -61,11 +83,11 @@ export default function Step6WhatsApp({ onComplete }: Props) {
           onClick={handleOpenWhatsApp}
           fullWidth
         >
-          Abrir WhatsApp
+          {t("step5.openWhatsApp")}
         </Button>
 
         <Button variant="text" size="medium" onClick={onComplete}>
-          Agora não
+          {t("step5.notNow")}
         </Button>
       </Box>
     </Box>

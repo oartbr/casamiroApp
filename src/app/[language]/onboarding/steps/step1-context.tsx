@@ -6,6 +6,7 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Grid";
+import { useTranslation } from "@/services/i18n/client";
 import type { OnboardingStatusResponse } from "@/services/api/services/onboarding";
 
 type Props = {
@@ -13,41 +14,42 @@ type Props = {
   onboardingData: OnboardingStatusResponse;
 };
 
-const contextOptions = [
-  {
-    id: "casa",
-    emoji: "🏠",
-    label: "Casa / Família",
-    description: "compras do dia a dia",
-  },
-  {
-    id: "casal",
-    emoji: "💑",
-    label: "Casal",
-    description: "dividir tarefas e gastos",
-  },
-  {
-    id: "republica",
-    emoji: "🧑‍🤝‍🧑",
-    label: "República / amigos",
-    description: "listas e compras coletivas",
-  },
-  {
-    id: "escritorio",
-    emoji: "🏢",
-    label: "Escritório",
-    description: "itens do time",
-  },
-  {
-    id: "condominio",
-    emoji: "🏘️",
-    label: "Condomínio",
-    description: "gastos e necessidades",
-  },
-];
-
 export default function Step1Context({ onComplete }: Props) {
+  const { t } = useTranslation("onboarding");
   const [selectedContext, setSelectedContext] = useState<string | null>(null);
+
+  const contextOptions = [
+    {
+      id: "casa",
+      image: "/onboarding/familia.jpg",
+      label: t("step1.contexts.casa.label"),
+      description: t("step1.contexts.casa.description"),
+    },
+    {
+      id: "casal",
+      image: "/onboarding/casal.jpg",
+      label: t("step1.contexts.casal.label"),
+      description: t("step1.contexts.casal.description"),
+    },
+    {
+      id: "republica",
+      image: "/onboarding/amigos.jpg",
+      label: t("step1.contexts.republica.label"),
+      description: t("step1.contexts.republica.description"),
+    },
+    {
+      id: "escritorio",
+      image: "/onboarding/escritorio.jpg",
+      label: t("step1.contexts.escritorio.label"),
+      description: t("step1.contexts.escritorio.description"),
+    },
+    {
+      id: "condominio",
+      image: "/onboarding/condominio.jpg",
+      label: t("step1.contexts.condominio.label"),
+      description: t("step1.contexts.condominio.description"),
+    },
+  ];
 
   const handleSelect = (contextId: string) => {
     setSelectedContext(contextId);
@@ -61,12 +63,20 @@ export default function Step1Context({ onComplete }: Props) {
 
   return (
     <Box>
-      <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 3 }}>
-        Bem-vindo ao Casamiro
+      <Typography
+        variant="h4"
+        component="h1"
+        gutterBottom
+        sx={{ mb: 3, fontWeight: "100" }}
+      >
+        {t("step1.title")}
       </Typography>
 
-      <Typography variant="body1" sx={{ mb: 4, color: "text.secondary" }}>
-        Como você vai usar o app?
+      <Typography
+        variant="body1"
+        sx={{ mb: 4, color: "text.secondary", fontWeight: "100" }}
+      >
+        {t("step1.subtitle")}
       </Typography>
 
       <Grid container spacing={2} sx={{ mb: 4 }}>
@@ -75,25 +85,52 @@ export default function Step1Context({ onComplete }: Props) {
             <Card
               sx={{
                 cursor: "pointer",
-                border: selectedContext === option.id ? 2 : 1,
-                borderColor:
-                  selectedContext === option.id ? "primary.main" : "divider",
-                "&:hover": {
-                  borderColor: "primary.main",
-                  borderWidth: 2,
+                position: "relative",
+                backgroundImage: `url(${option.image})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                minHeight: 200,
+                overflow: "hidden",
+                "&::before": {
+                  content: '""',
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  backgroundColor: "rgba(0, 0, 0, 0.5)",
+                  transition: "background-color 0.3s ease",
                 },
-                transition: "all 0.2s",
+                "&:hover::before": {
+                  backgroundColor: "rgba(0, 0, 0, 0)",
+                },
+                transition: "all 0.3s ease",
               }}
               onClick={() => handleSelect(option.id)}
             >
-              <CardContent>
-                <Typography variant="h3" sx={{ mb: 1 }}>
-                  {option.emoji}
-                </Typography>
-                <Typography variant="h6" component="h3" gutterBottom>
+              <CardContent
+                sx={{
+                  position: "relative",
+                  zIndex: 1,
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-end",
+                  minHeight: 200,
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  component="h3"
+                  gutterBottom
+                  sx={{ color: "white" }}
+                >
                   {option.label}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography
+                  variant="body2"
+                  sx={{ color: "rgba(255, 255, 255, 0.9)" }}
+                >
                   {option.description}
                 </Typography>
               </CardContent>
@@ -109,7 +146,7 @@ export default function Step1Context({ onComplete }: Props) {
           onClick={handleContinue}
           disabled={!selectedContext}
         >
-          Continuar
+          {t("step1.continue")}
         </Button>
       </Box>
     </Box>

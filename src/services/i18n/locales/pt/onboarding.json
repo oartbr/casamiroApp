@@ -1,0 +1,121 @@
+{
+  "step1": {
+    "title": "Bem-vindo ao Casamiro",
+    "subtitle": "Como você vai usar o app?",
+    "continue": "Continuar",
+    "contexts": {
+      "casa": {
+        "label": "Casa / Família",
+        "description": "compras do dia a dia"
+      },
+      "casal": {
+        "label": "Casal",
+        "description": "dividir tarefas e gastos"
+      },
+      "republica": {
+        "label": "República / amigos",
+        "description": "listas e compras coletivas"
+      },
+      "escritorio": {
+        "label": "Escritório",
+        "description": "itens do time"
+      },
+      "condominio": {
+        "label": "Condomínio",
+        "description": "gastos e necessidades"
+      }
+    }
+  },
+  "step2": {
+    "invited": {
+      "title": "Você entrou no grupo {{groupName}}",
+      "subtitle": "Além dele, você também tem um grupo pessoal para coisas privadas.",
+      "activeGroup": "Grupo ativo:",
+      "personalGroup": "Grupo pessoal:",
+      "active": "ativo",
+      "viewMyGroup": "Ver meu grupo",
+      "continueInGroup": "Continuar no grupo {{groupName}}"
+    },
+    "notInvited": {
+      "title": "Criamos seu grupo: ",
+      "subtitle": "Seu grupo está pronto para você começar a usar. Se preferir, você pode renomeá-lo.",
+      "yourGroup": "Seu grupo:",
+      "continue": "Continuar"
+    },
+    "rename": "Renomear",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "renameSuccess": "Grupo renomeado com sucesso",
+    "renameError": "Erro ao renomear grupo"
+  },
+  "step3": {
+    "title": "O Casamiro funciona melhor quando todos participam!",
+    "subtitle_casa": "Convide sua família para o grupo. Você também pode ter um grupo pessoal para coisas privadas.",
+    "subtitle_casal": "Convide seu(a) parceiro(a) para o grupo. Você também pode ter um grupo pessoal para coisas privadas.",
+    "subtitle_republica": "Convide seus amigos para o grupo. Você também pode ter um grupo pessoal para coisas privadas.",
+    "subtitle_escritorio": "Convide seus colegas de trabalho para o grupo. Você também pode ter um grupo pessoal ou para a família.",
+    "subtitle_condominio": "Convide seus vizinhos para o grupo. Você também pode ter um grupo pessoal ou para a família.",
+    "inviteWhatsApp": "Convidar pelo WhatsApp",
+    "skip": "Pular por enquanto",
+    "error": {
+      "groupNotFound": "Erro: grupo não encontrado."
+    }
+  },
+  "step4": {
+    "titleWithItems": "Tem mais algumas coisas para comprar?",
+    "titleWithoutItems": "Que produtos você precisará comprar?",
+    "subtitleWithItems": "Adicione mais alguns itens à lista.",
+    "subtitleWithoutItems": "Não precisa ser perfeito. Adicione pelo menos 1 item e pronto.",
+    "suggestions": "Sugestões:",
+    "currentItems": "Itens na lista:",
+    "placeholder": "Digite um item...",
+    "add": "Adicionar",
+    "itemsAdded": "Itens adicionados:",
+    "continue": "Continuar",
+    "addSuccess": "Item adicionado",
+    "addError": "Erro ao adicionar item",
+    "addErrorWithStatus": "Erro ao adicionar item (status: {{status}})"
+  },
+  "step5": {
+    "title": "Agora tente adicionar um item enviando uma mensagem",
+    "subtitle": "Pode ser texto ou áudio! Use o WhatsApp como você já usa.",
+    "examples": "Exemplos:",
+    "openWhatsApp": "Abrir WhatsApp",
+    "notNow": "Agora não",
+    "example1": "adicionar café na lista",
+    "example2": "o que está faltando?",
+    "example3": "marcar comprado: leite"
+  },
+  "step6": {
+    "title": "Quer deixar o Casamiro mais inteligente?",
+    "titleScanned": "✅ Nota fiscal escaneada com sucesso!",
+    "subtitle": "A cada nota fiscal escaneada, ele entende marcas, preços e frequência — e começa a sugerir o que fazer. Isso vai fazer o Casamiro entender melhor suas compras e fazer melhores sugestões.",
+    "successMessageScanned": "O Casamiro vai analizar a sua compra e entender melhor como economizar.",
+    "scanNow": "Escanear uma nota fiscal",
+    "doLater": "Fazer depois",
+    "cancelScan": "Cancelar",
+    "successMessage": "Nota fiscal escaneada com sucesso! O Casamiro agora entende melhor suas compras.",
+    "continue": "Continuar",
+    "scanningImageAlt": "Como escanear uma nota fiscal"
+  },
+  "step7": {
+    "title": "Pronto. Agora é só usar regularmente!",
+    "subtitle": "A partir de agora você vai receber sugestões no momento certo, baseadas nas suas compras no grupo.",
+    "referralTitle": "Indique o Casamiro e ganhe benefícios",
+    "referralDescription": "Compartilhe seu link de indicação e ganhe recompensas quando seus amigos se cadastrarem. Você pode compartilhar pelo WhatsApp ou copiar o link.",
+    "goToHome": "Ir para a página inicial"
+  },
+  "common": {
+    "loading": "Carregando...",
+    "error": {
+      "loadData": "Erro ao carregar dados do onboarding. Por favor, recarregue a página.",
+      "loadOnboarding": "Erro ao carregar onboarding",
+      "loadOnboardingStatus": "Erro ao carregar onboarding (status: {{status}})",
+      "noData": "Erro: resposta sem dados",
+      "saveContext": "Erro ao salvar contexto",
+      "complete": "Erro ao completar onboarding"
+    },
+    "noStepAvailable": "Nenhum step disponível"
+  }
+}
+
