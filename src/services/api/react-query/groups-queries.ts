@@ -36,7 +36,25 @@ export const useUserGroupsQuery = (userId: string) => {
       }
       const { status, data } = await fetch(userId);
       if (status === HTTP_CODES_ENUM.OK) {
-        return data;
+        // Filter out orphaned memberships (where group_id is null or invalid)
+        // This prevents "Cannot read properties of null" errors across all pages
+        return {
+          ...data,
+          groupsByStatus: {
+            active: (data.groupsByStatus?.active || []).filter(
+              (membership) =>
+                membership?.group_id &&
+                typeof membership.group_id === "object" &&
+                membership.group_id.id
+            ),
+            pending: (data.groupsByStatus?.pending || []).filter(
+              (membership) =>
+                membership?.group_id &&
+                typeof membership.group_id === "object" &&
+                membership.group_id.id
+            ),
+          },
+        };
       }
       throw new Error("Failed to fetch user groups");
     },

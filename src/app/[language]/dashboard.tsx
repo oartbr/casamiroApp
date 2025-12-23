@@ -7,6 +7,12 @@ import MuiLink from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
+import Chip from "@mui/material/Chip";
+import Stack from "@mui/material/Stack";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Avatar from "@mui/material/Avatar";
+import AddIcon from "@mui/icons-material/Add";
 import { useTranslation } from "@/services/i18n/client";
 import { Trans } from "react-i18next/TransWithoutContext";
 import { StandardLandingPage } from "@/components/landingPage/standard";
@@ -215,13 +221,16 @@ export default function PageContent() {
             </h1>
             <Box component="div" sx={{ position: "relative" }}>
               {defaultListItems?.length ? (
-                <ul>
+                <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
                   {defaultListItems.map((it) => (
-                    <li key={it.id}>
-                      <Typography variant="body2">{it.text}</Typography>
-                    </li>
+                    <Chip
+                      key={it.id}
+                      label={it.text}
+                      variant="outlined"
+                      color="primary"
+                    />
                   ))}
-                </ul>
+                </Stack>
               ) : (
                 <Alert severity="info">{t("noItemsMessage")}</Alert>
               )}
@@ -350,6 +359,56 @@ export default function PageContent() {
                     type="listing"
                     t={notaCardT}
                   />
+                  <Box sx={{ mt: 2 }}>
+                    <Card
+                      sx={{
+                        cursor: "pointer",
+                        border: "2px dashed",
+                        borderColor: "divider",
+                        "&:hover": {
+                          borderColor: "primary.main",
+                          bgcolor: "action.hover",
+                        },
+                        transition: "all 0.1s ease-in-out",
+                      }}
+                      onClick={() => router.replace("/scan")}
+                    >
+                      <CardContent
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          minHeight: 100,
+                          textAlign: "center",
+                        }}
+                      >
+                        <Avatar
+                          sx={{
+                            width: 80,
+                            height: 80,
+                            bgcolor: "transparent",
+                            border: "2px dashed",
+                            borderColor: "primary.main",
+                            mb: 2,
+                          }}
+                        >
+                          <AddIcon
+                            sx={{ fontSize: 40, color: "primary.main" }}
+                          />
+                        </Avatar>
+                        <Typography
+                          variant="h6"
+                          component="div"
+                          sx={{ fontWeight: 100 }}
+                        >
+                          {notaCardT("actions.scanNewNota", {
+                            defaultValue: "Scan a new nota",
+                          })}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Box>
                 </>
               ) : (
                 <Box>

@@ -57,20 +57,18 @@ function ListsPageContent({}: ListsPageContentProps) {
     refetchDefaultList();
   };
 
-  // Set first group as selected when groups are loaded
-  useEffect(() => {
-    if (
-      userGroupsData?.groupsByStatus?.active &&
-      userGroupsData.groupsByStatus.active.length > 0 &&
-      !selectedGroupId
-    ) {
-      const firstGroup = userGroupsData.groupsByStatus.active[0];
-      setSelectedGroupId(firstGroup.group_id.id);
-    }
-  }, [userGroupsData, selectedGroupId]);
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const activeGroups = userGroupsData?.groupsByStatus?.active || [];
   const items = defaultList?.items || [];
+
+  // Set first group as selected when groups are loaded
+  useEffect(() => {
+    if (activeGroups.length > 0 && !selectedGroupId) {
+      const firstGroup = activeGroups[0];
+      // Groups are already filtered at the service level, so group_id is guaranteed to be valid
+      setSelectedGroupId(firstGroup.group_id.id);
+    }
+  }, [activeGroups, selectedGroupId]);
 
   const handleItemAdded = () => {
     refetchItems();
