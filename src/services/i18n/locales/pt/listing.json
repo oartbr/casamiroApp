@@ -5,7 +5,8 @@
     "createAccount": "Criar uma conta",
     "forgotPassword": "Esqueceu a senha?",
     "register": "Registrar Garantia",
-    "viewDetails": "Ver detalhes"
+    "viewDetails": "Ver detalhes",
+    "scanNewNota": "Escanear uma nova nota"
   },
   "status":{
     "registeredAt": "⌛ Nota registrada ",

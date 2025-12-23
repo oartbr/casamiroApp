@@ -39,6 +39,8 @@ import {
   useDeclineInvitationMutation,
   useGroupMembershipsQuery,
 } from "@/services/api/react-query/memberships-queries";
+import { useGetGroupMembershipsService } from "@/services/api/services/memberships";
+import HTTP_CODES_ENUM from "@/services/api/types/http-codes";
 import { useSetActiveGroupMutation } from "@/services/api/react-query/users-queries";
 import { useSnackbar } from "notistack";
 import { Group, CreateGroupRequest } from "@/services/api/types/group";
@@ -84,6 +86,7 @@ function GroupsPageContent() {
   const { user } = useAuth();
   const { setUser } = useAuthActions();
   const { enqueueSnackbar } = useSnackbar();
+  const getGroupMemberships = useGetGroupMembershipsService();
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
@@ -267,8 +270,116 @@ function GroupsPageContent() {
   const handleDeleteConfirm = async () => {
     if (!groupToDelete) return;
 
+    // #region agent log
+    // Check memberships before deletion
+    try {
+      const response = await getGroupMemberships(groupToDelete.id);
+      const membershipsBefore =
+        response.status === HTTP_CODES_ENUM.OK ? response.data : null;
+
+      fetch(
+        "http://127.0.0.1:7242/ingest/48f10dec-b30a-462e-ba72-a40a9e83d578",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            location: "page-content.tsx:270",
+            message: "Memberships before group deletion",
+            data: {
+              groupId: groupToDelete.id,
+              groupName: groupToDelete.name,
+              membershipsCount: membershipsBefore?.results?.length || 0,
+              memberships: membershipsBefore?.results || [],
+              membershipsResponseStatus: response.status,
+            },
+            timestamp: Date.now(),
+            sessionId: "debug-session",
+            runId: "check-memberships-deletion",
+            hypothesisId: "A",
+          }),
+        }
+      ).catch(() => {});
+    } catch (error) {
+      fetch(
+        "http://127.0.0.1:7242/ingest/48f10dec-b30a-462e-ba72-a40a9e83d578",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            location: "page-content.tsx:295",
+            message: "Error fetching memberships before deletion",
+            data: {
+              groupId: groupToDelete.id,
+              error: error instanceof Error ? error.message : String(error),
+            },
+            timestamp: Date.now(),
+            sessionId: "debug-session",
+            runId: "check-memberships-deletion",
+            hypothesisId: "A",
+          }),
+        }
+      ).catch(() => {});
+    }
+    // #endregion
+
     try {
       await deleteGroupMutation.mutateAsync(groupToDelete.id);
+
+      // #region agent log
+      // Check memberships after deletion
+      setTimeout(async () => {
+        try {
+          const response = await getGroupMemberships(groupToDelete.id);
+          const membershipsAfter =
+            response.status === HTTP_CODES_ENUM.OK ? response.data : null;
+
+          fetch(
+            "http://127.0.0.1:7242/ingest/48f10dec-b30a-462e-ba72-a40a9e83d578",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                location: "page-content.tsx:325",
+                message: "Memberships after group deletion",
+                data: {
+                  groupId: groupToDelete.id,
+                  membershipsCount: membershipsAfter?.results?.length || 0,
+                  memberships: membershipsAfter?.results || [],
+                  membershipsResponseStatus: response.status,
+                  membershipsStillExist:
+                    (membershipsAfter?.results?.length || 0) > 0,
+                },
+                timestamp: Date.now(),
+                sessionId: "debug-session",
+                runId: "check-memberships-deletion",
+                hypothesisId: "B",
+              }),
+            }
+          ).catch(() => {});
+        } catch (error) {
+          fetch(
+            "http://127.0.0.1:7242/ingest/48f10dec-b30a-462e-ba72-a40a9e83d578",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                location: "page-content.tsx:350",
+                message: "Error fetching memberships after deletion",
+                data: {
+                  groupId: groupToDelete.id,
+                  error: error instanceof Error ? error.message : String(error),
+                },
+                timestamp: Date.now(),
+                sessionId: "debug-session",
+                runId: "check-memberships-deletion",
+                hypothesisId: "B",
+              }),
+            }
+          ).catch(() => {});
+        }
+      }, 1000); // Wait 1 second after deletion to check
+      // #endregion
+
       enqueueSnackbar(
         t("groups:actions.deleteGroupSuccess") || "Group deleted successfully",
         { variant: "success" }
@@ -534,7 +645,11 @@ function GroupsPageContent() {
                   >
                     <AddIcon sx={{ fontSize: 40, color: "primary.main" }} />
                   </Avatar>
-                  <Typography variant="h6" component="div">
+                  <Typography
+                    variant="h6"
+                    component="div"
+                    sx={{ fontWeight: 100 }}
+                  >
                     {t("groups:actions.create")}
                   </Typography>
                 </CardContent>

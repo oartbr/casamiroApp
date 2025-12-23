@@ -108,6 +108,10 @@ function Scan() {
     router.push(`listing`);
   };
 
+  const handleCancel = () => {
+    router.push(`listing`);
+  };
+
   return (
     <Container maxWidth="md">
       <Box sx={{ position: "relative", width: "100%" }}>
@@ -116,6 +120,11 @@ function Scan() {
             <QRscanner callBack={useScanData} />
           </Grid>
         </Grid>
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 3, mb: 3 }}>
+          <Button variant="outlined" onClick={handleCancel} size="large">
+            {t("cancel", { defaultValue: "Cancel" })}
+          </Button>
+        </Box>
 
         {/* Modal overlay when scan is successful */}
         <Dialog

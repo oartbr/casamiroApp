@@ -4,7 +4,9 @@
     "submit": "Entrar",
     "createAccount": "Crear una cuenta",
     "forgotPassword": "Se olvidó la contraseña?",
-    "register": "Registrar Garantia"
+    "register": "Registrar Garantia",
+    "viewDetails": "Ver detalles",
+    "scanNewNota": "Escanear una nueva nota"
   },
   "or": "OR"
 }

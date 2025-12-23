@@ -15,7 +15,7 @@
     "switchCameraTitle": "Trocar Câmera"
   },
   "success": {
-    "title": "Nota Registrada com Sucesso!",
+    "title": "✅ Nota Registrada com Sucesso!",
     "message": "Sua nota foi registrada e está disponível abaixo.",
     "viewDetails": "Ver Detalhes",
     "scanAnother": "Escanear outra nota",
@@ -24,6 +24,7 @@
   "error": {
     "invalidQRCode": "Código QR inválido"
   },
+  "cancel": "Cancelar",
   "status": {
     "registered": "Registrada",
     "pending": "Pendente",

@@ -29,6 +29,9 @@ import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar/Avatar";
 import { ListingSkeleton } from "@/components/skeletons/ListingSkeleton";
 import { SortEnum } from "@/services/api/types/sort-type";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import AddIcon from "@mui/icons-material/Add";
 
 type Props = {
   params: { [key: string]: string | undefined };
@@ -60,6 +63,7 @@ function List(props: Props) {
   const previousPageRef = useRef(1);
 
   const activeGroups = groupsData?.groupsByStatus?.active || [];
+
   /* const currentActiveGroup = activeGroups.find(
     (membership) => membership.group_id.id === user?.activeGroupId
   ); */
@@ -263,6 +267,49 @@ function List(props: Props) {
         </Box>
       )}
       <Grid container spacing={3} rowSpacing={3}>
+        {/* Phantom "New Nota" Card */}
+        <Grid item xs={12} key="phantom-nota">
+          <Card
+            sx={{
+              cursor: "pointer",
+              border: "2px dashed",
+              borderColor: "divider",
+              "&:hover": {
+                borderColor: "primary.main",
+                bgcolor: "action.hover",
+              },
+              transition: "all 0.1s ease-in-out",
+            }}
+            onClick={() => router.replace("/scan")}
+          >
+            <CardContent
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                minHeight: 100,
+                textAlign: "center",
+              }}
+            >
+              <Avatar
+                sx={{
+                  width: 80,
+                  height: 80,
+                  bgcolor: "transparent",
+                  border: "2px dashed",
+                  borderColor: "primary.main",
+                  mb: 2,
+                }}
+              >
+                <AddIcon sx={{ fontSize: 40, color: "primary.main" }} />
+              </Avatar>
+              <Typography variant="h6" component="div" sx={{ fontWeight: 100 }}>
+                {t("actions.scanNewNota", { defaultValue: "Scan a new nota" })}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
         {isLoading ? (
           <Grid item xs={12}>
             <ListingSkeleton />
